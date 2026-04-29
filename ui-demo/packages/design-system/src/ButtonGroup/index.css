@@ -1,0 +1,62 @@
+@import '../tokens.css';
+
+.ds-button-group {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  height: 32px;
+  padding: 0;
+  border-radius: var(--ds-radius-sm);
+}
+
+.ds-button-group--block {
+  display: flex;
+  width: 100%;
+}
+
+.ds-button-group .ds-button {
+  position: relative;
+  height: 32px;
+  min-width: 64px;
+  border-radius: 0;
+}
+
+.ds-button-group--block .ds-button {
+  flex: 1;
+}
+
+.ds-button-group .ds-button:not(:first-child) {
+  margin-left: -1px;
+}
+
+.ds-button-group .ds-button:first-child {
+  border-top-left-radius: var(--ds-radius-sm);
+  border-bottom-left-radius: var(--ds-radius-sm);
+}
+
+.ds-button-group .ds-button:last-child {
+  border-top-right-radius: var(--ds-radius-sm);
+  border-bottom-right-radius: var(--ds-radius-sm);
+}
+
+.ds-button-group .ds-button:hover,
+.ds-button-group .ds-button:focus-visible,
+.ds-button-group .ds-button:active {
+  z-index: 1;
+}
+
+.ds-button-group .ds-button--icon-only {
+  min-width: 32px;
+  width: 32px;
+}
+
+.ds-button-group .ds-button--text,
+.ds-button-group .ds-button--link {
+  min-width: auto;
+  border-radius: var(--ds-radius-sm);
+}
+
+.ds-button-group .ds-button--text:not(:first-child),
+.ds-button-group .ds-button--link:not(:first-child) {
+  margin-left: 8px;
+}

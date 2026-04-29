@@ -1,0 +1,22 @@
+@import '../tokens.css';
+
+.ds-filter-bar {
+  display: grid;
+  grid-template-columns: minmax(360px, 2fr) minmax(220px, 1fr) minmax(220px, 1fr) auto;
+  gap: var(--ds-space-3);
+  align-items: end;
+  min-height: var(--ds-filter-card-height);
+  padding: var(--ds-card-padding);
+}
+
+.ds-filter-bar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+}
+
+@media (max-width: 1180px) {
+  .ds-filter-bar {
+    grid-template-columns: 1fr;
+  }
+}

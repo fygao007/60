@@ -1,0 +1,33 @@
+@import '../tokens.css';
+
+.ds-empty-state {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  min-height: 280px;
+  gap: var(--ds-space-2);
+  color: var(--ds-color-text-tertiary);
+}
+
+.ds-empty-state__icon {
+  display: grid;
+  place-items: center;
+  width: 112px;
+  height: 84px;
+  color: var(--ds-color-primary);
+  font-size: 36px;
+  background: linear-gradient(135deg, var(--ds-color-primary-light), var(--ds-color-primary-lighter));
+  border: 1px dashed var(--ds-color-border-hover);
+  border-radius: var(--ds-radius-2xl);
+}
+
+.ds-empty-state h3 {
+  margin: 0;
+  color: var(--ds-color-text);
+  font-size: var(--ds-font-size-lg);
+  line-height: var(--ds-line-height-lg);
+}
+
+.ds-empty-state p {
+  margin: 0;
+}

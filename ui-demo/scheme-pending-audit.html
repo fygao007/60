@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>方案待审核</title>
+  <link rel="stylesheet" href="./packages/design-system/src/base.css" />
+  <style>
+    body { margin: 0; background: var(--ds-color-bg-page); font-family: var(--ds-font-family); }
+    .shell { display: flex; align-items: stretch; width: 100vw; height: 100vh; overflow: hidden; background: #f5f7ff; }
+    .nav { display: flex; flex: none; flex-direction: column; align-self: stretch; align-items: center; width: 80px; gap: 8px; color: #fff; background: url("./assets/pc-nav-bg.svg") center/100% 100% no-repeat, linear-gradient(180deg, #7454F1 0%, #6A52F1 25%, #524AE4 53%, #5753E4 75%, #507AEE 100%); overflow: hidden; }
+    .nav-main { display: flex; flex: 1; flex-direction: column; align-items: center; width: 100%; padding: 0 8px; }
+    .logo { display: grid; justify-items: center; align-content: start; gap: 8px; width: 48px; padding: 8px 0; color: #fff; font-size: 12px; font-weight: 1000; line-height: 16px; text-align: center; }
+    .logo-mark { display: grid; place-items: center; width: 48px; height: 22px; color: #fff; font-size: 15px; font-weight: 1000; line-height: 18px; position: relative; }
+    .logo-mark::after { content: ""; position: absolute; right: 0; top: 1px; width: 28px; height: 12px; border-top: 2px solid #ffe247; border-radius: 50%; transform: rotate(-15deg); }
+    .nav-search { display: grid; place-items: center; width: 36px; height: 36px; margin: 2px 0 4px; border-radius: 4px; color: #fff; }
+    .nav-list { display: flex; flex: 1; flex-direction: column; align-items: center; gap: 12px; width: 48px; padding: 12px 0; border-top: 1px solid rgba(255,255,255,.2); border-bottom: 1px solid rgba(255,255,255,.2); overflow: hidden; }
+    .nav-item { display: flex; flex: none; flex-direction: column; align-items: center; justify-content: flex-start; width: 48px; color: rgba(255,255,255,.8); border-radius: 4px; text-decoration: none; font-size: 12px; line-height: 20px; }
+    .nav-item.active, .nav-item:hover { color: #fff; background: transparent; box-shadow: none; }
+    .nav-icon, .nav-tool { display: inline-flex; align-items: center; justify-content: center; padding: 8px; border-radius: 4px; opacity: .8; }
+    .nav-icon svg { width: 20px; height: 20px; stroke: currentColor; }
+    .nav-footer { display: flex; flex: none; flex-direction: column; align-items: center; gap: 4px; width: 48px; padding: 8px 4px; }
+    .nav-line { display: none; }
+    .nav-tool { width: 32px; height: 32px; color: rgba(255,255,255,.9); }
+    .nav-tool:hover { color: #fff; background: rgba(255,255,255,.16); }
+    .nav-tool svg { width: 16px; height: 16px; stroke: currentColor; }
+    .avatar { display: grid; place-items: center; width: 32px; height: 32px; color: #303fff; background: #ffdcc8; border: 1px solid #fff; border-radius: 4px; font-size: 12px; font-weight: 600; overflow: hidden; }
+    .user { display: flex; flex: none; align-items: center; justify-content: flex-start; width: 80px; height: 28px; padding: 4px 20px 4px 4px; color: #fff; background: rgba(0,0,0,.8); backdrop-filter: blur(20px); font-size: 12px; font-weight: 600; line-height: 20px; }
+    .main { display: flex; flex: 1; align-self: stretch; flex-direction: column; min-width: 0; padding: 12px; background: #f5f7ff; z-index: 1; }
+    .workspace { display: flex; flex: 1; align-self: stretch; flex-direction: column; background: #fff; border-radius: 12px; overflow: hidden; }
+    .top-tabs { display: flex; align-self: stretch; flex-shrink: 0; align-items: center; justify-content: flex-start; gap: 8px; height: 32px; background: transparent; }
+    .top-tabs-left { display: flex; flex: 1; flex-shrink: 0; align-items: flex-start; justify-content: flex-start; min-width: 0; }
+    .top-tabs-list { display: flex; flex-shrink: 0; align-items: center; justify-content: flex-start; min-width: 0; }
+    .top-tab { position: relative; display: flex; align-items: center; justify-content: flex-start; gap: 8px; height: 32px; padding: 5px 12px; color: #505266; background: transparent; border: 0; border-top-left-radius: 8px; border-top-right-radius: 8px; font-size: 13px; line-height: 22px; white-space: nowrap; }
+    .top-tab:not(.active)::after { content: ""; position: absolute; right: -1px; top: 8px; z-index: 3; width: 1px; height: 16px; background: rgba(0,0,0,.1); }
+    .top-tab.active { color: #000; background: #fff; }
+    .top-tab-label { position: relative; z-index: 1; display: flex; align-items: center; gap: 4px; }
+    .top-tab-close { width: 16px; height: 16px; color: #b9bdc9; }
+    .top-tabs-add { display: flex; align-items: center; justify-content: flex-start; gap: 8px; padding: 0 8px; }
+    .top-actions { display: flex; flex-shrink: 0; align-items: center; justify-content: flex-start; gap: 4px; }
+    .top-icon { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; padding: 5px; color: var(--ds-color-text-tertiary); background: transparent; border: 0; border-radius: 4px; }
+    .top-icon svg { width: 14px; height: 14px; stroke: currentColor; }
+    .content { display: flex; flex: 1; align-self: stretch; flex-direction: column; overflow: auto; padding: 12px 16px 16px; color: var(--ds-color-text); background: #fff; }
+    .page-title { margin: 0; color: var(--ds-color-text-heading); font-size: 24px; font-weight: 600; line-height: 32px; }
+    .page-desc { margin: 6px 0 12px; color: var(--ds-color-text-secondary); font-size: 16px; line-height: 24px; }
+    .status-tabs { display: flex; align-items: center; gap: 40px; height: 56px; margin-bottom: 24px; border-bottom: 1px solid var(--ds-color-border-secondary); }
+    .status-tab { position: relative; display: inline-flex; align-items: center; gap: 8px; height: 56px; padding: 0; color: #55586b; background: transparent; border: 0; font-family: var(--ds-font-family); font-size: 18px; line-height: 24px; cursor: pointer; }
+    .status-tab.active { color: #000; font-weight: 600; }
+    .status-tab.active::after { content: ""; position: absolute; right: 0; bottom: -1px; left: 0; height: 8px; background: #d8dcff; }
+    .badge { display: inline-flex; align-items: center; justify-content: center; min-width: 24px; height: 24px; padding: 0 7px; color: #fff; background: #ff4d5a; border-radius: 999px; font-size: 18px; font-weight: 600; line-height: 24px; }
+    .filter { display: grid; grid-template-columns: minmax(260px, 1.6fr) minmax(180px, 1fr) minmax(180px, 1fr) minmax(180px, 1fr) auto; gap: 12px; align-items: end; min-height: 124px; padding: 24px; margin-bottom: 16px; background: #fff; border: 1px solid var(--ds-color-border-secondary); border-radius: 12px; box-shadow: var(--ds-shadow-xs); }
+    .actions, .toolbar, .toolbar-right, .pagination, .row-actions { display: flex; align-items: center; gap: 8px; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; min-width: 56px; height: 32px; padding: 0 16px; border: 1px solid transparent; border-radius: 4px; font-size: 14px; background: #fff; cursor: pointer; }
+    .btn.primary { color: #fff; background: var(--ds-color-primary); border-color: var(--ds-color-primary); }
+    .btn.default { color: var(--ds-color-text); border-color: var(--ds-color-border); }
+    .card { overflow: hidden; background: #fff; border: 1px solid var(--ds-color-border-secondary); border-radius: 12px; box-shadow: var(--ds-shadow-xs); }
+    .toolbar { justify-content: space-between; padding: 16px 24px; border-bottom: 1px solid var(--ds-color-border-secondary); }
+    .toolbar-title { display: flex; align-items: baseline; gap: 8px; }
+    .toolbar-title strong { font-size: 14px; }
+    .toolbar-title span { color: var(--ds-color-text-tertiary); font-size: 13px; }
+    .table-wrap { overflow: auto; }
+    table { width: 100%; min-width: 1280px; border-collapse: collapse; table-layout: fixed; font-size: 14px; }
+    th, td { height: 48px; padding: 0 12px; text-align: left; border-bottom: 1px solid var(--ds-color-border-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    th { color: var(--ds-color-text-secondary); font-weight: 600; background: var(--ds-color-bg-hover); }
+    tr:hover td { background: var(--ds-color-primary-lighter); }
+    .col-check { width: 44px; } .col-index { width: 64px; } .col-type { width: 120px; } .col-group { width: 160px; } .col-time { width: 176px; } .col-status { width: 120px; } .col-actions { width: 220px; }
+    .pagination { justify-content: flex-end; padding: 16px 24px; color: var(--ds-color-text-secondary); font-size: 13px; }
+    .pagination-current { display: inline-flex; align-items: center; justify-content: center; min-width: 24px; height: 24px; color: #fff; background: var(--ds-color-primary); border-radius: 4px; }
+    @media (max-width: 1280px) { .filter { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="shell ds-scope">
+    <aside class="nav" aria-label="主导航">
+      <div class="nav-main">
+        <div class="logo"><div class="logo-mark">Wisedu</div><p>系统</p></div>
+        <a class="nav-search" href="#"><svg viewBox="0 0 24 24" fill="none"><path d="M10.5 18a7.5 7.5 0 1 1 5.3-12.8A7.5 7.5 0 0 1 10.5 18ZM16 16l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></a>
+        <div class="nav-list">
+          <a class="nav-item active" href="#"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M4 12h16M12 4v16" stroke-width="2" stroke-linecap="round"/></svg></span><span>准备工作</span></a>
+          <a class="nav-item" href="#"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><path d="m4 9 8-4 8 4-8 4-8-4Z" fill="currentColor"/><path d="M7 11v4c3 2 7 2 10 0v-4" stroke-width="2" stroke-linecap="round"/></svg></span><span>硕士</span></a>
+          <a class="nav-item" href="#"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M8 8h5a3 3 0 0 1 0 6H8" stroke-width="2.6" stroke-linecap="round"/></svg></span><span>博士</span></a>
+          <a class="nav-item" href="#"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4 21 20H3L12 4Z" stroke-width="2.4" stroke-linejoin="round"/></svg></span><span>夏令营</span></a>
+          <a class="nav-item" href="#"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M6 19c7-1 10-5 12-13-7 1-11 4-12 13Z" fill="currentColor"/><path d="M5 11l2 2M9 5l2 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span>推免</span></a>
+          <a class="nav-item" href="#"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="7" cy="8" r="3" fill="currentColor"/><circle cx="15" cy="7" r="3" fill="currentColor"/><circle cx="12" cy="15" r="3" fill="currentColor"/></svg></span><span>港澳台</span></a>
+          <a class="nav-item" href="#"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M6 7h12v12H6V7Z" stroke-width="2" stroke-linejoin="round"/><path d="M9 5h6M9 11h6" stroke-width="2" stroke-linecap="round"/></svg></span><span>考务管理</span></a>
+        </div>
+        <div class="nav-footer">
+          <a class="nav-tool" href="#"><svg viewBox="0 0 24 24" fill="none"><path d="M5 5h14l-2 5 2 5H5V5Z" stroke-width="2" stroke-linejoin="round"/></svg></a>
+          <a class="nav-tool" href="#"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4v10M8 10l4 4 4-4M5 20h14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <a class="nav-tool" href="#"><svg viewBox="0 0 24 24" fill="none"><path d="M12 18h.01M9.5 9a2.6 2.6 0 1 1 4.24 2.02c-.92.62-1.74 1.24-1.74 2.48" stroke-width="2" stroke-linecap="round"/><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" stroke-width="2"/></svg></a>
+        </div>
+        <div class="avatar">高</div>
+      </div>
+      <div class="user">管理员</div>
+    </aside>
+    <section class="main">
+      <div class="workspace">
+      <nav class="top-tabs" aria-label="页面页签">
+        <div class="top-tabs-left">
+          <div class="top-tabs-list">
+            <div class="top-tab active"><span class="top-tab-label">专业研究方向管理</span><svg class="top-tab-close" viewBox="0 0 16 16" fill="none"><path d="M4.5 4.5 11.5 11.5M11.5 4.5 4.5 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+            <div class="top-tab"><span class="top-tab-label">考试科目采集</span><svg class="top-tab-close" viewBox="0 0 16 16" fill="none"><path d="M4.5 4.5 11.5 11.5M11.5 4.5 4.5 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+            <div class="top-tab"><span class="top-tab-label">招生计划管理</span><svg class="top-tab-close" viewBox="0 0 16 16" fill="none"><path d="M4.5 4.5 11.5 11.5M11.5 4.5 4.5 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+            <div class="top-tab"><span class="top-tab-label">专业目录审核</span><svg class="top-tab-close" viewBox="0 0 16 16" fill="none"><path d="M4.5 4.5 11.5 11.5M11.5 4.5 4.5 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+            <div class="top-tab"><span class="top-tab-label">专业目录参数设置</span><svg class="top-tab-close" viewBox="0 0 16 16" fill="none"><path d="M4.5 4.5 11.5 11.5M11.5 4.5 4.5 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+            <div class="top-tabs-add"><button class="top-icon" aria-label="新增页签"><svg viewBox="0 0 16 16" fill="none"><path d="M5 3h8v8M3 5h8v8" stroke-width="1.4" stroke-linejoin="round"/></svg></button></div>
+          </div>
+        </div>
+        <div class="top-actions"><button class="top-icon" aria-label="刷新"><svg viewBox="0 0 16 16" fill="none"><path d="M13 7a5 5 0 1 0-1.46 3.54M13 3v4H9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button class="top-icon" aria-label="全屏"><svg viewBox="0 0 16 16" fill="none"><path d="M6 3H3v3M10 3h3v3M6 13H3v-3M10 13h3v-3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+      </nav>
+      <main class="content">
+        <h1 class="page-title">方案待审核</h1>
+        <p class="page-desc">审核岗位聘任、聘期考核等业务的分组方案与条款规则。</p>
+        <nav class="status-tabs"><button class="status-tab active">待审核 <span class="badge">9</span></button><button class="status-tab">已审核</button><button class="status-tab">全部</button></nav>
+        <section class="filter">
+          <label class="ds-field"><span>方案名称</span><input class="ds-input" placeholder="请输入方案名称模糊搜索" /></label>
+          <label class="ds-field"><span>业务类型</span><select class="ds-select"><option>全部</option><option>岗位聘任</option><option>聘期考核</option></select></label>
+          <label class="ds-field"><span>提交部门</span><select class="ds-select"><option>全部</option><option>人事处</option><option>教师发展中心</option><option>学院办公室</option></select></label>
+          <label class="ds-field"><span>提交时间</span><input class="ds-input" placeholder="请选择时间范围" /></label>
+          <div class="actions"><button class="btn default">重置</button><button class="btn primary">查询</button></div>
+        </section>
+        <section class="card">
+          <div class="toolbar"><div class="toolbar-title"><strong>待审核列表</strong><span>共 9 条记录，1 页，已选 1 条</span></div><div class="toolbar-right"><button class="btn default">导出</button><button class="btn default">批量通过</button><button class="btn default">批量退回</button></div></div>
+          <div class="table-wrap"><table><thead><tr><th class="col-check"><input type="checkbox" /></th><th class="col-index">序号</th><th>方案名称</th><th class="col-type">业务类型</th><th class="col-group">分组类型</th><th>提交部门</th><th>提交人</th><th class="col-time">提交时间</th><th class="col-status">审核状态</th><th>备注</th><th class="col-actions">操作</th></tr></thead><tbody>
+            <tr><td><input type="checkbox" checked /></td><td>1</td><td>岗位聘任分组方案A</td><td>岗位聘任</td><td>按岗位等级分组</td><td>人事处</td><td>王老师</td><td>2026-04-28 09:30</td><td><span class="ds-tag ds-tag--primary">待审核</span></td><td>年度岗位聘任方案提交审核</td><td><span class="row-actions"><button class="ds-link-button">通过</button><button class="ds-link-button">不通过</button><button class="ds-link-button">退回</button><button class="ds-link-button">详情</button></span></td></tr>
+            <tr><td><input type="checkbox" /></td><td>2</td><td>聘期考核默认方案</td><td>聘期考核</td><td>按人员类别分组</td><td>教师发展中心</td><td>李老师</td><td>2026-04-27 16:12</td><td><span class="ds-tag ds-tag--primary">待审核</span></td><td>补充考核条款后重新提交</td><td><span class="row-actions"><button class="ds-link-button">通过</button><button class="ds-link-button">不通过</button><button class="ds-link-button">退回</button><button class="ds-link-button">详情</button></span></td></tr>
+            <tr><td><input type="checkbox" /></td><td>3</td><td>岗位聘任高层次人才方案</td><td>岗位聘任</td><td>按人才类型分组</td><td>学院办公室</td><td>陈老师</td><td>2026-04-26 11:05</td><td><span class="ds-tag ds-tag--primary">待审核</span></td><td>含特殊条款与优先级配置</td><td><span class="row-actions"><button class="ds-link-button">通过</button><button class="ds-link-button">不通过</button><button class="ds-link-button">退回</button><button class="ds-link-button">详情</button></span></td></tr>
+          </tbody></table></div>
+          <footer class="pagination"><span>共 9 条</span><span>共 1 页</span><button class="ds-link-button">上一页</button><strong class="pagination-current">1</strong><button class="ds-link-button">下一页</button><label class="ds-field">跳至 <input class="ds-input" value="1" style="width:48px;height:28px;text-align:center" /> 页</label><select class="ds-select" style="width:96px;height:28px"><option>10 条/页</option></select></footer>
+        </section>
+      </main>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
