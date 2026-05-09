@@ -1,0 +1,31 @@
+@import '../tokens.css';
+
+.ds-field__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-xs);
+  line-height: var(--ds-line-height-xs);
+}
+
+.ds-field__label b {
+  color: var(--ds-color-danger);
+  font-weight: var(--ds-font-weight-semibold);
+}
+
+.ds-field__message {
+  color: var(--ds-color-text-tertiary);
+  font-size: var(--ds-font-size-xs);
+  line-height: var(--ds-line-height-xs);
+}
+
+.ds-field--error .ds-input,
+.ds-field--error .ds-select,
+.ds-field--error .ds-textarea {
+  border-color: var(--ds-color-danger);
+}
+
+.ds-field--error .ds-field__message {
+  color: var(--ds-color-danger);
+}

@@ -1,4 +1,5 @@
 import DSButton from '../Button'
+import DSField, { DSInput, DSSelect } from '../Field'
 import './index.css'
 
 export default function DSFilterBar({ fields = [], onSearch, onReset, className = '' }) {
@@ -7,20 +8,13 @@ export default function DSFilterBar({ fields = [], onSearch, onReset, className 
   return (
     <section className={classes} aria-label="查询筛选">
       {fields.map((field) => (
-        <label className="ds-field" key={field.key || field.label}>
-          <span>{field.label}</span>
+        <DSField label={field.label} key={field.key || field.label}>
           {field.type === 'select' ? (
-            <select className="ds-select" defaultValue={field.value || field.options?.[0]?.value || field.options?.[0]}>
-              {(field.options || []).map((option) => {
-                const optionValue = typeof option === 'string' ? option : option.value
-                const optionLabel = typeof option === 'string' ? option : option.label
-                return <option value={optionValue} key={optionValue}>{optionLabel}</option>
-              })}
-            </select>
+            <DSSelect options={field.options || []} defaultValue={field.value || field.options?.[0]?.value || field.options?.[0]} />
           ) : (
-            <input className="ds-input" placeholder={field.placeholder} defaultValue={field.value} />
+            <DSInput placeholder={field.placeholder} defaultValue={field.value} />
           )}
-        </label>
+        </DSField>
       ))}
       <div className="ds-filter-bar__actions">
         <DSButton variant="default" onClick={onReset}>重置</DSButton>

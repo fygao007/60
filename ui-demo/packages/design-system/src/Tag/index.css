@@ -1,0 +1,12 @@
+@import '../tokens.css';
+
+.ds-tag--info {
+  color: var(--ds-color-info);
+  background: var(--ds-color-info-light);
+}
+
+.ds-tag--neutral {
+  color: var(--ds-color-text-secondary);
+  background: var(--ds-color-bg-hover);
+  border: 1px solid var(--ds-color-border-secondary);
+}

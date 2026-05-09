@@ -1,0 +1,31 @@
+@import '../tokens.css';
+
+.ds-card-component {
+  overflow: hidden;
+}
+
+.ds-card-component__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-space-4);
+  min-height: 56px;
+  padding: 0 var(--ds-card-padding);
+  border-bottom: 1px solid var(--ds-color-border-secondary);
+}
+
+.ds-card-component__header strong {
+  color: var(--ds-color-text-heading);
+  font-size: var(--ds-font-size-md);
+  font-weight: var(--ds-font-weight-semibold);
+}
+
+.ds-card-component__extra {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+}
+
+.ds-card-component--padded .ds-card-component__body {
+  padding: var(--ds-card-padding);
+}

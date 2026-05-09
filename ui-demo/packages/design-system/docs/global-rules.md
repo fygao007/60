@@ -15,6 +15,34 @@
 
 - `src/tokens.css`：全局设计变量。
 - `src/base.css`：页面生成常用基础类。
+- `src/Button` / `src/ButtonGroup`：按钮与按钮组。
+- `src/Field`：表单字段、输入框、选择器、文本域。
+- `src/Tag` / `src/Tabs`：状态标签与页签。
+- `src/Card` / `src/PageHeader`：内容容器与页面标题区。
+- `src/DataTable` / `src/Pagination` / `src/FilterBar`：列表页核心组件。
+- `src/Modal` / `src/Drawer`：确认弹窗、编辑弹窗、详情抽屉等浮层。
+- `src/AppShell`：PC 后台框架壳。
+- `src/CrudTemplate` / `src/AuditTemplate` / `src/ImportWizard` / `src/EmptyState`：常见页面模板。
+
+## React 引用规则
+
+```js
+import {
+  DSAppShell,
+  DSButton,
+  DSCard,
+  DSDataTable,
+  DSField,
+  DSInput,
+  DSModal,
+  DSPageHeader,
+  DSSelect,
+  DSTabs,
+  DSTag,
+} from '@wisedu/design-system'
+```
+
+页面内不重复定义同名基础样式；若必须扩展，优先通过外层业务 class 组合设计变量。
 
 ## 页面生成要求
 
