@@ -11,6 +11,7 @@ import {
   DSDataTable,
   DSFilterBar,
   DSPageHeader,
+  DSSwitch,
   DSTag,
 } from '@wisedu/design-system'
 ```
@@ -29,6 +30,7 @@ import {
 - `DSSelect`
 - `DSTextarea`
 - `DSTag`
+- `DSSwitch`
 
 布局与导航：
 
@@ -41,8 +43,25 @@ import {
 
 - `DSFilterBar`
 - `DSDataTable`
+- `DSParentChildTable`
 - `DSPagination`
 - `DSEmptyState`
+
+审核场景：
+
+- `DSAuditStatusTabs`
+- `DSAuditToolbar`
+- `DSAuditActions`
+- `DSAuditOpinionModal`
+- `DSAuditDetailDrawer`
+
+导入场景：
+
+- `DSImportSteps`
+- `DSImportUpload`
+- `DSImportMappingTable`
+- `DSImportValidationPanel`
+- `DSImportResult`
 
 浮层：
 
@@ -73,6 +92,37 @@ import {
 />
 ```
 
+低代码系统风格列表可使用：
+
+```jsx
+<DSDataTable
+  variant="lowcode"
+  title="条款列表"
+  summary="已选 2 条"
+  draggable
+  columns={[
+    { key: 'code', title: '条款编号', width: 160 },
+    { key: 'name', title: '条款名称', width: 230 },
+    { key: 'scope', title: '适用业务', width: 210 },
+    { key: 'enabled', title: '启用状态', width: 170, render: (value) => <DSSwitch checked={value} /> },
+  ]}
+  data={data}
+  toolbarActions={<>
+    <DSButton>新增</DSButton>
+    <DSButton>删除</DSButton>
+    <DSButton>导入</DSButton>
+    <DSButton>导出</DSButton>
+  </>}
+  actions={[
+    { key: 'edit', label: '编辑' },
+    { key: 'detail', label: '详情' },
+    { key: 'delete', label: '删除' },
+  ]}
+/>
+```
+
+`variant="lowcode"` 会按教学 6.0 低代码系统贴近 VXE 表格视觉：首列拖拽手柄、次列复选框、40px 表头、46px 行高、右侧表格工具图标、文字操作列和 `暂无数据` 空态。
+
 ## 状态字段
 
 状态统一使用 `DSTag`，避免页面级重复写胶囊样式：
@@ -83,3 +133,98 @@ import {
 <DSTag color="warning">需补充</DSTag>
 <DSTag color="danger">不通过</DSTag>
 ```
+
+## 审核页组合
+
+```jsx
+<DSAuditStatusTabs
+  activeKey="pending"
+  items={[
+    { key: 'pending', label: '待审核', count: 9 },
+    { key: 'reviewed', label: '已审核' },
+    { key: 'all', label: '全部' },
+  ]}
+/>
+<DSDataTable
+  title="审核列表"
+  columns={columns}
+  data={data}
+  actions={[
+    { key: 'pass', label: '通过' },
+    { key: 'reject', label: '不通过' },
+    { key: 'return', label: '退回' },
+    { key: 'detail', label: '详情' },
+  ]}
+/>
+<DSAuditOpinionModal open={opinionOpen} type="return" record={currentRecord} />
+<DSAuditDetailDrawer open={detailOpen} record={currentRecord} />
+```
+
+## 导入页组合
+
+```jsx
+<DSImportWizard
+  current={1}
+  mappingRows={[
+    { key: 'name', source: '姓名', target: '姓名', required: true, status: 'matched' },
+    { key: 'college', source: '学院', target: '所属学院', required: true, status: 'matched' },
+  ]}
+  validationItems={[
+    { row: 8, field: '手机号', message: '格式可能不正确', level: 'warning' },
+  ]}
+/>
+```
+
+## 父子表格组合
+
+```jsx
+<DSParentChildTable
+  title="培养单位与专业方向"
+  summary="共 8 个培养单位"
+  parentColumns={[
+    { key: 'name', title: '培养单位', width: 240 },
+    { key: 'code', title: '单位代码', width: 120 },
+    { key: 'status', title: '状态', width: 120 },
+  ]}
+  childColumns={[
+    { key: 'name', title: '专业方向', width: 240 },
+    { key: 'degree', title: '学位类型', width: 120 },
+    { key: 'plan', title: '计划数', width: 100 },
+  ]}
+  data={data}
+  defaultExpandedKeys={['college-1']}
+  childSelectable
+  childToolbarActions={<DSButton variant="default">批量设置</DSButton>}
+  parentActions={[{ key: 'edit', label: '编辑' }]}
+  childActions={[{ key: 'detail', label: '详情' }]}
+/>
+```
+
+父子表格支持 `expandedKeys` 受控展开、`rowExpandable` 控制行是否可展开、`expandedRowRender` 自定义展开内容、`childSelectable` 子表勾选、`childToolbarActions` 子表工具栏、`emptyText` 与 `childEmptyText` 空态文案。
+
+MasterGo「1.2.2 父子表格（分组表格）」场景使用分组布局：
+
+```jsx
+<DSParentChildTable
+  layout="grouped"
+  title="报名信息审核"
+  summary="学生参与情况"
+  groupTitleKey="college"
+  showChildHeader={false}
+  childColumns={[
+    { key: 'name', title: '姓名', width: 100 },
+    { key: 'applyNo', title: '报名号', width: 78 },
+    { key: 'school', title: '就读院校', width: 120 },
+    { key: 'schoolLevel', title: '学校层次', width: 123 },
+    { key: 'rank', title: '成绩排名', width: 92 },
+    { key: 'direction', title: '研究方向', width: 100 },
+    { key: 'mentor', title: '申请导师', width: 88 },
+    { key: 'status', title: '审核状态', width: 100 },
+  ]}
+  data={groupedData}
+  defaultExpandedKeys={['industrial-design-1']}
+  childActions={[{ key: 'audit', label: '审核' }]}
+/>
+```
+
+`layout="grouped"` 会按「分组条 -> 父级汇总行 -> 缩进子表」渲染；父级汇总默认读取 `degree/type/tag`、`title/name`、`code/number`、`count/countText`，复杂场景可用 `renderGroupTitle` 和 `renderParentSummary` 覆盖。

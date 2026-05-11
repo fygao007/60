@@ -1,6 +1,7 @@
 import DSButton from '../Button'
 import DSFilterBar from '../FilterBar'
 import DSDataTable from '../DataTable'
+import DSAuditStatusTabs from '../AuditStatusTabs'
 import './index.css'
 
 const defaultStatusTabs = [
@@ -24,6 +25,7 @@ export default function DSAuditTemplate({
   pagination,
   onSearch,
   onReset,
+  onStatusChange,
   className = '',
 }) {
   const classes = ['ds-audit-template', className].filter(Boolean).join(' ')
@@ -50,18 +52,7 @@ export default function DSAuditTemplate({
         </div>
       </header>
 
-      <nav className="ds-audit-template__status-tabs" aria-label="审核状态">
-        {statusTabs.map((tab) => (
-          <button
-            className={['ds-audit-template__status-tab', tab.key === activeStatus && 'is-active'].filter(Boolean).join(' ')}
-            type="button"
-            key={tab.key}
-          >
-            <span>{tab.label}</span>
-            {typeof tab.count === 'number' && <em>{tab.count}</em>}
-          </button>
-        ))}
-      </nav>
+      <DSAuditStatusTabs items={statusTabs} activeKey={activeStatus} onChange={onStatusChange} />
 
       {filters.length > 0 && <DSFilterBar fields={filters} onSearch={onSearch} onReset={onReset} />}
 

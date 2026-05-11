@@ -44,6 +44,9 @@
 - 查询
 - 分页
 - 表格
+- 父子表格
+- 子表
+- 展开明细
 - 行内操作
 - 批量操作
 
@@ -58,6 +61,34 @@
 - 分页
 - 弹窗/抽屉预览
 - 空态预览
+
+若目标页面需要贴近教学 6.0 低代码系统默认列表态，表格优先使用 `DSDataTable variant="lowcode"`，并按需要开启 `draggable`。该模式默认匹配「首列拖拽手柄、第二列复选框、右侧表格工具图标、46px 行高、文字操作列」的低代码表格形态。
+
+### 父子表格页
+
+出现以下关键词时，优先使用 `DSParentChildTable`：
+
+- 父子表格
+- 主子表
+- 展开子表
+- 展开明细
+- 学院-专业、批次-任务、方案-规则、组织-人员等层级数据
+
+默认结构：
+
+- 查询筛选区
+- 工具栏
+- 父级表格
+- 展开按钮列
+- 内嵌子表容器
+- 父级行操作与子级行操作
+- 子表空态
+- 分页
+
+父级和子级字段应分别配置 `parentColumns` 与 `childColumns`；父级操作使用 `parentActions`，子级操作使用 `childActions`。
+若展开内容不是标准表格，使用 `expandedRowRender` 自定义内容；若需要控制展开状态，使用 `expandedKeys` 和 `onExpandChange`；若子表可勾选，开启 `childSelectable` 并传入 `selectedChildKeys`。
+
+当 MasterGo 页面表现为「表头 -> 分组条 -> 父级汇总行 -> 缩进子表」时，使用 `layout="grouped"`。分组文本使用 `groupTitleKey` 或 `renderGroupTitle`，父级汇总行优先使用默认字段 `degree/type/tag`、`title/name`、`code/number`、`count/countText`，复杂内容使用 `renderParentSummary`；主表头直接配置 `childColumns`，如稿件已在主表头展示字段，可设置 `showChildHeader={false}` 避免重复表头。
 
 ### 审核页
 
@@ -110,9 +141,20 @@
 
 - 步骤条
 - 上传区域
+- 模板下载说明
 - 字段映射表
 - 校验结果
+- 导入完成结果
 - 底部操作按钮
+
+React 页面优先使用：
+
+- `DSImportWizard`：导入向导整页组合。
+- `DSImportSteps`：导入步骤条。
+- `DSImportUpload`：上传文件和模板下载区域。
+- `DSImportMappingTable`：模板字段到系统字段的映射表。
+- `DSImportValidationPanel`：错误、警告、通过数量与明细。
+- `DSImportResult`：导入完成结果页。
 
 ### 详情页
 

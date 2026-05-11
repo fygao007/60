@@ -4,6 +4,10 @@
   overflow: hidden;
 }
 
+.ds-data-table--lowcode {
+  border-radius: var(--ds-radius-sm);
+}
+
 .ds-data-table__toolbar {
   display: flex;
   align-items: center;
@@ -11,6 +15,12 @@
   gap: var(--ds-space-4);
   padding: var(--ds-space-4) var(--ds-card-padding);
   border-bottom: 1px solid var(--ds-color-border-secondary);
+}
+
+.ds-data-table--lowcode .ds-data-table__toolbar {
+  min-height: 48px;
+  padding: var(--ds-space-2) 0;
+  border-bottom: 0;
 }
 
 .ds-data-table__title {
@@ -30,14 +40,54 @@
   line-height: var(--ds-line-height-sm);
 }
 
+.ds-data-table__toolbar-side {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-3);
+}
+
 .ds-data-table__toolbar-actions {
   display: flex;
   align-items: center;
   gap: var(--ds-space-2);
 }
 
+.ds-data-table__table-tools {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-1);
+}
+
+.ds-data-table__tool-button {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  color: var(--ds-color-text-heading);
+  background: transparent;
+  border: 0;
+  border-radius: var(--ds-radius-sm);
+  cursor: pointer;
+}
+
+.ds-data-table__tool-button:hover {
+  color: var(--ds-color-primary);
+  background: var(--ds-color-primary-lighter);
+}
+
+.ds-data-table__tool-button svg {
+  width: 16px;
+  height: 16px;
+}
+
 .ds-data-table__wrap {
   overflow: auto;
+}
+
+.ds-data-table--lowcode .ds-data-table__wrap {
+  border: 1px solid var(--ds-color-border-secondary);
+  border-radius: var(--ds-radius-sm);
 }
 
 .ds-data-table__table {
@@ -60,6 +110,29 @@
   text-overflow: ellipsis;
 }
 
+.ds-data-table--lowcode .ds-data-table__table th {
+  height: 40px;
+  color: var(--ds-color-text-heading);
+  background: #fafafa;
+}
+
+.ds-data-table--lowcode .ds-data-table__table td {
+  height: 46px;
+}
+
+.ds-data-table--lowcode .ds-data-table__table th + th,
+.ds-data-table--lowcode .ds-data-table__table td + td {
+  border-left: 1px solid rgba(238, 238, 240, 0.72);
+}
+
+.ds-data-table--lowcode .ds-data-table__table tbody tr:nth-child(even) td {
+  background: #fcfcfd;
+}
+
+.ds-data-table--lowcode .ds-data-table__table tbody tr:hover td {
+  background: var(--ds-color-primary-lighter);
+}
+
 .ds-data-table__table th {
   color: var(--ds-color-text-secondary);
   font-weight: var(--ds-font-weight-semibold);
@@ -74,11 +147,43 @@
   width: 44px;
 }
 
+.ds-data-table__drag {
+  width: 48px;
+  text-align: center;
+}
+
+.ds-data-table__drag-handle {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  color: var(--ds-color-text-heading);
+}
+
+.ds-data-table__drag-handle::before {
+  content: "::";
+  font-weight: var(--ds-font-weight-semibold);
+  letter-spacing: 1px;
+  transform: rotate(90deg);
+}
+
 .ds-data-table__actions-col {
-  width: 208px;
+  width: 160px;
 }
 
 .ds-data-table__row-actions {
   display: inline-flex;
   gap: var(--ds-space-2);
+}
+
+.ds-data-table__empty {
+  height: 220px;
+  color: var(--ds-color-text-tertiary);
+  text-align: center;
+}
+
+.ds-data-table__empty-content {
+  display: grid;
+  place-items: center;
+  min-height: 180px;
 }

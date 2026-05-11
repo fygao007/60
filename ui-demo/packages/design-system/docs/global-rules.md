@@ -19,9 +19,11 @@
 - `src/Field`：表单字段、输入框、选择器、文本域。
 - `src/Tag` / `src/Tabs`：状态标签与页签。
 - `src/Card` / `src/PageHeader`：内容容器与页面标题区。
-- `src/DataTable` / `src/Pagination` / `src/FilterBar`：列表页核心组件。
+- `src/DataTable` / `src/ParentChildTable` / `src/Pagination` / `src/FilterBar`：列表页核心组件。
 - `src/Modal` / `src/Drawer`：确认弹窗、编辑弹窗、详情抽屉等浮层。
 - `src/AppShell`：PC 后台框架壳。
+- `src/AuditStatusTabs` / `src/AuditToolbar` / `src/AuditActions` / `src/AuditOpinionModal` / `src/AuditDetailDrawer`：审核场景专用组件。
+- `src/ImportSteps` / `src/ImportUpload` / `src/ImportMappingTable` / `src/ImportValidationPanel` / `src/ImportResult`：导入场景专用组件。
 - `src/CrudTemplate` / `src/AuditTemplate` / `src/ImportWizard` / `src/EmptyState`：常见页面模板。
 
 ## React 引用规则
@@ -29,13 +31,24 @@
 ```js
 import {
   DSAppShell,
+  DSAuditActions,
+  DSAuditDetailDrawer,
+  DSAuditOpinionModal,
+  DSAuditStatusTabs,
+  DSAuditToolbar,
   DSButton,
   DSCard,
   DSDataTable,
   DSField,
+  DSImportMappingTable,
+  DSImportResult,
+  DSImportSteps,
+  DSImportUpload,
+  DSImportValidationPanel,
   DSInput,
   DSModal,
   DSPageHeader,
+  DSParentChildTable,
   DSSelect,
   DSTabs,
   DSTag,
