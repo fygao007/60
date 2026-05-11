@@ -156,6 +156,47 @@
   margin-left: auto;
 }
 
+.ds-app-shell__section-tabs {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.ds-app-shell__section-tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 2px;
+  color: #505266;
+  background: transparent;
+  border: 0;
+  font-family: var(--ds-font-family);
+  font-size: 16px;
+  font-weight: var(--ds-font-weight-semibold);
+  line-height: 24px;
+  cursor: pointer;
+}
+
+.ds-app-shell__section-tab.is-active {
+  color: #000;
+}
+
+.ds-app-shell__section-tab.is-active::after {
+  content: "";
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  z-index: 0;
+  height: 8px;
+  background: #d6d9ff;
+}
+
+.ds-app-shell__section-tab > span {
+  position: relative;
+  z-index: 1;
+}
+
 .ds-app-shell__content {
   flex: 1;
   min-height: 0;

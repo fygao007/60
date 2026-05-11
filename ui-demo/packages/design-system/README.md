@@ -2,6 +2,86 @@
 
 60 系统 PC 页面生成使用的本地 React 组件库。组件以 `DS*` 前缀导出，样式基于 `src/tokens.css` 和 `src/base.css`。
 
+## HTML 预览底子（DSAppShell HTML preview）
+
+`src/AppShell/` 下并列两套实现：
+
+| 文件 | 用途 |
+|---|---|
+| `index.jsx` + `index.css` | React 组件 `DSAppShell`，业务页用 |
+| **`app-shell.css` + `app-shell.js`** | **HTML 单文件预览底子**，给设计 / 评审看 |
+
+HTML 预览页只需要：
+
+```html
+<link rel="stylesheet" href="./packages/design-system/src/base.css" />
+<link rel="stylesheet" href="./packages/design-system/src/AppShell/app-shell.css" />
+
+<body>
+  <div class="stage ds-scope">
+    <!-- 业务内容（init 后会被自动挪进 .operation-content） -->
+    <header class="operation-header">...</header>
+    <div class="operation-query-row">...</div>
+    <div class="operation-table-wrap">...</div>
+    <footer class="operation-footer">...</footer>
+  </div>
+
+  <script src="./assets/icon-registry.js"></script>
+  <script src="./packages/design-system/src/AppShell/app-shell.js"></script>
+  <script>
+    WiseAppShell.init({
+      activeModule: 'doctor',          // 一级导航 active
+      secondaryNav: {                  // 二级导航分组
+        title: '协议管理',
+        status: ['进行', 6],
+        items: ['协议模板','条款库','机构管理','年级管理','引用配置','条款审核'],
+        foot: '流程参数设置'
+      },
+      activeFeature: '条款库'           // 二级导航 + 顶 Tab active 项
+    });
+  </script>
+</body>
+```
+
+参考样例：`ui-demo/clause-library.html`、`ui-demo/campus-info.html`。
+
+`app-shell.css` 同时包含 **CRUD 列表通用模式**（`.operation-query-row` / `.operation-table` / `.ds-switch` / `.pages` / `.operation-footer`），业务页只需在 `<style>` 里写自己表格的列宽。
+
+### 一级页签 / 业务标题样式
+
+一级页签选中态统一使用 8px 高的底部色块，不使用边框模拟。
+
+HTML 预览底子：
+
+```html
+<div class="operation-title"><span>专业研究方向管理</span></div>
+<div class="operation-title is-muted"><span>选项</span></div>
+```
+
+React / 组件库样式：
+
+```jsx
+<DSTabs
+  variant="section"
+  activeKey="base"
+  items={[
+    { key: 'base', label: '选项' },
+    { key: 'other', label: '选项' },
+  ]}
+/>
+```
+
+也可在 `DSAppShell` 内部直接使用样式类：
+
+```jsx
+<div className="ds-app-shell__section-tabs">
+  <button className="ds-app-shell__section-tab is-active" type="button"><span>选项</span></button>
+  <button className="ds-app-shell__section-tab" type="button"><span>选项</span></button>
+</div>
+```
+
+视觉规则：文本 `16px / 600 / 24px`，选中态色块 `height: 8px`，色值 `#D6D9FF`，文字层级高于色块。
+
 ## 使用
 
 ```jsx

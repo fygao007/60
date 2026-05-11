@@ -70,3 +70,37 @@
   color: var(--ds-color-text-disabled);
   cursor: not-allowed;
 }
+
+.ds-tabs--section {
+  gap: 24px;
+  min-height: auto;
+  border-bottom: 0;
+}
+
+.ds-tabs--section .ds-tabs__item {
+  height: auto;
+  padding: 2px;
+  color: #505266;
+  font-size: 16px;
+  font-weight: var(--ds-font-weight-semibold);
+  line-height: 24px;
+}
+
+.ds-tabs--section .ds-tabs__item.is-active {
+  color: #000;
+}
+
+.ds-tabs--section .ds-tabs__item.is-active::after {
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  z-index: 0;
+  height: 8px;
+  background: #d6d9ff;
+  border-radius: 0;
+}
+
+.ds-tabs--section .ds-tabs__item > span {
+  position: relative;
+  z-index: 1;
+}

@@ -298,15 +298,38 @@
     }
 
     .operation-title {
+      position: relative;
       display: flex;
+      justify-content: flex-start;
       align-items: center;
       padding: 2px;
-      border-bottom: 8px solid #d6d9ff;
       color: #000;
       font-size: 16px;
       font-weight: 600;
       line-height: 24px;
     }
+
+    .operation-title::after {
+      content: "";
+      position: absolute;
+      left: 2px;
+      right: 2px;
+      bottom: 2px;
+      z-index: 0;
+      height: 8px;
+      background: #d6d9ff;
+    }
+
+    .operation-title span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .operation-title.is-muted {
+      color: #505266;
+    }
+
+    .operation-title.is-muted::after { display: none; }
 
     .operation-meta {
       display: flex;
@@ -446,7 +469,7 @@
           <section class="operation-body">
             <div class="operation-content">
               <header class="operation-header">
-                <div class="operation-title">专业研究方向管理</div>
+                <div class="operation-title"><span>专业研究方向管理</span></div>
                 <div class="operation-meta"><span>标题：</span><strong>专业目录</strong></div>
                 <div class="operation-header-spacer"></div>
                 <div class="operation-buttons">
@@ -488,6 +511,7 @@
     const operationRefresh = document.querySelector(".operation-refresh");
     const operationFullscreen = document.querySelector(".operation-fullscreen");
     const operationTitle = document.querySelector(".operation-title");
+    const operationTitleText = document.querySelector(".operation-title span");
     const operationMeta = document.querySelector(".operation-meta strong");
     const operationTableBody = document.querySelector(".operation-table tbody");
     const tabStorageKey = "wise-pc-shell-tabs";
@@ -613,14 +637,14 @@
 
     function renderOperationContent(feature) {
       if (!feature) {
-        operationTitle.textContent = "请选择功能";
+        operationTitleText.textContent = "请选择功能";
         operationMeta.textContent = "无";
         operationTableBody.innerHTML = "";
         return;
       }
       if (!tabStates[feature]) tabStates[feature] = createFeatureState(feature);
       const state = tabStates[feature];
-      operationTitle.textContent = feature;
+      operationTitleText.textContent = feature;
       operationMeta.textContent = state.meta;
       operationTableBody.innerHTML = state.rows.map((row) => `
         <tr>

@@ -1,7 +1,12 @@
 import './index.css'
 
-export default function DSTabs({ items = [], activeKey, onChange, size = 'default', className = '' }) {
-  const classes = ['ds-tabs', size === 'large' && 'ds-tabs--large', className].filter(Boolean).join(' ')
+export default function DSTabs({ items = [], activeKey, onChange, size = 'default', variant = 'default', className = '' }) {
+  const classes = [
+    'ds-tabs',
+    size === 'large' && 'ds-tabs--large',
+    variant === 'section' && 'ds-tabs--section',
+    className,
+  ].filter(Boolean).join(' ')
 
   return (
     <nav className={classes} aria-label="页签">
