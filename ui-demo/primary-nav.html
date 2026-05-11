@@ -114,12 +114,14 @@
     .navigation-row, .navigation-child, .navigation-section, .navigation-bottom-row { display: flex; flex: none; align-items: center; align-self: stretch; gap: 8px; border-radius: 4px; text-decoration: none; }
     .navigation-row, .navigation-bottom-row { padding: 7px 8px; color: #000; }
     .navigation-child { padding: 7px 8px 7px 24px; color: #505266; }
-    .navigation-child.active { color: #000; background: rgba(51, 63, 255, .1); }
+    .navigation-row.active, .navigation-child.active { color: #000; background: rgba(51, 63, 255, .1); }
     .navigation-title, .navigation-child span, .navigation-bottom-text span { flex: 1; min-width: 0; overflow: hidden; font-size: 14px; line-height: 22px; text-overflow: ellipsis; white-space: nowrap; }
     .navigation-status { display: inline-flex; align-items: center; gap: 4px; color: #737585; font-size: 12px; line-height: 20px; white-space: nowrap; }
     .navigation-status strong { font-weight: 600; }
     .navigation-arrow { display: grid; place-items: center; flex: none; width: 16px; height: 16px; color: #737585; }
     .navigation-section { gap: 4px; padding: 12px 0 0 24px; color: #737585; font-size: 12px; line-height: 12px; }
+    .navigation-section-label { max-width: 118px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .navigation-section-icon { display: inline-grid; place-items: center; flex: none; width: 14px; height: 14px; color: #737585; font-size: 12px; line-height: 14px; }
     .navigation-menu-foot { display: flex; flex: none; flex-direction: column; align-items: flex-start; align-self: stretch; gap: 4px; padding: 8px; }
     .navigation-bottom-icon { display: flex; flex: none; align-items: center; justify-content: center; width: 16px; height: 16px; color: #000; }
     .navigation-bottom-text { display: flex; flex: 1; flex-shrink: 0; align-items: center; justify-content: flex-start; min-width: 0; gap: 8px; color: #000; }
@@ -157,9 +159,22 @@
     .operation-tabs {
       display: flex;
       flex: 1;
-      align-items: flex-start;
+      align-items: center;
       min-width: 0;
-      overflow: hidden;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scrollbar-width: thin;
+      white-space: nowrap;
+    }
+
+    .operation-tabs::-webkit-scrollbar { height: 4px; }
+    .operation-tabs::-webkit-scrollbar-thumb { background: rgba(80, 82, 102, .24); border-radius: 999px; }
+
+    .operation-tabs-track {
+      display: flex;
+      flex: none;
+      align-items: center;
+      min-width: max-content;
     }
 
     .operation-tab {
@@ -178,6 +193,13 @@
       cursor: pointer;
     }
 
+    .operation-tab span:first-child {
+      max-width: 168px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
     .operation-tab.active {
       color: #000;
       background: #fff;
@@ -194,23 +216,50 @@
     }
 
     .operation-tab-close {
+      display: grid;
+      place-items: center;
+      flex: none;
+      width: 16px;
+      height: 16px;
       color: #9697a3;
       font-size: 16px;
       line-height: 16px;
+      border-radius: 4px;
     }
 
-    .operation-tab-add,
-    .operation-tool {
+    .operation-tab-close:hover { color: #333fff; background: rgba(51, 63, 255, .08); }
+
+    .operation-tab-close-all {
       display: grid;
       place-items: center;
-      width: 24px;
-      height: 24px;
+      flex: none;
+      width: 32px;
+      height: 32px;
+      margin: 0 8px;
       color: #505266;
       background: transparent;
       border: 0;
       border-radius: 4px;
       cursor: pointer;
     }
+
+    .operation-tool {
+      display: grid;
+      place-items: center;
+      width: 32px;
+      height: 32px;
+      color: #505266;
+      background: transparent;
+      border: 0;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .operation-tab-close-all:hover,
+    .operation-tool:hover { background: rgba(51, 63, 255, .08); }
+
+    .operation-tool .wise-icon,
+    .operation-tab-close-all .wise-icon { width: 24px; height: 24px; }
 
     .operation-actions {
       display: flex;
@@ -391,8 +440,8 @@
         <div class="operation-shell">
           <div class="operation-tabs-bar">
             <div class="operation-tabs" aria-label="功能页签"></div>
-            <button class="operation-tool" type="button" aria-label="刷新">↻</button>
-            <button class="operation-tool" type="button" aria-label="全屏">□</button>
+            <button class="operation-tool operation-refresh" type="button" aria-label="刷新当前页签"><span class="wise-icon" data-wise-icon="refresh"></span></button>
+            <button class="operation-tool operation-fullscreen" type="button" aria-label="全屏"><span class="wise-icon" data-wise-icon="fullscreen"></span></button>
           </div>
           <section class="operation-body">
             <div class="operation-content">
@@ -435,84 +484,206 @@
     const navigationList = document.querySelector(".navigation-list");
     const navigationFoot = document.querySelector(".navigation-menu-foot");
     const operationTabs = document.querySelector(".operation-tabs");
+    const operationShell = document.querySelector(".operation-shell");
+    const operationRefresh = document.querySelector(".operation-refresh");
+    const operationFullscreen = document.querySelector(".operation-fullscreen");
     const operationTitle = document.querySelector(".operation-title");
     const operationMeta = document.querySelector(".operation-meta strong");
     const operationTableBody = document.querySelector(".operation-table tbody");
+    const tabStorageKey = "wise-pc-shell-tabs";
+    const defaultTabs = ["专业研究方向管理", "考试科目采集", "招生计划管理", "专业目录审核", "专业目录参数设置"];
     let activeFeature = "专业研究方向管理";
-    let recentFeatures = ["专业研究方向管理", "考试科目采集", "招生计划管理", "专业目录审核", "专业目录参数设置"];
+    let openTabs = [...defaultTabs];
+    let tabStates = {};
+    let refreshSerial = 0;
+    let currentModule = "doctor";
 
     const moduleMenus = {
       home: { groups: [{ title: "常用功能", open: true, children: ["我的待办", "最近访问", "消息通知", "个人收藏"] }, { title: "工作台", children: ["数据概览", "流程跟踪", "操作日志"] }], foot: "流程参数设置" },
       prepare: { groups: [{ title: "准备工作", status: ["进行", "3"], open: true, children: ["年度批次设置", "招生单位维护", "报名材料配置", "通知模板维护"] }, { title: "基础配置", children: ["字典参数管理", "流程参数设置", "公共规则配置"] }], foot: "准备参数设置" },
-      master: { groups: [{ title: "硕士招生", status: ["进行", "5"], open: true, children: ["专业目录管理", "招生计划管理", "考试科目管理", "考试大纲管理", "专业目录审核"] }, { title: "考生管理", rows: ["报名信息管理", "资格审核管理", "准考证管理"] }, { title: "录取管理", rows: ["复试管理", "拟录取管理"] }], foot: "硕士流程参数" },
-      doctor: { groups: [{ title: "专业目录", status: ["进行", "4"], open: true, children: ["专业研究方向管理", "招生计划管理", "考试科目管理", "考试科目采集", "考试大纲管理", "专业目录审核"] }, { section: "通用信息管理", children: ["招生简章管理", "招生信息发布管理", "年度导师管理"] }, { section: "超管配置", children: ["检查项配置页"] }, { rows: ["考生管理", "初试管理", "复试管理", "拟录取管理"] }], foot: "流程参数设置" },
+      master: { groups: [{ title: "硕士招生", status: ["进行", "5"], open: true, children: ["专业目录管理", "招生计划管理", "考试科目管理", "考试大纲管理", "专业目录审核"] }, { title: "考生管理", open: false, children: ["报名信息管理", "资格审核管理", "准考证管理"] }, { title: "录取管理", open: false, children: ["复试管理", "拟录取管理"] }], foot: "硕士流程参数" },
+      doctor: { groups: [{ title: "专业目录", status: ["进行", "4"], open: true, children: ["专业研究方向管理", "招生计划管理", "考试科目管理", "考试科目采集", "考试大纲管理", "专业目录审核", { section: "通用信息管理", info: true, children: ["招生简章管理", "招生信息发布管理", "年度导师管理"] }, { section: "超管配置", children: ["检查项配置页"] }] }, { title: "考生管理", open: false, children: ["报名信息管理", "资格审核管理", "准考证管理"] }, { title: "初试管理", open: false, children: ["初试安排", "成绩录入", "成绩复核"] }, { title: "复试管理", open: false, children: ["复试安排", "复试名单", "复试成绩"] }, { title: "拟录取管理", open: false, children: ["拟录取名单", "录取确认", "调档函管理"] }], foot: "流程参数设置" },
       camp: { groups: [{ title: "夏令营", status: ["进行", "2"], open: true, children: ["营员报名管理", "材料审核管理", "活动日程管理", "优秀营员管理"] }, { title: "通知发布", children: ["公告管理", "邮件短信模板"] }], foot: "夏令营参数" },
       recommend: { groups: [{ title: "推免管理", status: ["进行", "3"], open: true, children: ["推免报名管理", "资格审核管理", "复试安排管理", "拟录取确认"] }, { title: "指标管理", children: ["推免指标维护", "接收学院配置"] }], foot: "推免参数设置" },
       hkmt: { groups: [{ title: "港澳台招生", status: ["进行", "2"], open: true, children: ["考生报名管理", "材料审核管理", "考试安排管理", "录取结果管理"] }, { title: "通用配置", children: ["招生简章管理", "通知模板管理"] }], foot: "港澳台参数" },
-      exam: { groups: [{ title: "考务管理", status: ["进行", "6"], open: true, children: ["考场编排", "监考安排", "准考证管理", "成绩录入", "成绩复核", "异常情况登记"] }, { title: "考试资源", rows: ["考点管理", "考场管理", "监考教师管理"] }], foot: "考务参数设置" }
+      exam: { groups: [{ title: "考务管理", status: ["进行", "6"], open: true, children: ["考场编排", "监考安排", "准考证管理", "成绩录入", "成绩复核", "异常情况登记"] }, { title: "考试资源", open: false, children: ["考点管理", "考场管理", "监考教师管理"] }], foot: "考务参数设置" }
     };
 
     function rowTemplate(title) {
       return `<a class="navigation-row" href="#" data-feature="${title}"><span class="navigation-title">${title}</span><span class="navigation-arrow"><span class="wise-icon" data-wise-icon="chevronRight"></span></span></a>`;
     }
 
+    function childTemplate(child, groupIndex, childIndex) {
+      if (typeof child === "string") {
+        return `<a class="navigation-child${groupIndex === 0 && childIndex === 0 ? " active" : ""}" href="#" data-feature="${child}"><span>${child}</span></a>`;
+      }
+      if (child.section) {
+        const icon = child.info ? '<span class="navigation-section-icon" aria-hidden="true">ⓘ</span>' : "";
+        const children = (child.children || []).map((item) => `<a class="navigation-child" href="#" data-feature="${item}"><span>${item}</span></a>`).join("");
+        return `<div class="navigation-section"><span class="navigation-section-label">${child.section}</span>${icon}</div>${children}`;
+      }
+      return "";
+    }
+
     function groupTemplate(group, index) {
       if (group.section) {
+        const icon = group.info ? '<span class="navigation-section-icon" aria-hidden="true">ⓘ</span>' : "";
         const children = (group.children || []).map((child) => `<a class="navigation-child" href="#" data-feature="${child}"><span>${child}</span></a>`).join("");
-        return `<div class="navigation-section"><span>${group.section}</span>${group.children ? '<span class="navigation-arrow"><span class="wise-icon" data-wise-icon="chevronDown"></span></span>' : ""}</div>${children}`;
+        return `<div class="navigation-section"><span class="navigation-section-label">${group.section}</span>${icon}</div>${children}`;
       }
       if (group.rows) return group.rows.map(rowTemplate).join("");
       const status = group.status ? `<span class="navigation-status">${group.status[0]} <strong>${group.status[1]}</strong></span>` : "";
-      const children = (group.children || []).map((child, childIndex) => `<a class="navigation-child${index === 0 && childIndex === 0 ? " active" : ""}" href="#" data-feature="${child}"><span>${child}</span></a>`).join("");
-      return `<a class="navigation-row" href="#" data-feature="${group.title}"><span class="navigation-title">${group.title}</span>${status}<span class="navigation-arrow"><span class="wise-icon" data-wise-icon="${group.open ? "chevronDown" : "chevronRight"}"></span></span></a>${children}`;
+      const isOpen = group.open !== false;
+      const children = isOpen ? (group.children || []).map((child, childIndex) => childTemplate(child, index, childIndex)).join("") : "";
+      return `<a class="navigation-row" href="#" data-nav-group="${index}" aria-expanded="${isOpen}"><span class="navigation-title">${group.title}</span>${status}<span class="navigation-arrow"><span class="wise-icon" data-wise-icon="${isOpen ? "chevronUp" : "chevronDown"}"></span></span></a>${children}`;
     }
 
-    function renderModule(moduleName) {
+    function loadTabState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(tabStorageKey) || "null");
+        if (!saved || !Array.isArray(saved.openTabs)) return;
+        openTabs = saved.openTabs.filter(Boolean);
+        activeFeature = openTabs.includes(saved.activeFeature) ? saved.activeFeature : openTabs[0] || "";
+        tabStates = saved.tabStates && typeof saved.tabStates === "object" ? saved.tabStates : {};
+      } catch (error) {
+        openTabs = [...defaultTabs];
+        activeFeature = "专业研究方向管理";
+        tabStates = {};
+      }
+    }
+
+    function saveTabState() {
+      try {
+        localStorage.setItem(tabStorageKey, JSON.stringify({ openTabs, activeFeature, tabStates }));
+      } catch (error) {
+        // 静态原型允许 localStorage 不可用，状态仍在内存中保持。
+      }
+    }
+
+    function createFeatureState(feature) {
+      refreshSerial += 1;
+      const moduleLabel = document.querySelector(".primary-nav-item.active .primary-label")?.textContent || "博士";
+      const rows = Array.from({ length: 6 }, (_, index) => ({
+        code: `${feature.slice(0, 2).toUpperCase()}-${String(index + 1).padStart(3, "0")}`,
+        name: `${feature} ${index + 1}`,
+        module: moduleLabel,
+        status: index % 3 === 0 ? "待处理" : "启用",
+        updatedAt: `2026-05-${String(11 - index).padStart(2, "0")}`
+      }));
+      return {
+        meta: feature.includes("参数") ? "参数配置" : feature.includes("审核") ? "审核业务" : "选项",
+        rows,
+        refreshCount: refreshSerial
+      };
+    }
+
+    function syncNavigationActive(feature) {
+      document.querySelectorAll(".navigation-row.active, .navigation-child.active, .navigation-bottom-row.active").forEach((item) => item.classList.remove("active"));
+      const current = [...document.querySelectorAll("[data-feature]")].find((item) => item.dataset.feature === feature);
+      if (current) current.classList.add("active");
+    }
+
+    function renderModule(moduleName, options = {}) {
+      currentModule = moduleName;
       const config = moduleMenus[moduleName] || moduleMenus.doctor;
       navigationList.innerHTML = config.groups.map(groupTemplate).join("");
       navigationFoot.innerHTML = `<a class="navigation-bottom-row" href="#" data-feature="${config.foot}"><span class="navigation-bottom-icon"><span class="wise-icon" data-wise-icon="flow"></span></span><span class="navigation-bottom-text"><span>${config.foot}</span></span></a>`;
       window.WiseIconRegistry.renderIcons(navigationList);
       window.WiseIconRegistry.renderIcons(navigationFoot);
-      const activeItem = navigationList.querySelector(".navigation-child.active") || navigationList.querySelector("[data-feature]");
-      if (activeItem) updateFeature(activeItem.dataset.feature, { syncNav: false });
+      const activeItem = navigationList.querySelector(".navigation-child.active") || navigationList.querySelector(".navigation-child[data-feature], .navigation-row[data-feature]");
+      if (options.openDefault !== false && activeItem) openFeature(activeItem.dataset.feature, { refresh: true, syncNav: false });
+      if (options.openDefault === false) syncNavigationActive(activeFeature);
     }
 
     function renderTabs() {
-      operationTabs.innerHTML = recentFeatures.map((feature) => `
-        <div class="operation-tab${feature === activeFeature ? " active" : ""}" data-tab="${feature}">
-          <span>${feature}</span>
-          <span class="operation-tab-close">×</span>
+      operationTabs.innerHTML = `
+        <div class="operation-tabs-track">
+          ${openTabs.map((feature) => `
+            <div class="operation-tab${feature === activeFeature ? " active" : ""}" data-tab="${feature}" title="${feature}">
+              <span>${feature}</span>
+              <span class="operation-tab-close" role="button" aria-label="关闭 ${feature}">×</span>
+            </div>
+          `).join("")}
+          ${openTabs.length ? '<button class="operation-tab-close-all" type="button" aria-label="关闭全部页签"><span class="wise-icon" data-wise-icon="closeAllTabs"></span></button>' : ""}
         </div>
-      `).join("") + '<button class="operation-tab-add" type="button" aria-label="新增页签">＋</button>';
+      `;
+      window.WiseIconRegistry.renderIcons(operationTabs);
+      operationTabs.querySelector(".operation-tab.active")?.scrollIntoView({ inline: "nearest", block: "nearest" });
     }
 
     function renderOperationContent(feature) {
+      if (!feature) {
+        operationTitle.textContent = "请选择功能";
+        operationMeta.textContent = "无";
+        operationTableBody.innerHTML = "";
+        return;
+      }
+      if (!tabStates[feature]) tabStates[feature] = createFeatureState(feature);
+      const state = tabStates[feature];
       operationTitle.textContent = feature;
-      operationMeta.textContent = feature.includes("参数") ? "参数配置" : feature.includes("审核") ? "审核业务" : "选项";
-      operationTableBody.innerHTML = Array.from({ length: 6 }, (_, index) => `
+      operationMeta.textContent = state.meta;
+      operationTableBody.innerHTML = state.rows.map((row) => `
         <tr>
-          <td>${feature.slice(0, 2).toUpperCase()}-${String(index + 1).padStart(3, "0")}</td>
-          <td>${feature} ${index + 1}</td>
-          <td>${document.querySelector(".primary-nav-item.active .primary-label")?.textContent || "博士"}</td>
-          <td>${index % 3 === 0 ? "待处理" : "启用"}</td>
-          <td>2026-05-${String(11 - index).padStart(2, "0")}</td>
+          <td>${row.code}</td>
+          <td>${row.name}</td>
+          <td>${row.module}</td>
+          <td>${row.status}</td>
+          <td>${row.updatedAt}</td>
         </tr>
       `).join("");
     }
 
-    function updateFeature(feature, options = {}) {
+    function openFeature(feature, options = {}) {
       if (!feature) return;
+      if (!openTabs.includes(feature)) openTabs.push(feature);
       activeFeature = feature;
-      recentFeatures = [feature, ...recentFeatures.filter((item) => item !== feature)].slice(0, 5);
+      if (options.refresh) tabStates[feature] = createFeatureState(feature);
 
-      if (options.syncNav !== false) {
-        document.querySelectorAll(".navigation-child.active").forEach((item) => item.classList.remove("active"));
-        const current = [...document.querySelectorAll("[data-feature]")].find((item) => item.dataset.feature === feature);
-        if (current?.classList.contains("navigation-child")) current.classList.add("active");
-      }
+      if (options.syncNav !== false) syncNavigationActive(feature);
 
       renderTabs();
       renderOperationContent(feature);
+      saveTabState();
+    }
+
+    function activateTab(feature) {
+      if (!openTabs.includes(feature)) return;
+      activeFeature = feature;
+      syncNavigationActive(feature);
+      renderTabs();
+      renderOperationContent(feature);
+      saveTabState();
+    }
+
+    function closeTab(feature) {
+      const closingIndex = openTabs.indexOf(feature);
+      openTabs = openTabs.filter((item) => item !== feature);
+      delete tabStates[feature];
+      if (activeFeature === feature) {
+        activeFeature = openTabs[closingIndex] || openTabs[closingIndex - 1] || openTabs[0] || "";
+      }
+      syncNavigationActive(activeFeature);
+      renderTabs();
+      renderOperationContent(activeFeature);
+      saveTabState();
+    }
+
+    function closeAllTabs() {
+      openTabs = [];
+      activeFeature = "";
+      tabStates = {};
+      syncNavigationActive("");
+      renderTabs();
+      renderOperationContent("");
+      saveTabState();
+    }
+
+    function toggleNavigationGroup(index) {
+      const config = moduleMenus[currentModule] || moduleMenus.doctor;
+      const group = config.groups[Number(index)];
+      if (!group || (!group.children && !group.rows)) return;
+      group.open = group.open === false;
+      renderModule(currentModule, { openDefault: false });
     }
 
     function setCollapsed(collapsed) {
@@ -537,35 +708,59 @@
     });
 
     navigationList.addEventListener("click", (event) => {
+      const groupToggle = event.target.closest("[data-nav-group]");
+      if (groupToggle) {
+        event.preventDefault();
+        toggleNavigationGroup(groupToggle.dataset.navGroup);
+        return;
+      }
+
       const target = event.target.closest("[data-feature]");
       if (!target) return;
       event.preventDefault();
-      updateFeature(target.dataset.feature);
+      openFeature(target.dataset.feature, { refresh: true });
     });
 
     navigationFoot.addEventListener("click", (event) => {
       const target = event.target.closest("[data-feature]");
       if (!target) return;
       event.preventDefault();
-      updateFeature(target.dataset.feature);
+      openFeature(target.dataset.feature, { refresh: true });
     });
 
     operationTabs.addEventListener("click", (event) => {
+      if (event.target.closest(".operation-tab-close-all")) {
+        closeAllTabs();
+        return;
+      }
       const close = event.target.closest(".operation-tab-close");
       const tab = event.target.closest(".operation-tab");
       if (!tab) return;
       const feature = tab.dataset.tab;
       if (close) {
-        recentFeatures = recentFeatures.filter((item) => item !== feature);
-        if (activeFeature === feature) activeFeature = recentFeatures[0] || "专业研究方向管理";
-        renderTabs();
-        renderOperationContent(activeFeature);
+        closeTab(feature);
         return;
       }
-      updateFeature(feature);
+      activateTab(feature);
     });
 
-    renderModule("doctor");
+    operationRefresh.addEventListener("click", () => {
+      if (!activeFeature) return;
+      openFeature(activeFeature, { refresh: true });
+    });
+
+    operationFullscreen.addEventListener("click", async () => {
+      if (!document.fullscreenElement) {
+        await operationShell.requestFullscreen?.();
+      } else {
+        await document.exitFullscreen?.();
+      }
+    });
+
+    loadTabState();
+    renderModule("doctor", { openDefault: false });
+    renderTabs();
+    renderOperationContent(activeFeature);
   </script>
 </body>
 </html>
