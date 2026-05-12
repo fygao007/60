@@ -13,6 +13,10 @@
 ## 主要入口
 
 - [UI Demo 说明](ui-demo/README.md)
+- [仓库目录结构](REPOSITORY_STRUCTURE.md)
+- [版本制度](VERSIONING.md)
+- [模块版本清单](MODULE_VERSIONS.md)
+- [变更记录](CHANGELOG.md)
 - [PC 框架外壳规范](ui-demo/specs/pc-app-shell-spec.md)
 - [PC 框架布局规范](ui-demo/specs/pc-framework-layout-spec.md)
 - [页面生成规则](ui-demo/specs/page-generation-rules.md)
@@ -29,7 +33,9 @@
 
 ## 维护约定
 
-1. 新增框架能力先更新 `ui-demo/specs/` 下的规范。
-2. 新增图标先放入 `ui-demo/assets/icons/`，再登记到 `icon-registry.js`。
-3. 新增页面原型优先复用 `primary-nav.html` 中沉淀的三层框架结构。
-4. 页面确认后，再沉淀到 `ui-demo/packages/design-system` 的 React 组件。
+1. 新模块、新页面、新导出材料都放在本仓库内，目录规则见 `REPOSITORY_STRUCTURE.md`。
+2. 新增框架能力先更新 `ui-demo/specs/` 下的规范。
+3. 新增图标先放入 `ui-demo/assets/icons/`，再登记到 `icon-registry.js`。
+4. 新增页面原型优先复用 `primary-nav.html` 中沉淀的三层框架结构。
+5. 页面确认后，再沉淀到 `ui-demo/packages/design-system` 的 React 组件。
+6. 发布前同步更新 `MODULE_VERSIONS.md` 和 `CHANGELOG.md`。

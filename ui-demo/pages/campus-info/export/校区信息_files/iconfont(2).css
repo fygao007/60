@@ -1,0 +1,161 @@
+@font-face {
+  font-family: "wisiconfont"; /* Project id 4896419 */
+  /* Color fonts */
+  src: 
+       url('iconfont.woff2?t=1761898794121') format('woff2'),
+       url('iconfont.woff?t=1761898794121') format('woff'),
+       url('iconfont.ttf?t=1761898794121') format('truetype');
+}
+
+.wisiconfont {
+  font-family: "wisiconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.wisicon-b-folder-color-dark:before {
+  content: "\f7e7";
+}
+
+.wisicon-b-image-color-dark:before {
+  content: "\f7e8";
+}
+
+.wisicon-b-link-color-dark:before {
+  content: "\f7e9";
+}
+
+.wisicon-b-pdf-color-light:before {
+  content: "\f7ca";
+}
+
+.wisicon-b-html-color-dark:before {
+  content: "\f7ea";
+}
+
+.wisicon-b-txt-color-light:before {
+  content: "\f7eb";
+}
+
+.wisicon-b-video-color-light:before {
+  content: "\f7ec";
+}
+
+.wisicon-b-folder-color-light:before {
+  content: "\f7ed";
+}
+
+.wisicon-b-ppt-color-dark:before {
+  content: "\f7cc";
+}
+
+.wisicon-b-music-color-dark:before {
+  content: "\f7c0";
+}
+
+.wisicon-b-excel-color-dark:before {
+  content: "\f7d8";
+}
+
+.wisicon-b-music-color-light:before {
+  content: "\f7d9";
+}
+
+.wisicon-b-link-color-light:before {
+  content: "\f7da";
+}
+
+.wisicon-b-excel-color-light:before {
+  content: "\f7db";
+}
+
+.wisicon-b-unkownfile-color-dark:before {
+  content: "\f7dc";
+}
+
+.wisicon-b-word-color-dark:before {
+  content: "\f7dd";
+}
+
+.wisicon-b-zip-color-dark:before {
+  content: "\f7de";
+}
+
+.wisicon-b-word-color-light:before {
+  content: "\f7df";
+}
+
+.wisicon-b-txt-color-dark:before {
+  content: "\f7e0";
+}
+
+.wisicon-b-image-color-light:before {
+  content: "\f7e1";
+}
+
+.wisicon-b-unkownfile-color-light:before {
+  content: "\f7e2";
+}
+
+.wisicon-b-ppt-color-light:before {
+  content: "\f7cb";
+}
+
+.wisicon-b-pdf-color-dark:before {
+  content: "\f7e3";
+}
+
+.wisicon-b-html-color-light:before {
+  content: "\f7e4";
+}
+
+.wisicon-b-zip-color-light:before {
+  content: "\f7e5";
+}
+
+.wisicon-b-video-color-dark:before {
+  content: "\f7e6";
+}
+
+.wisicon-a-checkbox-circle-dark:before {
+  content: "\f7ce";
+}
+
+.wisicon-a-checkbox-circle-light:before {
+  content: "\f7cf";
+}
+
+.wisicon-a-close-circle-dark:before {
+  content: "\f7d0";
+}
+
+.wisicon-a-arrow-right-circle-dark:before {
+  content: "\f7d1";
+}
+
+.wisicon-a-information-dark:before {
+  content: "\f7d2";
+}
+
+.wisicon-a-close-circle-light:before {
+  content: "\f7d3";
+}
+
+.wisicon-a-arrow-right-circle-light:before {
+  content: "\f7d4";
+}
+
+.wisicon-a-error-warning-dark:before {
+  content: "\f7d5";
+}
+
+.wisicon-a-error-warning-light:before {
+  content: "\f7d6";
+}
+
+.wisicon-a-information-light:before {
+  content: "\f7d7";
+}
+

@@ -2,12 +2,13 @@
 
 | 模块 | 当前版本 | 路径 | 说明 |
 | --- | --- | --- | --- |
-| project | 0.1.0 | `/` | 60 项目整体交付版本 |
-| ui-demo | 0.1.0 | `ui-demo/` | 页面生成资产、HTML 预览页和规范入口 |
+| project | 0.1.1 | `/` | 60 项目整体交付版本 |
+| ui-demo | 0.1.1 | `ui-demo/` | 页面生成资产、HTML 预览页和规范入口 |
 | design-system | 0.1.0 | `ui-demo/packages/design-system/` | 本地 React 设计组件库 |
 | layout-spec | 0.1.0 | `ui-demo/specs/pc-framework-layout-spec.md` | PC 框架布局规范 |
 | generation-rules | 0.1.0 | `ui-demo/specs/page-generation-rules.md` | 页面生成规则 |
 | audit-page | 0.1.0 | `ui-demo/scheme-pending-audit.html` | 方案待审核 HTML 预览页 |
+| campus-info | 0.1.0 | `ui-demo/campus-info.html` | 校区信息 HTML 预览页与导出材料 |
 
 ## 更新规则
 
