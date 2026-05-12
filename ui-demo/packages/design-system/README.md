@@ -50,33 +50,75 @@ HTML 预览页只需要：
 ### 一级页签 / 业务标题样式
 
 一级页签选中态统一使用 8px 高的底部色块，不使用边框模拟。
+只有存在多个一级页签时才展示标题行；单个页签或无页签时隐藏。
+页签行默认不放右侧按钮，右侧仅保留自适应占位或业务自定义内容。
 
 HTML 预览底子：
 
 ```html
-<div class="operation-title"><span>专业研究方向管理</span></div>
-<div class="operation-title is-muted"><span>选项</span></div>
+<header class="operation-header">
+  <div class="operation-section-tabs" aria-label="一级页签">
+    <button class="operation-section-tab is-active" type="button" data-section-tab="pending"><span>待审核</span></button>
+    <button class="operation-section-tab" type="button" data-section-tab="reviewed"><span>已审核</span></button>
+  </div>
+  <div class="operation-header-spacer"></div>
+</header>
+
+<section data-section-panel="pending">待审核内容</section>
+<section data-section-panel="reviewed" hidden>已审核内容</section>
+
+<!-- 单个一级页签时隐藏整行 -->
+<header class="operation-header is-hidden">...</header>
 ```
+
+`app-shell.js` 会自动处理：
+
+- 同一 `.operation-section-tabs` 内点击切换 `.is-active`。
+- 存在 `[data-section-panel]` 时，按 `data-section-tab` 对应值自动显示 / 隐藏内容。
+- `operation-header` 内只有 0 或 1 个页签时自动加 `.is-hidden`，不展示标题行。
+- 如需自定义刷新表格，可传 `onSectionTabChange(key, tab)`。
 
 React / 组件库样式：
 
 ```jsx
+const [activeSection, setActiveSection] = useState('pending')
+
+<DSAppShell
+  sectionTabs={[
+    { key: 'pending', label: '待审核' },
+    { key: 'reviewed', label: '已审核' },
+  ]}
+  activeSectionTab={activeSection}
+  onSectionTabChange={setActiveSection}
+>
+  {activeSection === 'pending' ? <PendingTable /> : <ReviewedTable />}
+</DSAppShell>
+```
+
+独立使用 `DSTabs`：
+
+```jsx
 <DSTabs
   variant="section"
-  activeKey="base"
+  activeKey={activeSection}
+  onChange={setActiveSection}
   items={[
-    { key: 'base', label: '选项' },
-    { key: 'other', label: '选项' },
+    { key: 'pending', label: '待审核' },
+    { key: 'reviewed', label: '已审核' },
   ]}
 />
+
+{activeSection === 'pending' ? <PendingTable /> : <ReviewedTable />}
 ```
+
+`variant="section"` 在 `items.length <= 1` 时返回 `null`，避免单个一级页签占用标题行。
 
 也可在 `DSAppShell` 内部直接使用样式类：
 
 ```jsx
 <div className="ds-app-shell__section-tabs">
-  <button className="ds-app-shell__section-tab is-active" type="button"><span>选项</span></button>
-  <button className="ds-app-shell__section-tab" type="button"><span>选项</span></button>
+  <button className="ds-app-shell__section-tab is-active" type="button"><span>待审核</span></button>
+  <button className="ds-app-shell__section-tab" type="button"><span>已审核</span></button>
 </div>
 ```
 
@@ -92,11 +134,72 @@ import {
   DSFilterBar,
   DSPageHeader,
   DSSwitch,
+  DSTabs,
   DSTag,
 } from '@wisedu/design-system'
 ```
 
 入口 `src/index.js` 已默认引入 `base.css`，业务页面通常不需要重复引入基础样式。
+
+## 选项卡 DSTabs
+
+`DSTabs` 覆盖基础选项卡、多选项卡溢出切换、侧边选项卡和一级页签。
+
+结构规则：
+
+- 标题：字段名称或功能名称。
+- 数量：跟随名称展示，使用 `count`。
+- 标题过长时截断，鼠标悬浮通过 `title` 展示全称。
+- 后置操作可使用 `more / actions / onMore`，例如侧边选项卡右侧的更多按钮。
+
+基础选项卡：
+
+```jsx
+<DSTabs
+  activeKey="a"
+  items={[
+    { key: 'a', label: '选项 0' },
+    { key: 'b', label: '选项 0' },
+  ]}
+/>
+```
+
+多选项卡溢出切换：
+
+```jsx
+<DSTabs
+  overflow
+  activeKey="a"
+  items={[
+    { key: 'a', label: '选项 0' },
+    { key: 'b', label: '选项 0' },
+    { key: 'c', label: '选项 0' },
+    { key: 'd', label: '选项 0' },
+  ]}
+/>
+```
+
+侧边选项卡：
+
+```jsx
+<DSTabs
+  variant="side"
+  orientation="vertical"
+  activeKey="mobile"
+  items={[
+    { key: 'teacher', label: '导师模块环工', icon: <UserIcon /> },
+    { key: 'mobile', label: '研究生院试用移动端', icon: <UserIcon />, more: true },
+  ]}
+/>
+```
+
+状态规则：
+
+- 默认：未选中为灰色文本，选中为高亮文本并显示指示线。
+- Hover：文字变深；侧边选项卡出现浅灰背景。
+- Press：文字使用主色。
+- Disabled：置灰且不可点击。
+- 多选项卡标题数量超出区域时，使用 `overflow` 展示左右切换按钮。
 
 ## 组件清单
 

@@ -13,6 +13,9 @@ export default function DSAppShell({
   tabs = [],
   activeNav,
   activeTab,
+  sectionTabs = [],
+  activeSectionTab,
+  onSectionTabChange,
   actions,
   children,
   className = '',
@@ -58,7 +61,29 @@ export default function DSAppShell({
             )}
           </div>
         </nav>
-        <main className="ds-app-shell__content ds-page">{children}</main>
+        <main className="ds-app-shell__content ds-page">
+          {sectionTabs.length > 1 && (
+            <header className="ds-app-shell__section-header">
+              <div className="ds-app-shell__section-tabs" aria-label="一级页签">
+                {sectionTabs.map((tab) => {
+                  const key = tab.key || tab.label
+                  return (
+                    <button
+                      className={['ds-app-shell__section-tab', key === activeSectionTab && 'is-active'].filter(Boolean).join(' ')}
+                      type="button"
+                      key={key}
+                      onClick={() => onSectionTabChange?.(key, tab)}
+                    >
+                      <span>{tab.label}</span>
+                    </button>
+                  )
+                })}
+              </div>
+              <div className="ds-app-shell__section-header-spacer" />
+            </header>
+          )}
+          {children}
+        </main>
       </section>
     </div>
   )

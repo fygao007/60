@@ -22,7 +22,9 @@
  *           items: ['协议模板','条款库','机构管理','年级管理','引用配置','条款审核'],
  *           foot: '流程参数设置'
  *         },
- *         activeFeature: '条款库'
+ *         activeFeature: '条款库',
+ *         // 可选：业务一级页签切换，例如“待审核 / 已审核”
+ *         // onSectionTabChange: (key) => renderBusinessPanel(key)
  *       });
  *     </script>
  *   </body>
@@ -160,7 +162,40 @@
     if (expandBtn) expandBtn.addEventListener('click', () => setCollapsed(true));
     if (collapseBtn) collapseBtn.addEventListener('click', () => setCollapsed(false));
 
-    // 5. 二级导航 ↔ 顶 Tab 双向联动
+    // 5. 业务一级页签：多页签才展示标题行，点击后切换 active 和可选 panel
+    function getSectionTabKey(tab) {
+      return tab.dataset.sectionTab || tab.dataset.reviewTab || tab.dataset.tab || '';
+    }
+
+    function activateSectionTab(key, source) {
+      if (!key) return;
+      stage.querySelectorAll('.operation-section-tabs [data-section-tab], .operation-section-tabs [data-review-tab], .operation-section-tabs [data-tab]').forEach(tab => {
+        tab.classList.toggle('is-active', getSectionTabKey(tab) === key);
+      });
+      const panels = stage.querySelectorAll('[data-section-panel]');
+      panels.forEach(panel => {
+        panel.hidden = panel.dataset.sectionPanel !== key;
+      });
+      if (typeof config.onSectionTabChange === 'function') {
+        config.onSectionTabChange(key, source);
+      }
+    }
+
+    stage.querySelectorAll('.operation-section-tabs').forEach(group => {
+      const tabs = group.querySelectorAll('[data-section-tab], [data-review-tab], [data-tab]');
+      const header = group.closest('.operation-header');
+      if (header) header.classList.toggle('is-hidden', tabs.length <= 1);
+      group.addEventListener('click', event => {
+        const tab = event.target.closest('[data-section-tab], [data-review-tab], [data-tab]');
+        if (!tab || !group.contains(tab)) return;
+        event.preventDefault();
+        activateSectionTab(getSectionTabKey(tab), tab);
+      });
+      const active = group.querySelector('.is-active') || tabs[0];
+      if (active) activateSectionTab(getSectionTabKey(active), active);
+    });
+
+    // 6. 二级导航 ↔ 顶 Tab 双向联动
     function activateFeature(feature) {
       if (!feature) return;
       stage.querySelectorAll('.navigation-child').forEach(n =>
@@ -188,7 +223,7 @@
       });
     });
 
-    // 6. 一级导航点击：仅切换 active（不重渲染二级导航，避免 demo 失焦）
+    // 7. 一级导航点击：仅切换 active（不重渲染二级导航，避免 demo 失焦）
     if (config.onModuleChange) {
       stage.querySelectorAll('.primary-nav-item[data-module]').forEach(item => {
         item.addEventListener('click', e => {
@@ -200,14 +235,14 @@
       });
     }
 
-    // 7. 渲染图标（icon-registry.js 必须已加载）
+    // 8. 渲染图标（icon-registry.js 必须已加载）
     if (window.WiseIconRegistry) {
       window.WiseIconRegistry.renderIcons(stage);
     } else {
       console.warn('[WiseAppShell] icon-registry.js not loaded - icons will not render');
     }
 
-    return { stage, setCollapsed, activateFeature };
+    return { stage, setCollapsed, activateFeature, activateSectionTab };
   }
 
   window.WiseAppShell = { init, PRIMARY_MODULES };

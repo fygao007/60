@@ -295,21 +295,38 @@
       gap: 16px;
       padding: 12px 16px;
       background: #fff;
+      border-top-right-radius: 12px;
     }
 
-    .operation-title {
+    .operation-header.is-hidden { display: none; }
+
+    .operation-section-tabs {
+      display: flex;
+      flex: none;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .operation-title,
+    .operation-section-tab {
       position: relative;
       display: flex;
       justify-content: flex-start;
       align-items: center;
       padding: 2px;
+      background: transparent;
+      border: 0;
       color: #000;
       font-size: 16px;
       font-weight: 600;
       line-height: 24px;
     }
 
-    .operation-title::after {
+    .operation-section-tab { color: #505266; cursor: pointer; }
+    .operation-section-tab.is-active { color: #000; }
+
+    .operation-title::after,
+    .operation-section-tab.is-active::after {
       content: "";
       position: absolute;
       left: 2px;
@@ -320,7 +337,8 @@
       background: #d6d9ff;
     }
 
-    .operation-title span {
+    .operation-title span,
+    .operation-section-tab span {
       position: relative;
       z-index: 1;
     }
@@ -342,7 +360,7 @@
       line-height: 22px;
     }
 
-    .operation-header-spacer { flex: 1; min-width: 0; }
+    .operation-header-spacer { flex: 1; min-width: 0; height: 28px; }
     .operation-buttons { display: flex; flex: none; align-items: center; gap: 8px; }
     .operation-button {
       display: inline-flex;
@@ -469,13 +487,11 @@
           <section class="operation-body">
             <div class="operation-content">
               <header class="operation-header">
-                <div class="operation-title"><span>专业研究方向管理</span></div>
-                <div class="operation-meta"><span>标题：</span><strong>专业目录</strong></div>
-                <div class="operation-header-spacer"></div>
-                <div class="operation-buttons">
-                  <button class="operation-button" type="button">新增</button>
-                  <button class="operation-button" type="button">导出</button>
+                <div class="operation-section-tabs" aria-label="一级页签">
+                  <button class="operation-section-tab is-active" type="button" data-review-tab="pending"><span>待审核</span></button>
+                  <button class="operation-section-tab" type="button" data-review-tab="reviewed"><span>已审核</span></button>
                 </div>
+                <div class="operation-header-spacer"></div>
               </header>
               <div class="operation-table-wrap">
                 <table class="operation-table">
@@ -510,7 +526,7 @@
     const operationShell = document.querySelector(".operation-shell");
     const operationRefresh = document.querySelector(".operation-refresh");
     const operationFullscreen = document.querySelector(".operation-fullscreen");
-    const operationTitle = document.querySelector(".operation-title");
+    const operationSectionTabs = document.querySelector(".operation-section-tabs");
     const operationTitleText = document.querySelector(".operation-title span");
     const operationMeta = document.querySelector(".operation-meta strong");
     const operationTableBody = document.querySelector(".operation-table tbody");
@@ -521,6 +537,7 @@
     let tabStates = {};
     let refreshSerial = 0;
     let currentModule = "doctor";
+    let activeReviewTab = "pending";
 
     const moduleMenus = {
       home: { groups: [{ title: "常用功能", open: true, children: ["我的待办", "最近访问", "消息通知", "个人收藏"] }, { title: "工作台", children: ["数据概览", "流程跟踪", "操作日志"] }], foot: "流程参数设置" },
@@ -591,7 +608,8 @@
         code: `${feature.slice(0, 2).toUpperCase()}-${String(index + 1).padStart(3, "0")}`,
         name: `${feature} ${index + 1}`,
         module: moduleLabel,
-        status: index % 3 === 0 ? "待处理" : "启用",
+        pendingStatus: index % 3 === 0 ? "待补充" : "待审核",
+        reviewedStatus: index % 2 === 0 ? "已通过" : "已退回",
         updatedAt: `2026-05-${String(11 - index).padStart(2, "0")}`
       }));
       return {
@@ -637,24 +655,33 @@
 
     function renderOperationContent(feature) {
       if (!feature) {
-        operationTitleText.textContent = "请选择功能";
-        operationMeta.textContent = "无";
+        if (operationTitleText) operationTitleText.textContent = "请选择功能";
+        if (operationMeta) operationMeta.textContent = "无";
         operationTableBody.innerHTML = "";
         return;
       }
       if (!tabStates[feature]) tabStates[feature] = createFeatureState(feature);
       const state = tabStates[feature];
-      operationTitleText.textContent = feature;
-      operationMeta.textContent = state.meta;
+      if (operationTitleText) operationTitleText.textContent = feature;
+      if (operationMeta) operationMeta.textContent = state.meta;
+      const statusKey = activeReviewTab === "reviewed" ? "reviewedStatus" : "pendingStatus";
       operationTableBody.innerHTML = state.rows.map((row) => `
         <tr>
           <td>${row.code}</td>
           <td>${row.name}</td>
           <td>${row.module}</td>
-          <td>${row.status}</td>
+          <td>${row[statusKey]}</td>
           <td>${row.updatedAt}</td>
         </tr>
       `).join("");
+    }
+
+    function activateReviewTab(key) {
+      activeReviewTab = key;
+      operationSectionTabs.querySelectorAll("[data-review-tab]").forEach((tab) => {
+        tab.classList.toggle("is-active", tab.dataset.reviewTab === key);
+      });
+      renderOperationContent(activeFeature);
     }
 
     function openFeature(feature, options = {}) {
@@ -766,6 +793,12 @@
         return;
       }
       activateTab(feature);
+    });
+
+    operationSectionTabs.addEventListener("click", (event) => {
+      const tab = event.target.closest("[data-review-tab]");
+      if (!tab) return;
+      activateReviewTab(tab.dataset.reviewTab);
     });
 
     operationRefresh.addEventListener("click", () => {
