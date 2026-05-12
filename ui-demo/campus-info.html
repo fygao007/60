@@ -5,268 +5,149 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>校区信息</title>
   <link rel="stylesheet" href="./packages/design-system/src/base.css" />
+  <link rel="stylesheet" href="./packages/design-system/src/AppShell/app-shell.css" />
   <style>
-    body { margin: 0; }
-    button, input, select { font: inherit; }
-    a { color: inherit; text-decoration: none; }
-
-    /* shell */
-    .shell { display: flex; width: 100vw; height: 100vh; overflow: hidden; background: var(--ds-color-bg-page); }
-
-    /* left nav (collapsed icon-only style) */
-    .nav { display: flex; flex: none; flex-direction: column; align-items: center; width: 64px; color: #fff;
-           background: url("./assets/pc-nav-bg.svg") center/100% 100% no-repeat,
-                       linear-gradient(180deg, #7454f1 0%, #524ae4 54%, #4779f0 100%); }
-    .logo { display: grid; justify-items: center; gap: 2px; width: 64px; height: 72px; padding-top: 18px; font-size: var(--ds-font-size-xs); line-height: 18px; text-align: center; }
-    .logo strong { position: relative; display: inline-block; font-size: 15px; line-height: 16px; font-weight: var(--ds-font-weight-semibold); }
-    .logo strong::after { content: ""; position: absolute; right: -3px; top: -2px; width: 22px; height: 10px; border-top: 2px solid #ffe247; border-radius: 50%; transform: rotate(-16deg); }
-    .nav-action { display: grid; place-items: center; width: 64px; height: 44px; color: rgba(255,255,255,.9); }
-    .nav-list { display: flex; flex: 1; flex-direction: column; align-items: center; gap: 8px; width: 64px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,.18); }
-    .nav-item { display: grid; justify-items: center; gap: 2px; width: 48px; min-height: 56px; padding: 6px 0; color: rgba(255,255,255,.88); border-radius: var(--ds-radius-sm); font-size: var(--ds-font-size-xs); line-height: 18px; cursor: pointer; }
-    .nav-item.active { background: rgba(255,255,255,.18); color: #fff; }
-    .nav-item svg { width: 20px; height: 20px; stroke: currentColor; }
-    .nav-footer { display: grid; justify-items: center; gap: 10px; width: 64px; padding: 16px 0 8px; border-top: 1px solid rgba(255,255,255,.18); }
-    .avatar { width: 32px; height: 32px; border-radius: var(--ds-radius-sm); background: #ffdcc8; border: 1px solid rgba(255,255,255,.9); }
-    .user { width: 64px; height: 28px; padding-left: 6px; background: rgba(0,0,0,.78); font-size: var(--ds-font-size-xs); font-weight: var(--ds-font-weight-semibold); line-height: 28px; }
-
-    /* workspace */
-    .main { display: flex; flex: 1; min-width: 0; padding: 0 10px 10px; }
-    .workspace { display: flex; flex: 1; flex-direction: column; min-width: 0; }
-
-    /* top tabs */
-    .top-tabs { display: flex; flex: none; align-items: center; justify-content: space-between; height: var(--ds-topbar-height); }
-    .top-tabs-list { display: flex; align-items: stretch; min-width: 0; overflow: hidden; }
-    .top-tab { position: relative; display: inline-flex; align-items: center; gap: var(--ds-space-2); height: var(--ds-topbar-height); padding: 0 14px; color: var(--ds-color-text-secondary); white-space: nowrap; cursor: pointer; }
-    .top-tab.active { color: var(--ds-color-text); background: var(--ds-color-bg); border-radius: var(--ds-radius-xl) var(--ds-radius-xl) 0 0; font-weight: var(--ds-font-weight-semibold); }
-    .top-tab:not(.active)::after { content: ""; position: absolute; right: 0; top: 14px; width: 1px; height: 16px; background: #dfe3ed; }
-    .tab-close { width: 14px; height: 14px; color: #b8bdca; }
-    .top-actions { display: flex; align-items: center; gap: var(--ds-space-2); padding-right: 6px; }
-    .icon-button, .tool-icon { display: inline-grid; place-items: center; width: 28px; height: 28px; color: var(--ds-color-text); background: transparent; border: 0; border-radius: var(--ds-radius-sm); cursor: pointer; }
-    .icon-button:hover, .tool-icon:hover { background: var(--ds-color-bg-hover); }
-    .icon-button svg, .tool-icon svg { width: 16px; height: 16px; stroke: currentColor; fill: none; }
-
-    /* content */
-    .content { display: flex; flex: 1; flex-direction: column; min-height: 0; padding: var(--ds-space-4); background: var(--ds-color-bg); border-radius: 0 var(--ds-radius-2xl) var(--ds-radius-2xl) var(--ds-radius-2xl); overflow: hidden; }
-
-    /* query row */
-    .query-row { display: flex; flex: none; align-items: center; justify-content: space-between; height: 44px; margin-bottom: var(--ds-space-1); }
-    .query-left { display: flex; align-items: center; gap: var(--ds-space-2); }
-    .query-label { color: var(--ds-color-text-secondary); }
-    .query-input { width: 240px; height: var(--ds-control-height-md); padding: 0 var(--ds-space-3); color: var(--ds-color-text); background: var(--ds-color-bg); border: 1px solid var(--ds-color-border); border-radius: var(--ds-radius-sm); outline: none; transition: border-color var(--ds-motion-duration) var(--ds-motion-ease), box-shadow var(--ds-motion-duration) var(--ds-motion-ease); }
-    .query-input::placeholder { color: var(--ds-color-text-placeholder); }
-    .query-input:focus { border-color: var(--ds-color-primary); box-shadow: 0 0 0 2px rgba(48, 63, 255, 0.12); }
-    .query-actions, .buttons-row, .table-tools, .row-actions { display: flex; align-items: center; gap: var(--ds-space-2); }
-
-    /* button */
-    .btn { display: inline-flex; align-items: center; justify-content: center; min-width: 62px; height: var(--ds-control-height-md); padding: 0 14px; color: var(--ds-color-text); background: var(--ds-color-bg); border: 1px solid var(--ds-color-border); border-radius: var(--ds-radius-sm); cursor: pointer; transition: color var(--ds-motion-duration) var(--ds-motion-ease), border-color var(--ds-motion-duration) var(--ds-motion-ease); }
-    .btn:hover { color: var(--ds-color-primary); border-color: var(--ds-color-primary); }
-    .btn.primary { color: #fff; background: var(--ds-color-primary); border-color: var(--ds-color-primary); }
-    .btn.primary:hover { background: var(--ds-color-primary-hover); border-color: var(--ds-color-primary-hover); color: #fff; }
-    .btn.icon-only { min-width: var(--ds-control-height-md); width: var(--ds-control-height-md); padding: 0; }
-    .btn.icon-only svg { width: 16px; height: 16px; stroke: currentColor; fill: none; }
-
-    /* operation row */
-    .operation-row { display: flex; flex: none; align-items: center; justify-content: space-between; min-height: var(--ds-table-header-height); }
-
-    /* table */
-    .table-box { flex: 1; min-height: 0; border: 1px solid var(--ds-color-border-secondary); overflow: auto; }
-    table { width: 100%; min-width: 1520px; border-collapse: collapse; table-layout: fixed; font-size: var(--ds-font-size-md); }
-    th, td { height: 46px; padding: 0 var(--ds-space-3); text-align: left; border-bottom: 1px solid var(--ds-color-border-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    th { height: 40px; color: var(--ds-color-text); font-weight: var(--ds-font-weight-semibold); background: #fafafa; }
-    th + th, td + td { border-left: 1px solid rgba(237, 240, 245, .65); }
-    tbody tr:nth-child(even) td { background: #fcfcfd; }
-    tbody tr:hover td { background: var(--ds-color-primary-lighter); }
-    tbody tr.selected td { background: var(--ds-color-bg-active); }
-
-    /* columns */
-    .col-drag { width: 48px; text-align: center; }
-    .col-check { width: 40px; text-align: center; }
-    .col-code { width: 170px; }
-    .col-name { width: 200px; }
-    .col-en   { width: 220px; }
-    .col-area { width: 220px; }
-    .col-addr { width: 220px; }
+    /* 仅本页差异：表格列宽 */
+    .campus-table { min-width: 1640px; }
+    .col-code    { width: 170px; }
+    .col-name    { width: 200px; }
+    .col-en      { width: 220px; }
+    .col-area    { width: 220px; }
+    .col-addr    { width: 220px; }
     .col-default { width: 130px; }
     .col-status  { width: 130px; }
     .col-actions { width: 160px; }
-
-    /* misc cell */
-    .drag-handle { display: inline-grid; place-items: center; width: 20px; height: 20px; color: var(--ds-color-text); cursor: grab; }
-    .drag-handle::before { content: "::"; transform: rotate(90deg); font-weight: var(--ds-font-weight-semibold); letter-spacing: 1px; }
-    input[type="checkbox"] { width: 14px; height: 14px; accent-color: var(--ds-color-primary); cursor: pointer; }
-    .dash { color: var(--ds-color-text-tertiary); }
-
-    /* status switch (DSSwitch lookalike) */
-    .ds-switch { position: relative; display: inline-flex; align-items: center; width: 54px; height: 22px; padding-left: 7px; color: #fff; background: var(--ds-color-primary); border-radius: var(--ds-radius-pill); font-size: var(--ds-font-size-xs); line-height: 20px; cursor: pointer; user-select: none; }
-    .ds-switch::after { content: ""; position: absolute; right: 3px; top: 3px; width: 16px; height: 16px; background: var(--ds-color-white); border-radius: 50%; box-shadow: var(--ds-shadow-xs); }
-    .ds-switch.off { justify-content: flex-end; padding-right: 7px; padding-left: 0; color: var(--ds-color-text-secondary); background: var(--ds-color-bg-disabled); }
-    .ds-switch.off::after { right: auto; left: 3px; }
-
-    /* link button divider (between row actions) */
-    .row-actions .ds-link-button + .ds-link-button { position: relative; padding-left: 13px; }
-    .row-actions .ds-link-button + .ds-link-button::before { content: ""; position: absolute; left: 5px; top: 50%; width: 1px; height: 12px; background: var(--ds-color-border-secondary); transform: translateY(-50%); }
-
-    /* pagination */
-    .pager { display: flex; flex: none; align-items: center; justify-content: flex-end; gap: var(--ds-space-3); padding: var(--ds-space-3) 0 0; color: var(--ds-color-text-secondary); font-size: var(--ds-font-size-sm); }
-    .pager .total { margin-right: auto; }
-    .pager .page-size { height: 28px; padding: 0 var(--ds-space-2); border: 1px solid var(--ds-color-border); border-radius: var(--ds-radius-sm); background: var(--ds-color-bg); color: var(--ds-color-text); }
-    .pages { display: flex; gap: 4px; }
-    .pages a { width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--ds-color-border); border-radius: var(--ds-radius-sm); background: var(--ds-color-bg); color: var(--ds-color-text); cursor: pointer; }
-    .pages a:hover { color: var(--ds-color-primary); border-color: var(--ds-color-primary); }
-    .pages a.cur { background: var(--ds-color-primary); color: #fff; border-color: var(--ds-color-primary); }
-    .pages a.dis { color: var(--ds-color-text-disabled); cursor: not-allowed; }
-    .pager .jump-input { width: 48px; height: 28px; text-align: center; border: 1px solid var(--ds-color-border); border-radius: var(--ds-radius-sm); outline: none; color: var(--ds-color-text); background: var(--ds-color-bg); }
-    .pager .jump-input:focus { border-color: var(--ds-color-primary); }
-
-    /* scrollbar */
-    ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-thumb { background: #c9cdd4; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #a9aeb8; }
-    ::-webkit-scrollbar-track { background: transparent; }
   </style>
 </head>
 <body>
-<div class="shell ds-scope">
+<div class="stage ds-scope">
 
-  <!-- Left nav -->
-  <aside class="nav" aria-label="主导航">
-    <div class="logo"><strong>Wisedu</strong><span>系统</span></div>
-    <a class="nav-action" href="#"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 7h14M5 12h14M5 17h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></a>
-    <a class="nav-action" href="#"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10.5 18a7.5 7.5 0 1 1 5.3-12.8A7.5 7.5 0 0 1 10.5 18ZM16 16l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></a>
-    <div class="nav-list">
-      <a class="nav-item active"><svg viewBox="0 0 24 24" fill="none"><path d="M4 5h16v14H4V5Z" stroke="currentColor" stroke-width="2"/><path d="M8 9h8M8 13h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>教务</span></a>
-      <a class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="m4 9 8-4 8 4-8 4-8-4Z" fill="currentColor"/></svg><span>研究生</span></a>
-      <a class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4 21 20H3L12 4Z" stroke="currentColor" stroke-width="2.4"/></svg><span>本研</span></a>
+  <!-- ====== 业务内容（init 后会被自动挪进 .operation-content） ====== -->
+
+  <header class="operation-header">
+    <div class="operation-title">校区信息</div>
+    <div class="operation-header-spacer"></div>
+    <div class="operation-buttons">
+      <button class="operation-button" type="button">新增</button>
+      <button class="operation-button" type="button">删除</button>
+      <button class="operation-button" type="button">导入</button>
+      <button class="operation-button" type="button">导出</button>
     </div>
-    <div class="nav-footer"><div class="avatar"></div></div>
-    <div class="user">管理员</div>
-  </aside>
+  </header>
 
-  <!-- Workspace -->
-  <section class="main">
-    <div class="workspace">
-
-      <!-- Top tabs -->
-      <nav class="top-tabs">
-        <div class="top-tabs-list">
-          <div class="top-tab">院系信息<svg class="tab-close" viewBox="0 0 16 16" fill="none"><path d="M4.5 4.5 11.5 11.5M11.5 4.5 4.5 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
-          <div class="top-tab active">校区信息<svg class="tab-close" viewBox="0 0 16 16" fill="none"><path d="M4.5 4.5 11.5 11.5M11.5 4.5 4.5 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
-          <div class="top-tab">专业信息<svg class="tab-close" viewBox="0 0 16 16" fill="none"><path d="M4.5 4.5 11.5 11.5M11.5 4.5 4.5 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
-          <div class="top-tab">班级信息<svg class="tab-close" viewBox="0 0 16 16" fill="none"><path d="M4.5 4.5 11.5 11.5M11.5 4.5 4.5 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
-        </div>
-        <div class="top-actions">
-          <button class="icon-button" title="刷新"><svg viewBox="0 0 16 16"><path d="M13 7a5 5 0 1 0-1.46 3.54M13 3v4H9" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-          <button class="icon-button" title="全屏"><svg viewBox="0 0 16 16"><path d="M6 3H3v3M10 3h3v3M6 13H3v-3M10 13h3v-3" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-        </div>
-      </nav>
-
-      <!-- Content -->
-      <main class="content">
-
-        <!-- Query row -->
-        <section class="query-row">
-          <div class="query-left">
-            <span class="query-label">关键字</span>
-            <input class="query-input" placeholder="校区代码/校区名称" />
-          </div>
-          <div class="query-actions">
-            <button class="btn icon-only" title="高级筛选"><svg viewBox="0 0 16 16"><path d="M3 4h10M5 8h6M7 12h2" stroke-width="1.7" stroke-linecap="round"/><path d="M12 10v4M10 12h4" stroke-width="1.5" stroke-linecap="round"/></svg></button>
-            <button class="btn">重置</button>
-            <button class="btn primary">查询</button>
-          </div>
-        </section>
-
-        <!-- Operation row -->
-        <section class="operation-row">
-          <div class="buttons-row">
-            <button class="btn">新增</button>
-            <button class="btn">删除</button>
-            <button class="btn">导入</button>
-            <button class="btn">导出</button>
-          </div>
-          <div class="table-tools">
-            <button class="tool-icon" title="自定义列"><svg viewBox="0 0 16 16"><path d="M3 4h4v8H3V4ZM9 4h4v8H9V4Z" stroke-width="1.5"/></svg></button>
-            <button class="tool-icon" title="最大化"><svg viewBox="0 0 16 16"><path d="M4 4h3M4 4v3M12 4h-3M12 4v3M4 12h3M4 12v-3M12 12h-3M12 12v-3" stroke-width="1.7" stroke-linecap="round"/></svg></button>
-          </div>
-        </section>
-
-        <!-- Table -->
-        <section class="table-box">
-          <table>
-            <thead>
-              <tr>
-                <th class="col-drag"></th>
-                <th class="col-check"><input type="checkbox" id="all" /></th>
-                <th class="col-code">校区代码</th>
-                <th class="col-name">校区名称</th>
-                <th class="col-en">校区英文名称</th>
-                <th class="col-area">所属行政区划</th>
-                <th class="col-addr">校区地址</th>
-                <th class="col-default">是否默认校区</th>
-                <th class="col-status">启用状态</th>
-                <th class="col-actions">操作</th>
-              </tr>
-            </thead>
-            <tbody id="tbody"></tbody>
-          </table>
-        </section>
-
-        <!-- Pagination -->
-        <section class="pager">
-          <span class="total">共 18 条数据</span>
-          <span>每页</span>
-          <select class="page-size"><option>20</option><option>50</option><option>100</option></select>
-          <span>条</span>
-          <div class="pages">
-            <a class="dis">‹</a>
-            <a class="cur">1</a>
-            <a>›</a>
-          </div>
-          <span>跳至</span>
-          <input class="jump-input" value="1" />
-          <span>页</span>
-        </section>
-
-      </main>
+  <div class="operation-query-row">
+    <span class="query-label">关键字</span>
+    <input class="query-input" placeholder="校区代码/校区名称" />
+    <button class="operation-button" type="button">重置</button>
+    <button class="operation-button primary" type="button">查询</button>
+    <span class="query-spacer"></span>
+    <div class="table-tools">
+      <button class="operation-tool" type="button" aria-label="自定义列">☰</button>
+      <button class="operation-tool" type="button" aria-label="最大化">⛶</button>
     </div>
-  </section>
+  </div>
+
+  <div class="operation-table-wrap">
+    <div class="operation-table-scroll">
+      <table class="operation-table campus-table">
+        <colgroup>
+          <col style="width:48px"><col style="width:40px">
+          <col class="col-code"><col class="col-name"><col class="col-en">
+          <col class="col-area"><col class="col-addr">
+          <col class="col-default"><col class="col-status"><col class="col-actions">
+        </colgroup>
+        <thead>
+          <tr>
+            <th class="col-drag"></th>
+            <th class="col-check"><input type="checkbox" id="all" /></th>
+            <th>校区代码</th>
+            <th>校区名称</th>
+            <th>校区英文名称</th>
+            <th>所属行政区划</th>
+            <th>校区地址</th>
+            <th>是否默认校区</th>
+            <th>启用状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <footer class="operation-footer">
+    <span>共 18 条</span>
+    <span>每页</span>
+    <select class="page-size"><option>20</option><option>50</option><option>100</option></select>
+    <span>条</span>
+    <span class="operation-footer-spacer"></span>
+    <div class="pages">
+      <a class="dis">‹</a>
+      <a class="cur">1</a>
+      <a>›</a>
+    </div>
+    <span>跳至</span>
+    <input class="jump-input" value="1" />
+    <span>页</span>
+  </footer>
+
 </div>
 
+<script src="./assets/icon-registry.js"></script>
+<script src="./packages/design-system/src/AppShell/app-shell.js"></script>
 <script>
+  // ====== 框架壳子 ======
+  WiseAppShell.init({
+    activeModule: 'prepare',
+    secondaryNav: {
+      title: '基础数据',
+      status: ['进行', 6],
+      items: ['院系信息','校区信息','专业信息','班级信息','校历管理','通用代码'],
+      foot: '准备参数设置'
+    },
+    activeFeature: '校区信息'
+  });
+
+  // ====== 业务数据 ======
   const rows = [
     {code:'XSXKTESTXQ',name:'测试校区',en:'Test Campus',area:'-',addr:'-',def:'-',on:true},
-    {code:'01',name:'主校区',en:'Main Campus',area:'江苏省南京市鼓楼区',addr:'汉口路22号',def:'是',on:true},
-    {code:'02',name:'仙林校区',en:'Xianlin Campus',area:'江苏省南京市栖霞区',addr:'仙林大道163号',def:'否',on:true},
-    {code:'03',name:'浦口校区',en:'Pukou Campus',area:'江苏省南京市浦口区',addr:'学府路8号',def:'否',on:true},
-    {code:'04',name:'江北校区',en:'Jiangbei Campus',area:'江苏省南京市江北新区',addr:'天华东路30号',def:'否',on:true},
-    {code:'05',name:'苏州校区',en:'Suzhou Campus',area:'江苏省苏州市工业园区',addr:'仁爱路199号',def:'否',on:true},
-    {code:'06',name:'宿迁校区',en:'Suqian Campus',area:'江苏省宿迁市宿城区',addr:'黄河南路399号',def:'否',on:false},
-    {code:'07',name:'盐城校区',en:'Yancheng Campus',area:'江苏省盐城市亭湖区',addr:'希望大道中路1号',def:'否',on:true},
-    {code:'08',name:'无锡校区',en:'Wuxi Campus',area:'江苏省无锡市滨湖区',addr:'蠡湖大道1800号',def:'否',on:true},
-    {code:'09',name:'常州校区',en:'Changzhou Campus',area:'江苏省常州市新北区',addr:'晋陵北路200号',def:'否',on:false},
-    {code:'10',name:'徐州校区',en:'Xuzhou Campus',area:'江苏省徐州市铜山区',addr:'上海路101号',def:'否',on:true},
-    {code:'11',name:'南通校区',en:'Nantong Campus',area:'江苏省南通市崇川区',addr:'啬园路9号',def:'否',on:true},
-    {code:'12',name:'连云港校区',en:'Lianyungang Campus',area:'江苏省连云港市海州区',addr:'苍梧路59号',def:'否',on:true},
-    {code:'13',name:'淮安校区',en:'Huaian Campus',area:'江苏省淮安市清江浦区',addr:'枚乘东路1号',def:'否',on:false},
-    {code:'14',name:'扬州校区',en:'Yangzhou Campus',area:'江苏省扬州市邗江区',addr:'华扬西路199号',def:'否',on:true},
-    {code:'15',name:'镇江校区',en:'Zhenjiang Campus',area:'江苏省镇江市京口区',addr:'学府路301号',def:'否',on:true},
-    {code:'16',name:'泰州校区',en:'Taizhou Campus',area:'江苏省泰州市海陵区',addr:'济川东路2号',def:'否',on:true},
-    {code:'17',name:'国际学院',en:'International College',area:'江苏省南京市玄武区',addr:'四牌楼2号',def:'否',on:true},
+    {code:'01',name:'主校区',     en:'Main Campus',          area:'江苏省南京市鼓楼区',   addr:'汉口路22号',         def:'是',on:true},
+    {code:'02',name:'仙林校区',   en:'Xianlin Campus',       area:'江苏省南京市栖霞区',   addr:'仙林大道163号',      def:'否',on:true},
+    {code:'03',name:'浦口校区',   en:'Pukou Campus',         area:'江苏省南京市浦口区',   addr:'学府路8号',          def:'否',on:true},
+    {code:'04',name:'江北校区',   en:'Jiangbei Campus',      area:'江苏省南京市江北新区', addr:'天华东路30号',       def:'否',on:true},
+    {code:'05',name:'苏州校区',   en:'Suzhou Campus',        area:'江苏省苏州市工业园区', addr:'仁爱路199号',        def:'否',on:true},
+    {code:'06',name:'宿迁校区',   en:'Suqian Campus',        area:'江苏省宿迁市宿城区',   addr:'黄河南路399号',      def:'否',on:false},
+    {code:'07',name:'盐城校区',   en:'Yancheng Campus',      area:'江苏省盐城市亭湖区',   addr:'希望大道中路1号',    def:'否',on:true},
+    {code:'08',name:'无锡校区',   en:'Wuxi Campus',          area:'江苏省无锡市滨湖区',   addr:'蠡湖大道1800号',     def:'否',on:true},
+    {code:'09',name:'常州校区',   en:'Changzhou Campus',     area:'江苏省常州市新北区',   addr:'晋陵北路200号',      def:'否',on:false},
+    {code:'10',name:'徐州校区',   en:'Xuzhou Campus',        area:'江苏省徐州市铜山区',   addr:'上海路101号',        def:'否',on:true},
+    {code:'11',name:'南通校区',   en:'Nantong Campus',       area:'江苏省南通市崇川区',   addr:'啬园路9号',          def:'否',on:true},
+    {code:'12',name:'连云港校区', en:'Lianyungang Campus',   area:'江苏省连云港市海州区', addr:'苍梧路59号',         def:'否',on:true},
+    {code:'13',name:'淮安校区',   en:'Huaian Campus',        area:'江苏省淮安市清江浦区', addr:'枚乘东路1号',        def:'否',on:false},
+    {code:'14',name:'扬州校区',   en:'Yangzhou Campus',      area:'江苏省扬州市邗江区',   addr:'华扬西路199号',      def:'否',on:true},
+    {code:'15',name:'镇江校区',   en:'Zhenjiang Campus',     area:'江苏省镇江市京口区',   addr:'学府路301号',        def:'否',on:true},
+    {code:'16',name:'泰州校区',   en:'Taizhou Campus',       area:'江苏省泰州市海陵区',   addr:'济川东路2号',        def:'否',on:true},
+    {code:'17',name:'国际学院',   en:'International College',area:'江苏省南京市玄武区',   addr:'四牌楼2号',          def:'否',on:true},
   ];
 
   const dash = '<span class="dash">-</span>';
-  document.getElementById('tbody').innerHTML = rows.map(r => `
+  const tbody = document.getElementById('tbody');
+  tbody.innerHTML = rows.map(r => `
     <tr>
       <td class="col-drag"><span class="drag-handle"></span></td>
       <td class="col-check"><input type="checkbox" class="row-chk" /></td>
-      <td class="col-code">${r.code}</td>
-      <td class="col-name">${r.name}</td>
-      <td class="col-en">${r.en === '-' ? dash : r.en}</td>
-      <td class="col-area">${r.area === '-' ? dash : r.area}</td>
-      <td class="col-addr">${r.addr === '-' ? dash : r.addr}</td>
-      <td class="col-default">${r.def === '是' ? '<span class="ds-tag ds-tag--primary">是</span>' : r.def === '否' ? '<span class="ds-tag ds-tag--warning">否</span>' : dash}</td>
-      <td class="col-status"><span class="ds-switch ${r.on ? '' : 'off'}">${r.on ? '启用' : '停用'}</span></td>
-      <td class="col-actions"><span class="row-actions">
+      <td>${r.code}</td>
+      <td title="${r.name}">${r.name}</td>
+      <td>${r.en === '-' ? dash : r.en}</td>
+      <td title="${r.area}">${r.area === '-' ? dash : r.area}</td>
+      <td title="${r.addr}">${r.addr === '-' ? dash : r.addr}</td>
+      <td>${r.def === '是'
+        ? '<span class="ds-tag ds-tag--primary">是</span>'
+        : r.def === '否'
+          ? '<span class="ds-tag ds-tag--warning">否</span>'
+          : dash}</td>
+      <td><span class="ds-switch ${r.on ? '' : 'off'}">${r.on ? '启用' : '停用'}</span></td>
+      <td><span class="row-actions">
         <button class="ds-link-button">查看</button>
         <button class="ds-link-button">编辑</button>
         <button class="ds-link-button ds-link-button--danger">删除</button>
@@ -274,26 +155,22 @@
     </tr>
   `).join('');
 
-  // select-all + row state
+  // 全选 / 行选
   document.getElementById('all').addEventListener('change', e => {
     document.querySelectorAll('.row-chk').forEach(c => {
       c.checked = e.target.checked;
       c.closest('tr').classList.toggle('selected', e.target.checked);
     });
   });
-  document.getElementById('tbody').addEventListener('change', e => {
+  tbody.addEventListener('change', e => {
     if (e.target.classList.contains('row-chk')) {
       e.target.closest('tr').classList.toggle('selected', e.target.checked);
     }
   });
-
-  // toggle DSSwitch click
-  document.getElementById('tbody').addEventListener('click', e => {
+  // DSSwitch 切换
+  tbody.addEventListener('click', e => {
     const sw = e.target.closest('.ds-switch');
-    if (sw) {
-      sw.classList.toggle('off');
-      sw.textContent = sw.classList.contains('off') ? '停用' : '启用';
-    }
+    if (sw) { sw.classList.toggle('off'); sw.textContent = sw.classList.contains('off') ? '停用' : '启用'; }
   });
 </script>
 </body>
