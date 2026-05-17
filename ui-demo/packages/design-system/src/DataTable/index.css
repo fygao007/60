@@ -150,8 +150,7 @@
   border-left: 0;
 }
 
-.ds-data-table--striped .ds-data-table__table tbody tr:nth-child(even) td,
-.ds-data-table--lowcode .ds-data-table__table tbody tr:nth-child(even) td {
+.ds-data-table--striped .ds-data-table__table tbody tr:nth-child(even) td {
   background: var(--ds-data-table-row-striped);
 }
 

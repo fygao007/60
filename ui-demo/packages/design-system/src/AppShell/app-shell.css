@@ -241,7 +241,6 @@
 }
 .operation-table th { background: #fafafa; font-weight: 600; height: 40px; }
 .operation-table th + th, .operation-table td + td { border-left: 1px solid rgba(238,238,240,.65); }
-.operation-table tbody tr:nth-child(even) td { background: #fcfcfd; }
 .operation-table tbody tr:hover td { background: var(--ds-color-primary-lighter); }
 .operation-table tbody tr.selected td { background: var(--ds-color-bg-active); }
 
