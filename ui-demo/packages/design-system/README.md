@@ -43,7 +43,7 @@ HTML 预览页只需要：
 </body>
 ```
 
-参考样例：`ui-demo/clause-library.html`、`ui-demo/campus-info.html`。
+参考样例：`ui-demo/component-library-index.html`、`ui-demo/clause-library.html`、`ui-demo/campus-info.html`、`ui-demo/form-components-page.html`。
 
 `app-shell.css` 同时包含 **CRUD 列表通用模式**（`.operation-query-row` / `.operation-table` / `.ds-switch` / `.pages` / `.operation-footer`），业务页只需在 `<style>` 里写自己表格的列宽。
 
@@ -215,6 +215,14 @@ import {
 - `DSTag`
 - `DSSwitch`
 
+HTML 表单预览：
+
+- 完整表单页：`ui-demo/form-components-page.html`
+- 状态页：`ui-demo/form-input-states.html`、`ui-demo/form-select-states.html`、`ui-demo/form-textarea-states.html`
+- 选项页：`ui-demo/form-radio-group-states.html`、`ui-demo/form-checkbox-group-states.html`、`ui-demo/form-switch-states.html`
+- 日期时间页：`ui-demo/form-date-picker-states.html`、`ui-demo/form-date-range-states.html`、`ui-demo/form-time-picker-states.html`、`ui-demo/form-time-range-states.html`、`ui-demo/form-datetime-picker-states.html`、`ui-demo/form-datetime-range-states.html`
+- 上传页：`ui-demo/form-upload-button-states.html`、`ui-demo/form-upload-dragger-states.html`
+
 布局与导航：
 
 - `DSAppShell`
@@ -370,6 +378,8 @@ import {
 ```
 
 多级表头通过 `children` 描述分组，子列仍按普通列渲染：
+
+HTML 预览页：`ui-demo/multi-level-table-page.html`。
 
 ```jsx
 <DSDataTable

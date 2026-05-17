@@ -32,9 +32,32 @@
 
 ## 当前框架预览
 
+- `component-library-index.html`：组件库索引页，汇总表单、表格、框架与 React 源码入口。
 - `primary-nav.html`：一级导航 + 二级导航区 + 右侧操作区的完整框架原型。
 - `assets/icon-registry.js`：统一图标注册表。
 - `assets/icons/`：框架图标和业务入口图标资产。
+
+## HTML 组件预览索引
+
+表单：
+
+- `form-components-page.html`：完整表单页面，整合输入、下拉、日期时间、单选、多选、开关、上传等控件。
+- `form-input-states.html`：录入输入框状态。
+- `form-select-states.html`：下拉选择状态。
+- `form-textarea-states.html`：文本域状态。
+- `form-radio-group-states.html`：单选组状态。
+- `form-checkbox-group-states.html`：多选组状态。
+- `form-switch-states.html`：开关状态。
+- `form-date-picker-states.html` / `form-date-range-states.html`：日期选择与日期范围。
+- `form-time-picker-states.html` / `form-time-range-states.html`：时间选择与时间范围。
+- `form-datetime-picker-states.html` / `form-datetime-range-states.html`：日期时间选择与日期时间范围。
+- `form-upload-button-states.html` / `form-upload-dragger-states.html`：附件上传与拖拽上传。
+
+表格：
+
+- `basic-table-page.html`：基础表格页面。
+- `multi-level-table-page.html`：多级表头表格页面。
+- `lowcode-table-page.html`：低代码表格页面。
 
 ## 60 组件库当前覆盖
 
