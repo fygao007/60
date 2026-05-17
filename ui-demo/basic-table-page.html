@@ -246,6 +246,11 @@
       cursor: grab;
     }
 
+    .drag-handle:hover {
+      background: #f5f5ff;
+      border-radius: 4px;
+    }
+
     .drag-handle:active {
       cursor: grabbing;
     }
@@ -263,6 +268,15 @@
       accent-color: #333fff;
       vertical-align: middle;
       cursor: pointer;
+    }
+
+    .basic-table tbody tr.is-dragging td {
+      background: #ebecff;
+      opacity: 0.72;
+    }
+
+    .basic-table tbody tr.is-drag-over td {
+      background: #f5f5ff;
     }
 
     .avatar-cell {
@@ -657,6 +671,72 @@
     if (!switchNode) return;
     switchNode.classList.toggle('is-off');
     switchNode.textContent = switchNode.classList.contains('is-off') ? '否' : '是';
+  });
+
+  let draggingRow = null;
+
+  function refreshRowIndex() {
+    [...tbody.querySelectorAll('tr')].forEach((row, index) => {
+      row.querySelector('.col-index').textContent = index + 1;
+      const checkbox = row.querySelector('.row-check');
+      checkbox?.setAttribute('aria-label', `选择第 ${index + 1} 行`);
+    });
+  }
+
+  function getDragAfterRow(container, y) {
+    const rows = [...container.querySelectorAll('tr:not(.is-dragging)')];
+    return rows.reduce((closest, row) => {
+      const rect = row.getBoundingClientRect();
+      const offset = y - rect.top - rect.height / 2;
+      if (offset < 0 && offset > closest.offset) {
+        return { offset, row };
+      }
+      return closest;
+    }, { offset: Number.NEGATIVE_INFINITY, row: null }).row;
+  }
+
+  tbody.addEventListener('mousedown', (event) => {
+    const handle = event.target.closest('.drag-handle');
+    if (!handle) return;
+    const row = handle.closest('tr');
+    row.draggable = true;
+  });
+
+  tbody.addEventListener('dragstart', (event) => {
+    const handle = event.target.querySelector?.('.drag-handle');
+    if (!event.target.matches('tr') || !handle) return;
+    draggingRow = event.target;
+    draggingRow.classList.add('is-dragging');
+    event.dataTransfer.effectAllowed = 'move';
+    event.dataTransfer.setData('text/plain', '');
+  });
+
+  tbody.addEventListener('dragover', (event) => {
+    if (!draggingRow) return;
+    event.preventDefault();
+    const afterRow = getDragAfterRow(tbody, event.clientY);
+    tbody.querySelectorAll('.is-drag-over').forEach((row) => row.classList.remove('is-drag-over'));
+    if (afterRow) {
+      afterRow.classList.add('is-drag-over');
+      tbody.insertBefore(draggingRow, afterRow);
+    } else {
+      tbody.appendChild(draggingRow);
+    }
+  });
+
+  tbody.addEventListener('dragend', () => {
+    if (!draggingRow) return;
+    draggingRow.classList.remove('is-dragging');
+    draggingRow.draggable = false;
+    draggingRow = null;
+    tbody.querySelectorAll('.is-drag-over').forEach((row) => row.classList.remove('is-drag-over'));
+    refreshRowIndex();
+  });
+
+  document.addEventListener('mouseup', () => {
+    tbody.querySelectorAll('tr[draggable="true"]').forEach((row) => {
+      if (row !== draggingRow) row.draggable = false;
+    });
   });
 </script>
 </body>
