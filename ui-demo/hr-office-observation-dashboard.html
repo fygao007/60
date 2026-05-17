@@ -1,0 +1,666 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>人事处 AI 观察室</title>
+  <link rel="stylesheet" href="./packages/design-system/src/base.css" />
+  <link rel="stylesheet" href="./packages/design-system/src/AppShell/app-shell.css" />
+  <style>
+    .operation-content { overflow: auto; background: #fff; }
+    .ai-office {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 100%;
+      padding: 0 16px 16px;
+      color: #11131a;
+      background: #fff;
+    }
+    .page-intro {
+      display: grid;
+      grid-template-columns: minmax(360px, 1fr) auto;
+      gap: 16px;
+      align-items: end;
+    }
+    .title-line { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .page-title { margin: 0; font-size: 20px; font-weight: 600; line-height: 30px; color: #11131a; }
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 24px;
+      padding: 0 10px;
+      color: #16794f;
+      background: #eaf8f0;
+      border: 1px solid #bce8cf;
+      border-radius: 999px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .live-badge::before { content: ""; width: 6px; height: 6px; background: #20a464; border-radius: 50%; }
+    .page-desc { margin: 4px 0 0; color: #505266; font-size: 13px; line-height: 20px; }
+    .page-actions { display: flex; justify-content: flex-end; gap: 8px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-width: 84px;
+      height: 32px;
+      padding: 0 12px;
+      color: #11131a;
+      background: #fff;
+      border: 1px solid #dcdce0;
+      border-radius: 4px;
+      font-size: 14px;
+      line-height: 22px;
+      cursor: pointer;
+    }
+    .btn.primary { color: #fff; background: #303fff; border-color: #303fff; }
+    .btn svg { width: 16px; height: 16px; stroke: currentColor; }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(520px, 1.12fr) minmax(420px, .88fr);
+      gap: 12px;
+      align-items: stretch;
+    }
+    .panel {
+      min-width: 0;
+      background: #fff;
+      border: 1px solid #eeeef0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 44px;
+      padding: 10px 14px;
+      border-bottom: 1px solid #eeeef0;
+    }
+    .panel-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 22px;
+    }
+    .panel-title::before {
+      content: "";
+      width: 4px;
+      height: 16px;
+      background: #303fff;
+      border-radius: 2px;
+    }
+    .panel-extra { flex: none; color: #737585; font-size: 12px; line-height: 20px; }
+    .panel-body { padding: 14px; }
+
+    .ai-command {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: start;
+      padding: 12px;
+      background: #f8faff;
+      border: 1px solid #dfe4ff;
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+    .command-label { color: #303fff; font-size: 12px; font-weight: 600; line-height: 18px; }
+    .command-text { margin-top: 4px; color: #11131a; font-size: 16px; font-weight: 600; line-height: 24px; }
+    .command-desc { margin-top: 4px; color: #505266; font-size: 12px; line-height: 20px; }
+    .command-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      color: #fff;
+      background: #303fff;
+      border: 0;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .command-button svg { width: 18px; height: 18px; stroke: currentColor; }
+
+    .priority-list { display: grid; gap: 8px; }
+    .priority {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 10px;
+      align-items: start;
+      padding: 10px;
+      border: 1px solid #eeeef0;
+      border-radius: 8px;
+      background: #fff;
+    }
+    .priority.is-danger { background: #fff7f7; border-color: #f4d7d7; }
+    .priority.is-warning { background: #fffaf2; border-color: #f3e2c6; }
+    .priority.is-info { background: #f7faff; border-color: #dfe7ff; }
+    .rank {
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      color: #303fff;
+      background: #eef0ff;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .priority-title { color: #11131a; font-size: 13px; font-weight: 600; line-height: 20px; }
+    .priority-desc { margin-top: 2px; color: #505266; font-size: 12px; line-height: 18px; }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      height: 22px;
+      padding: 0 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      line-height: 20px;
+      white-space: nowrap;
+    }
+    .tag.danger { color: #c84040; background: #fff0f0; }
+    .tag.warning { color: #ad6800; background: #fff7e8; }
+    .tag.info { color: #303fff; background: #eef0ff; }
+    .tag.success { color: #1f7a4d; background: #e9f8ef; }
+
+    .ask-area { display: grid; gap: 10px; }
+    .ask-box {
+      display: flex;
+      gap: 8px;
+      padding: 10px;
+      background: #f8faff;
+      border: 1px solid #dfe4ff;
+      border-radius: 8px;
+    }
+    .ask-box textarea {
+      flex: 1;
+      min-width: 0;
+      min-height: 78px;
+      color: #11131a;
+      background: transparent;
+      border: 0;
+      outline: none;
+      resize: none;
+      font-size: 14px;
+      line-height: 22px;
+      font-family: var(--ds-font-family);
+    }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip {
+      height: 28px;
+      padding: 0 10px;
+      color: #505266;
+      background: #fff;
+      border: 1px solid #dcdce0;
+      border-radius: 999px;
+      font-size: 12px;
+      line-height: 26px;
+      cursor: pointer;
+    }
+    .answer {
+      padding: 12px;
+      background: #fff;
+      border: 1px solid #eeeef0;
+      border-radius: 8px;
+    }
+    .answer strong { display: block; margin-bottom: 4px; color: #11131a; font-size: 13px; line-height: 20px; }
+    .answer p { margin: 0; color: #505266; font-size: 12px; line-height: 20px; }
+    .source-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .source { height: 22px; padding: 0 8px; color: #303fff; background: #eef0ff; border-radius: 4px; font-size: 12px; line-height: 22px; }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .kpi {
+      padding: 12px;
+      background: #f8faff;
+      border: 1px solid #edf0ff;
+      border-radius: 8px;
+    }
+    .kpi:nth-child(2) { background: #fffaf2; border-color: #f3e2c6; }
+    .kpi:nth-child(3) { background: #f6fbf8; border-color: #dfeee6; }
+    .kpi:nth-child(4) { background: #f7faff; border-color: #dfe7ff; }
+    .kpi-label { color: #737585; font-size: 12px; line-height: 18px; }
+    .kpi-value { margin-top: 6px; color: #11131a; font-size: 24px; font-weight: 700; line-height: 30px; }
+    .kpi-note { margin-top: 4px; color: #505266; font-size: 12px; line-height: 18px; }
+    .kpi-note.green { color: #1f7a4d; }
+    .kpi-note.orange { color: #ad6800; }
+    .kpi-note.red { color: #c84040; }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: minmax(420px, 1fr) minmax(420px, 1fr);
+      gap: 12px;
+    }
+    .workflows { display: grid; gap: 12px; }
+    .workflow-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 6px;
+      color: #11131a;
+      font-size: 13px;
+      line-height: 20px;
+    }
+    .workflow-sub { color: #737585; font-size: 12px; }
+    .progress {
+      height: 8px;
+      overflow: hidden;
+      background: #e8eaf7;
+      border-radius: 999px;
+    }
+    .progress span { display: block; height: 100%; background: #303fff; border-radius: inherit; }
+    .progress span.green { background: #24a866; }
+    .progress span.red { background: #d94b4b; }
+    .ai-tip { margin-top: 5px; color: #737585; font-size: 12px; line-height: 18px; }
+    .ai-tip strong { color: #303fff; font-weight: 600; }
+    .ai-tip.red strong { color: #c84040; }
+
+    .cards-list { display: grid; gap: 8px; }
+    .policy-item,
+    .signal-item,
+    .tool-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      background: #fff;
+      border: 1px solid #eeeef0;
+      border-radius: 8px;
+    }
+    .item-title { color: #11131a; font-size: 13px; font-weight: 600; line-height: 20px; }
+    .item-desc { margin-top: 2px; color: #737585; font-size: 12px; line-height: 18px; }
+    .signals {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .signal-card {
+      padding: 12px;
+      background: #fff;
+      border: 1px solid #eeeef0;
+      border-radius: 8px;
+    }
+    .signal-label { color: #737585; font-size: 12px; line-height: 18px; }
+    .signal-value { margin-top: 6px; color: #11131a; font-size: 24px; font-weight: 700; line-height: 30px; }
+    .signal-note { margin-top: 2px; color: #505266; font-size: 12px; line-height: 18px; }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .tool-item {
+      grid-template-columns: auto 1fr;
+      align-items: start;
+      cursor: pointer;
+    }
+    .tool-icon {
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      color: #303fff;
+      background: #eef0ff;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    @media (max-width: 1320px) {
+      .hero-grid,
+      .section-grid { grid-template-columns: 1fr; }
+      .kpi-grid,
+      .signals,
+      .tools-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .page-intro { grid-template-columns: 1fr; }
+      .page-actions { justify-content: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <div class="stage ds-scope">
+    <header class="operation-header">
+      <div class="operation-section-tabs">
+        <button class="operation-section-tab is-active" data-section-tab="overview"><span>AI总览</span></button>
+        <button class="operation-section-tab" data-section-tab="service"><span>业务监测</span></button>
+        <button class="operation-section-tab" data-section-tab="policy"><span>政策推演</span></button>
+        <button class="operation-section-tab" data-section-tab="team"><span>队伍异动</span></button>
+      </div>
+      <div class="operation-header-spacer"></div>
+      <div class="operation-buttons">
+        <button class="operation-button">订阅日报</button>
+        <button class="operation-button primary">生成汇报</button>
+      </div>
+    </header>
+
+    <main class="ai-office">
+      <section class="page-intro">
+        <div>
+          <div class="title-line">
+            <h1 class="page-title">人事处 AI 观察室</h1>
+            <span class="live-badge">已同步 5 个业务系统</span>
+          </div>
+          <p class="page-desc">围绕处长日常工作，把人事业务办理、政策落地、人员异动和智能工具组织成可追问、可处置、可生成材料的工作台。</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h10M4 18h16" stroke-width="2" stroke-linecap="round"/></svg>
+            观察规则
+          </button>
+          <button class="btn primary">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke-width="2" stroke-linecap="round"/></svg>
+            新建任务
+          </button>
+        </div>
+      </section>
+
+      <section class="hero-grid">
+        <section class="panel">
+          <div class="panel-head">
+            <div class="panel-title">AI 今日处置建议</div>
+            <div class="panel-extra">基于昨日数据 + 本周日程</div>
+          </div>
+          <div class="panel-body">
+            <div class="ai-command">
+              <div>
+                <div class="command-label">AI已完成工作排序</div>
+                <div class="command-text">建议今天优先处理 3 件事，并自动准备清单、模板和汇报初稿。</div>
+                <div class="command-desc">AI 已关联职称评审、进校办理、OA 日程、政策任务和人员档案数据。</div>
+              </div>
+              <button class="command-button" aria-label="执行">
+                <svg viewBox="0 0 24 24" fill="none"><path d="m5 12 14-7-4 14-3-6-7-1Z" stroke-width="2" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+
+            <div class="priority-list">
+              <article class="priority is-danger">
+                <div class="rank">1</div>
+                <div>
+                  <div class="priority-title">职称评审材料初审 18:00 截止</div>
+                  <div class="priority-desc">已收 216 份，预计 28 份未提交；AI 识别 7 份材料格式或附件缺失，可生成催办短信。</div>
+                </div>
+                <span class="tag danger">今日截止</span>
+              </article>
+              <article class="priority is-warning">
+                <div class="rank">2</div>
+                <div>
+                  <div class="priority-title">3 位海外引进人才入职手续超时</div>
+                  <div class="priority-desc">最长超时 12 天，卡点集中在档案调档和户口办理，可生成责任人与流程卡点表。</div>
+                </div>
+                <span class="tag warning">本周推进</span>
+              </article>
+              <article class="priority is-info">
+                <div class="rank">3</div>
+                <div>
+                  <div class="priority-title">“非升即走”改革半年进展需汇报</div>
+                  <div class="priority-desc">AI 已整理执行数据、典型案例、问题分析和下一步举措，可直接生成汇报材料。</div>
+                </div>
+                <span class="tag info">需汇报</span>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div class="panel-title">跨系统 AI 问答</div>
+            <div class="panel-extra">人事 / 科研 / 教务 / 财务 / OA</div>
+          </div>
+          <div class="panel-body">
+            <div class="ask-area">
+              <div class="ask-box">
+                <textarea id="askInput">哪些业务事项办理超时？卡在哪个环节？责任人是谁？</textarea>
+                <button class="command-button" aria-label="提问">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="m5 12 14-7-4 14-3-6-7-1Z" stroke-width="2" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+              <div class="chips">
+                <button class="chip" data-question="生成职称评审未提交人员清单和催办短信模板">催办模板</button>
+                <button class="chip" data-question="展示海外人才入职流程卡点和责任人">流程卡点</button>
+                <button class="chip" data-question="本年度高层次人才引进进度对比往年如何">引才进度</button>
+                <button class="chip" data-question="新政策预计影响哪些人员和预算成本">政策测算</button>
+              </div>
+              <div class="answer">
+                <strong>AI 示例回答</strong>
+                <p>当前共有 7 项审批超时，主要集中在博士后出站、海外人才进校和职称材料补正。AI 建议优先处理 3 个跨部门卡点，并已生成责任人清单、催办话术和本周协调会议程。</p>
+                <div class="source-row">
+                  <span class="source">人事：审批流程</span>
+                  <span class="source">OA：日程与待办</span>
+                  <span class="source">档案：调档状态</span>
+                  <span class="source">政策库：办理时限</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div class="panel-title">业务运行指标</div>
+          <div class="panel-extra">AI 自动识别异常与变化</div>
+        </div>
+        <div class="panel-body">
+          <div class="kpi-grid">
+            <div class="kpi">
+              <div class="kpi-label">本月办理事项</div>
+              <div class="kpi-value">847</div>
+              <div class="kpi-note green">按期办结率 94.2%</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-label">待审批事项</div>
+              <div class="kpi-value">36</div>
+              <div class="kpi-note orange">含 7 项超时</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-label">本月人员变动</div>
+              <div class="kpi-value">23</div>
+              <div class="kpi-note">入职 18，离职 5</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-label">本周政策咨询</div>
+              <div class="kpi-value">142</div>
+              <div class="kpi-note green">AI 自助答复 67%</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-grid">
+        <section class="panel">
+          <div class="panel-head">
+            <div class="panel-title">核心业务办理监测</div>
+            <div class="panel-extra">AI 识别瓶颈 + 提效建议</div>
+          </div>
+          <div class="panel-body">
+            <div class="workflows">
+              <div>
+                <div class="workflow-top"><span><strong>职称评审</strong> <span class="workflow-sub">申报 216 人 · 初审中</span></span><span>68%</span></div>
+                <div class="progress"><span style="width: 68%"></span></div>
+                <div class="ai-tip"><strong>AI提示：</strong>剩余 7 天，建议增派 2 人协助初审。</div>
+              </div>
+              <div>
+                <div class="workflow-top"><span><strong>高层次人才引进</strong> <span class="workflow-sub">在谈 32 人 · 已签约 18 人</span></span><span>56%</span></div>
+                <div class="progress"><span style="width: 56%"></span></div>
+                <div class="ai-tip"><strong>AI提示：</strong>按当前节奏年底预计 58 人，较年度目标缺口 2 人。</div>
+              </div>
+              <div>
+                <div class="workflow-top"><span><strong>聘期考核</strong> <span class="workflow-sub">应考核 486 人 · 已完成 412 人</span></span><span>85%</span></div>
+                <div class="progress"><span class="green" style="width: 85%"></span></div>
+                <div class="ai-tip"><strong>AI提示：</strong>进度良好，剩余 74 人集中在 3 个学院。</div>
+              </div>
+              <div>
+                <div class="workflow-top"><span><strong>博士后管理</strong> <span class="workflow-sub">在站 98 人 · 拟出站 12 人</span></span><span>42%</span></div>
+                <div class="progress"><span class="red" style="width: 42%"></span></div>
+                <div class="ai-tip red"><strong>AI提示：</strong>5 位出站手续超期，建议本周专项推进。</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div class="panel-title">政策落地与影响推演</div>
+            <div class="panel-extra">本年度重点改革</div>
+          </div>
+          <div class="panel-body">
+            <div class="cards-list">
+              <article class="policy-item">
+                <div>
+                  <div class="item-title">非升即走聘任制度改革</div>
+                  <div class="item-desc">已执行 18 个月，覆盖青年教师 218 人，首批考核通过率 82%。</div>
+                </div>
+                <span class="tag success">推进顺利</span>
+              </article>
+              <article class="policy-item">
+                <div>
+                  <div class="item-title">薪酬制度改革</div>
+                  <div class="item-desc">方案已征求意见 3 轮，各学院反馈差异较大，AI 可聚类争议点。</div>
+                </div>
+                <span class="tag warning">需关注</span>
+              </article>
+              <article class="policy-item">
+                <div>
+                  <div class="item-title">岗位聘任管理办法修订</div>
+                  <div class="item-desc">初稿已完成，预计 6 月校长办公会审议，可生成审议材料。</div>
+                </div>
+                <span class="tag info">按计划</span>
+              </article>
+              <article class="policy-item">
+                <div>
+                  <div class="item-title">师德师风长效机制建设</div>
+                  <div class="item-desc">5 月底前需完成本校实施细则，AI 已标记法规差异与必填条款。</div>
+                </div>
+                <span class="tag danger">时间紧</span>
+              </article>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div class="panel-title">队伍异动监测</div>
+          <div class="panel-extra">AI 识别异常信号</div>
+        </div>
+        <div class="panel-body">
+          <div class="signals">
+            <div class="signal-card">
+              <div class="signal-label">本周新入职</div>
+              <div class="signal-value">6</div>
+              <div class="signal-note">含 2 位高层次人才</div>
+            </div>
+            <div class="signal-card">
+              <div class="signal-label">本月离职</div>
+              <div class="signal-value">5</div>
+              <div class="signal-note">含 1 位重点人才</div>
+            </div>
+            <div class="signal-card">
+              <div class="signal-label">流失风险高</div>
+              <div class="signal-value" style="color:#c84040">8</div>
+              <div class="signal-note">建议尽快沟通</div>
+            </div>
+            <div class="signal-card">
+              <div class="signal-label">三月内合同到期</div>
+              <div class="signal-value">14</div>
+              <div class="signal-note">含 5 位非升即走</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div class="panel-title">AI 业务工具箱</div>
+          <div class="panel-extra">从问答走向执行</div>
+        </div>
+        <div class="panel-body">
+          <div class="tools-grid">
+            <div class="tool-item"><div class="tool-icon">文</div><div><div class="item-title">起草文书</div><div class="item-desc">聘任通知、考核意见、推荐信</div></div></div>
+            <div class="tool-item"><div class="tool-icon">报</div><div><div class="item-title">生成汇报</div><div class="item-desc">月报、季报、专题汇报</div></div></div>
+            <div class="tool-item"><div class="tool-icon">策</div><div><div class="item-title">政策查询</div><div class="item-desc">政策库智能问答与依据引用</div></div></div>
+            <div class="tool-item"><div class="tool-icon">表</div><div><div class="item-title">数据导出</div><div class="item-desc">花名册、统计表、明细表</div></div></div>
+            <div class="tool-item"><div class="tool-icon">算</div><div><div class="item-title">政策测算</div><div class="item-desc">受影响人员与成本测算</div></div></div>
+            <div class="tool-item"><div class="tool-icon">会</div><div><div class="item-title">会议准备</div><div class="item-desc">议程、材料、数据准备</div></div></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="./assets/icon-registry.js"></script>
+  <script src="./packages/design-system/src/AppShell/app-shell.js"></script>
+  <script>
+    WiseAppShell.init({
+      activeModule: 'exam',
+      secondaryNav: {
+        title: '智能人事',
+        status: ['预警', 17],
+        items: ['AI观察室', '队伍画像', '变化追踪', '风险预警', '决策推演', '数据源管理'],
+        foot: '智能规则配置'
+      },
+      activeFeature: 'AI观察室',
+      tabs: ['AI观察室', '队伍画像', '变化追踪', '风险预警', '决策推演'],
+      userName: '管理员'
+    });
+
+    const primaryModules = [
+      {
+        key: 'recruit',
+        label: '招聘',
+        icon: '<svg viewBox="0 0 24 24" fill="none"><path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="currentColor" stroke-width="2"/><path d="M3 21v-1a6 6 0 0 1 12 0v1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M17 8h4M19 6v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'
+      },
+      {
+        key: 'entry',
+        label: '进校',
+        icon: '<svg viewBox="0 0 24 24" fill="none"><path d="M4 20h16M6 20V9l6-4 6 4v11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 20v-6h4v6M9 10h.01M15 10h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'
+      },
+      {
+        key: 'staff',
+        label: '人员管理',
+        icon: '<svg viewBox="0 0 24 24" fill="none"><path d="M8 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM2 21v-1a6 6 0 0 1 10.5-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M17 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM13 21v-.5a4.5 4.5 0 0 1 9 0v.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'
+      },
+      {
+        key: 'assessment',
+        label: '考核',
+        icon: '<svg viewBox="0 0 24 24" fill="none"><path d="M8 4h8l2 3v13H6V7l2-3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m9 13 2 2 4-5M9 4v4h6V4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      },
+      {
+        key: 'statistics',
+        label: '统计',
+        icon: '<svg viewBox="0 0 24 24" fill="none"><path d="M4 19h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M7 16V9M12 16V5M17 16v-4" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M6 21h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'
+      }
+    ];
+
+    const primaryList = document.querySelector('.primary-nav-list');
+    if (primaryList) {
+      primaryList.innerHTML = primaryModules.map(function (item) {
+        return [
+          '<a class="primary-nav-item' + (item.key === 'statistics' ? ' active' : '') + '" href="#" data-module="' + item.key + '">',
+          '<span class="primary-nav-icon"><span class="wise-icon">' + item.icon + '</span></span>',
+          '<span class="primary-label">' + item.label + '</span>',
+          '</a>'
+        ].join('');
+      }).join('');
+    }
+
+    document.querySelectorAll('.chip').forEach(function (chip) {
+      chip.addEventListener('click', function () {
+        document.getElementById('askInput').value = chip.dataset.question;
+      });
+    });
+  </script>
+</body>
+</html>

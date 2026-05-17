@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>办事中心</title>
+  <link rel="stylesheet" href="./packages/design-system/src/base.css" />
+  <style>
+    :root {
+      --brand: #315cff;
+      --brand-2: #6557f2;
+      --cyan: #17b8d8;
+      --mint: #1fbd7a;
+      --orange: #ff9f2f;
+      --red: #ff5a5f;
+      --bg: #f3f6fb;
+      --card: #fff;
+      --text: #15182a;
+      --sub: #5d6475;
+      --weak: #8d95a8;
+      --line: #e7ebf4;
+      --shadow: 0 10px 28px rgba(40, 57, 126, .08);
+    }
+
+    * { box-sizing: border-box; }
+    html { background: var(--bg); }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background: var(--bg);
+      font-family: var(--ds-font-family), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 14px;
+    }
+    button { font: inherit; }
+    p, h1, h2, h3 { margin: 0; }
+    a { color: inherit; text-decoration: none; }
+
+    .phone {
+      position: relative;
+      width: min(100vw, 430px);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 12px 12px 88px;
+      background:
+        radial-gradient(circle at 12% -4%, rgba(49, 92, 255, .18), transparent 28%),
+        linear-gradient(180deg, #eef4ff 0%, #f9fbff 40%, #f3f6fb 100%);
+      overflow-x: hidden;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      height: 40px;
+      gap: 10px;
+    }
+    .icon-btn {
+      display: grid;
+      place-items: center;
+      flex: none;
+      width: 32px;
+      height: 32px;
+      color: var(--text);
+      background: rgba(255, 255, 255, .86);
+      border: 1px solid rgba(232, 236, 245, .9);
+      border-radius: 9px;
+      box-shadow: 0 6px 16px rgba(50, 66, 116, .06);
+    }
+    .icon-btn svg { width: 18px; height: 18px; stroke: currentColor; }
+    .page-title {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      font-size: 18px;
+      font-weight: 900;
+      line-height: 26px;
+      text-align: center;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .summary {
+      position: relative;
+      margin-top: 10px;
+      padding: 15px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--brand) 0%, var(--brand-2) 58%, var(--cyan) 100%);
+      border-radius: 16px;
+      box-shadow: 0 16px 34px rgba(49, 92, 255, .22);
+      overflow: hidden;
+    }
+    .summary::after {
+      content: "";
+      position: absolute;
+      right: -30px;
+      top: 18px;
+      width: 118px;
+      height: 118px;
+      border: 18px solid rgba(255, 255, 255, .13);
+      border-radius: 50%;
+    }
+    .summary-main { position: relative; z-index: 1; }
+    .summary-kicker {
+      display: inline-flex;
+      align-items: center;
+      height: 24px;
+      padding: 0 8px;
+      color: #1b3ddb;
+      background: #fff;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .summary-title {
+      margin-top: 10px;
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 30px;
+    }
+    .summary-copy {
+      margin-top: 5px;
+      max-width: 310px;
+      color: rgba(255, 255, 255, .84);
+      font-size: 13px;
+      line-height: 20px;
+    }
+    .summary-stats {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 13px;
+    }
+    .stat {
+      min-width: 0;
+      padding: 9px;
+      background: rgba(255, 255, 255, .13);
+      border: 1px solid rgba(255, 255, 255, .16);
+      border-radius: 10px;
+    }
+    .stat-num { font-size: 18px; font-weight: 900; line-height: 24px; }
+    .stat-label { margin-top: 1px; color: rgba(255, 255, 255, .72); font-size: 11px; line-height: 16px; white-space: nowrap; }
+
+    .tabs {
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-top: 12px;
+      padding: 6px;
+      background: rgba(255, 255, 255, .9);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+    .tab {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 34px;
+      gap: 5px;
+      color: var(--sub);
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .tab.active { color: #fff; background: var(--brand); }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 5px;
+      color: var(--brand);
+      background: #eef3ff;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 900;
+    }
+    .tab.active .badge { color: var(--brand); background: #fff; }
+
+    .ai-strip {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 10px;
+      margin-top: 12px;
+      padding: 12px;
+      background: linear-gradient(135deg, #fff 0%, #eef7ff 100%);
+      border: 1px solid #deebff;
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+    }
+    .ai-icon {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--cyan), var(--brand));
+      border-radius: 10px;
+    }
+    .ai-icon svg { width: 18px; height: 18px; stroke: currentColor; }
+    .ai-title { font-size: 14px; font-weight: 850; line-height: 20px; }
+    .ai-copy { margin-top: 2px; color: var(--sub); font-size: 12px; line-height: 18px; }
+    .ai-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 30px;
+      padding: 0 10px;
+      color: var(--brand);
+      background: #edf3ff;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 14px 2px 8px;
+    }
+    .section-title { font-size: 16px; font-weight: 900; line-height: 24px; }
+    .section-note { color: var(--weak); font-size: 12px; line-height: 18px; white-space: nowrap; }
+
+    .todo-list { display: grid; gap: 10px; }
+    .todo-card {
+      position: relative;
+      padding: 13px;
+      background: var(--card);
+      border: 1px solid rgba(232, 236, 245, .92);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .todo-card.urgent { border-color: rgba(255, 90, 95, .22); }
+    .todo-card.urgent::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--red);
+    }
+    .todo-card.normal::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--brand);
+    }
+    .todo-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      padding-left: 3px;
+    }
+    .todo-title {
+      overflow: hidden;
+      font-size: 15px;
+      font-weight: 900;
+      line-height: 22px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .todo-meta {
+      margin-top: 2px;
+      color: var(--sub);
+      font-size: 12px;
+      line-height: 18px;
+    }
+    .level {
+      display: inline-flex;
+      align-items: center;
+      height: 24px;
+      padding: 0 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 850;
+      white-space: nowrap;
+    }
+    .level.danger { color: #c93434; background: #fff0f0; }
+    .level.warn { color: #a96200; background: #fff2dd; }
+    .level.info { color: #264be8; background: #e9efff; }
+
+    .analysis {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 8px;
+      margin-top: 11px;
+      padding: 10px;
+      background: #f7faff;
+      border: 1px solid #edf2fb;
+      border-radius: 10px;
+    }
+    .analysis-mark {
+      display: grid;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--cyan), var(--brand));
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .analysis-text { color: var(--sub); font-size: 12px; line-height: 18px; }
+    .analysis-text strong { color: var(--text); font-weight: 850; }
+
+    .todo-foot {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 10px;
+      margin-top: 11px;
+    }
+    .deadline {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      gap: 6px;
+      color: var(--weak);
+      font-size: 12px;
+      line-height: 18px;
+    }
+    .deadline svg { flex: none; width: 15px; height: 15px; stroke: currentColor; }
+    .handle-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 34px;
+      padding: 0 12px;
+      color: #fff;
+      background: var(--brand);
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 850;
+      white-space: nowrap;
+    }
+    .handle-btn.secondary { color: var(--brand); background: #edf3ff; }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .mini-card {
+      min-width: 0;
+      padding: 12px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+    }
+    .mini-label { color: var(--weak); font-size: 12px; line-height: 18px; }
+    .mini-value { margin-top: 3px; font-size: 18px; font-weight: 900; line-height: 24px; }
+    .mini-copy { margin-top: 3px; color: var(--sub); font-size: 11px; line-height: 16px; }
+
+    .bottom-nav {
+      position: fixed;
+      left: 50%;
+      bottom: 0;
+      z-index: 5;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      width: min(100vw, 430px);
+      height: 66px;
+      padding: 7px 12px 8px;
+      background: rgba(255, 255, 255, .94);
+      border-top: 1px solid rgba(232, 236, 245, .9);
+      transform: translateX(-50%);
+      backdrop-filter: blur(18px);
+    }
+    .nav-item {
+      display: grid;
+      place-items: center;
+      gap: 2px;
+      color: var(--weak);
+      text-decoration: none;
+      font-size: 11px;
+      line-height: 16px;
+    }
+    .nav-item svg { width: 22px; height: 22px; stroke: currentColor; }
+    .nav-item.active { color: var(--brand); font-weight: 850; }
+
+    @media (max-width: 360px) {
+      .phone { padding-left: 10px; padding-right: 10px; }
+      .summary-stats, .mini-grid { grid-template-columns: 1fr; }
+      .ai-strip, .todo-foot { grid-template-columns: 1fr; }
+      .ai-action, .handle-btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <main class="phone ds-scope">
+    <header class="topbar" aria-label="顶部导航">
+      <a class="icon-btn" href="./mobile-campus-hr-home.html" aria-label="返回"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18 9 12l6-6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <h1 class="page-title">办事中心</h1>
+      <button class="icon-btn" aria-label="筛选"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16M7 12h10M10 18h4" stroke-width="2" stroke-linecap="round"/></svg></button>
+    </header>
+
+    <section class="summary" aria-label="办事概览">
+      <div class="summary-main">
+        <span class="summary-kicker">AI 已排序今日事项</span>
+        <h2 class="summary-title">优先处理 2 项紧急待办</h2>
+        <p class="summary-copy">系统按截止时间、影响范围和材料完整度排序，帮助人事处从事务堆里先抓重点。</p>
+      </div>
+      <div class="summary-stats">
+        <div class="stat"><p class="stat-num">8</p><p class="stat-label">待办事项</p></div>
+        <div class="stat"><p class="stat-num">5</p><p class="stat-label">进行中</p></div>
+        <div class="stat"><p class="stat-num">24</p><p class="stat-label">本周已办</p></div>
+      </div>
+    </section>
+
+    <nav class="tabs" aria-label="办事状态页签">
+      <a class="tab active" href="#"><span>待办</span><span class="badge">8</span></a>
+      <a class="tab" href="#"><span>进行中</span><span class="badge">5</span></a>
+      <a class="tab" href="#"><span>已办</span><span class="badge">24</span></a>
+    </nav>
+
+    <section class="ai-strip" aria-label="智能分析">
+      <span class="ai-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M6.8 6.8l2.1 2.1M15.1 15.1l2.1 2.1M17.2 6.8l-2.1 2.1M8.9 15.1l-2.1 2.1" stroke-width="2" stroke-linecap="round"/></svg></span>
+      <div>
+        <h2 class="ai-title">AI 分析：职称评审影响范围最大</h2>
+        <p class="ai-copy">涉及 31 名教师，材料缺口集中在教学证明与学院意见。</p>
+      </div>
+      <a class="ai-action" href="#">查看</a>
+    </section>
+
+    <div class="section-head">
+      <h2 class="section-title">待办事项</h2>
+      <span class="section-note">按紧急程度排序</span>
+    </div>
+
+    <section class="todo-list" aria-label="待办列表">
+      <article class="todo-card urgent">
+        <div class="todo-top">
+          <div>
+            <h3 class="todo-title">职称评审材料审核</h3>
+            <p class="todo-meta">2025 年教师中级职称评审 · 科学院</p>
+          </div>
+          <span class="level danger">紧急</span>
+        </div>
+        <div class="analysis">
+          <span class="analysis-mark">AI</span>
+          <p class="analysis-text"><strong>建议立即处理。</strong> 31 人待审核，6 份材料缺失，预计会影响本周评审会前置汇总。</p>
+        </div>
+        <div class="todo-foot">
+          <span class="deadline"><svg viewBox="0 0 24 24" fill="none"><path d="M7 3v3M17 3v3M4 8h16M6 5h12a2 2 0 0 1 2 2v12H4V7a2 2 0 0 1 2-2Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>今天 17:00 前完成初审</span>
+          <a class="handle-btn" href="#">一件事办理</a>
+        </div>
+      </article>
+
+      <article class="todo-card urgent">
+        <div class="todo-top">
+          <div>
+            <h3 class="todo-title">年度考核异常数据确认</h3>
+            <p class="todo-meta">2025 年度教职工考核 · 全校</p>
+          </div>
+          <span class="level warn">较急</span>
+        </div>
+        <div class="analysis">
+          <span class="analysis-mark">AI</span>
+          <p class="analysis-text"><strong>建议先批量处理。</strong> 已识别 12 条岗位、聘期、学院归属不一致数据，可自动生成核对清单。</p>
+        </div>
+        <div class="todo-foot">
+          <span class="deadline"><svg viewBox="0 0 24 24" fill="none"><path d="M12 8v5l3 2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>剩余 1 天 6 小时</span>
+          <a class="handle-btn" href="#">一件事办理</a>
+        </div>
+      </article>
+
+      <article class="todo-card normal">
+        <div class="todo-top">
+          <div>
+            <h3 class="todo-title">双师型教师认定提交提醒</h3>
+            <p class="todo-meta">材料待提交 · 机电学院 2 人</p>
+          </div>
+          <span class="level info">普通</span>
+        </div>
+        <div class="analysis">
+          <span class="analysis-mark">AI</span>
+          <p class="analysis-text"><strong>可自动催办。</strong> 系统已生成提醒文案，并匹配两位教师的缺失附件。</p>
+        </div>
+        <div class="todo-foot">
+          <span class="deadline"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16v12H4V6Z" stroke-width="2"/><path d="m8 10 4 3 4-3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>截止 09-12</span>
+          <a class="handle-btn secondary" href="#">智能催办</a>
+        </div>
+      </article>
+    </section>
+
+    <section class="mini-grid" aria-label="办事效率">
+      <article class="mini-card">
+        <p class="mini-label">AI 已释放</p>
+        <p class="mini-value">2.6h</p>
+        <p class="mini-copy">预填、校验、催办节省时间</p>
+      </article>
+      <article class="mini-card">
+        <p class="mini-label">风险提醒</p>
+        <p class="mini-value">4 项</p>
+        <p class="mini-copy">截止、缺材料、数据冲突</p>
+      </article>
+    </section>
+  </main>
+
+  <nav class="bottom-nav ds-scope" aria-label="底部导航">
+    <a class="nav-item" href="./mobile-campus-hr-home.html"><svg viewBox="0 0 24 24" fill="none"><path d="M4 11.5 12 4l8 7.5V20H5v-8.5Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>首页</span></a>
+    <a class="nav-item active" href="#"><svg viewBox="0 0 24 24" fill="none"><path d="M4 5h16v14H4V5Z" stroke-width="2"/><path d="M8 9h8M8 13h5" stroke-width="2" stroke-linecap="round"/></svg><span>办事</span></a>
+    <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M8 8l8 8M16 8l-8 8" stroke-width="2" stroke-linecap="round"/></svg><span>智能</span></a>
+    <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM4 21a8 8 0 0 1 16 0" stroke-width="2" stroke-linecap="round"/></svg><span>我的</span></a>
+  </nav>
+</body>
+</html>
