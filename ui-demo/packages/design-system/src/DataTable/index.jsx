@@ -2,6 +2,98 @@ import DSButton from '../Button'
 import DSPagination from '../Pagination'
 import './index.css'
 
+const SPECIAL_COLUMN_WIDTH = {
+  drag: 40,
+  check: 48,
+  index: 64,
+  actions: 116,
+}
+
+function getColumnKey(column, index) {
+  return column.key || column.dataIndex || `column-${index}`
+}
+
+function getColumnWidth(column, fallback = 140) {
+  const rawWidth = column.width || column.minWidth || fallback
+  const parsed = Number.parseInt(rawWidth, 10)
+  return Number.isFinite(parsed) ? parsed : fallback
+}
+
+function getLeafCount(column) {
+  if (!column.children?.length) return 1
+  return column.children.reduce((total, child) => total + getLeafCount(child), 0)
+}
+
+function getMaxDepth(columns) {
+  if (!columns.length) return 1
+  return columns.reduce((depth, column) => Math.max(depth, column.children?.length ? 1 + getMaxDepth(column.children) : 1), 1)
+}
+
+function flattenColumns(columns, inheritedFixed) {
+  return columns.flatMap((column, index) => {
+    const fixed = column.fixed || inheritedFixed
+    const normalizedColumn = { ...column, key: getColumnKey(column, index), fixed }
+    if (column.children?.length) {
+      return flattenColumns(column.children, fixed)
+    }
+    return normalizedColumn
+  })
+}
+
+function buildHeaderRows(columns, depth) {
+  const rows = Array.from({ length: depth }, () => [])
+
+  const walk = (items, level = 0, inheritedFixed) => {
+    items.forEach((column, index) => {
+      const fixed = column.fixed || inheritedFixed
+      const key = getColumnKey(column, index)
+      const hasChildren = column.children?.length
+      rows[level].push({
+        ...column,
+        key,
+        fixed,
+        colSpan: hasChildren ? getLeafCount(column) : 1,
+        rowSpan: hasChildren ? 1 : depth - level,
+      })
+      if (hasChildren) {
+        walk(column.children, level + 1, fixed)
+      }
+    })
+  }
+
+  walk(columns)
+  return rows
+}
+
+function applyFixedOffsets(columns) {
+  let leftOffset = 0
+  const withLeft = columns.map((column) => {
+    if (column.fixed !== 'left') return column
+    const fixedColumn = { ...column, stickyOffset: leftOffset }
+    leftOffset += getColumnWidth(column)
+    return fixedColumn
+  })
+
+  let rightOffset = 0
+  return [...withLeft].reverse().map((column) => {
+    if (column.fixed !== 'right') return column
+    const fixedColumn = { ...column, stickyOffset: rightOffset }
+    rightOffset += getColumnWidth(column)
+    return fixedColumn
+  }).reverse()
+}
+
+function getFixedStyle(column) {
+  if (column.fixed === 'left') return { left: column.stickyOffset }
+  if (column.fixed === 'right') return { right: column.stickyOffset }
+  return undefined
+}
+
+function renderCellValue(column, record, index) {
+  const value = record[column.dataIndex || column.key]
+  return column.render ? column.render(value, record, index) : value ?? '-'
+}
+
 export default function DSDataTable({
   title = '列表',
   summary,
@@ -17,42 +109,115 @@ export default function DSDataTable({
   draggable = false,
   rowDraggable = draggable,
   actionsPosition = 'right',
+  actionsMaxVisible = 2,
+  actionFixed = true,
   showToolbar = true,
   emptyText = '暂无数据',
   emptyRender,
   variant = 'default',
+  showIndex = false,
+  indexTitle = '序号',
+  striped = false,
+  bordered = true,
+  selectedRowKeys,
+  onSelectRow,
+  onSelectAll,
+  rowSelectable = true,
   minWidth,
   rowClassName,
   className = '',
 }) {
-  const classes = ['ds-data-table', 'ds-card', variant === 'lowcode' && 'ds-data-table--lowcode', className].filter(Boolean).join(' ')
+  const currentSelectedKeys = selectedRowKeys || selectedKeys
+  const classes = [
+    'ds-data-table',
+    'ds-card',
+    variant === 'lowcode' && 'ds-data-table--lowcode',
+    striped && 'ds-data-table--striped',
+    !bordered && 'ds-data-table--borderless',
+    className,
+  ].filter(Boolean).join(' ')
   const hasActions = actions.length > 0
   const actionsAtLeft = hasActions && actionsPosition === 'left'
   const actionsAtRight = hasActions && actionsPosition !== 'left'
-  const tableMinWidth = minWidth || columns.reduce((total, column) => total + Number.parseInt(column.width || column.minWidth || 140, 10), 0) + (selectable ? 40 : 0) + (rowDraggable ? 48 : 0) + (hasActions ? 160 : 0)
-  const colSpan = columns.length + (selectable ? 1 : 0) + (rowDraggable ? 1 : 0) + (hasActions ? 1 : 0)
+  const actionColumnWidth = Math.max(SPECIAL_COLUMN_WIDTH.actions, actionsMaxVisible * 52 + (actions.length > actionsMaxVisible ? 32 : 0))
+
+  const systemLeftColumns = [
+    rowDraggable && { key: '__drag', title: '', width: SPECIAL_COLUMN_WIDTH.drag, fixed: 'left', className: 'ds-data-table__drag', system: 'drag' },
+    selectable && { key: '__check', title: '', width: SPECIAL_COLUMN_WIDTH.check, fixed: 'left', className: 'ds-data-table__check', system: 'check' },
+    showIndex && { key: '__index', title: indexTitle, width: SPECIAL_COLUMN_WIDTH.index, fixed: 'left', className: 'ds-data-table__index', system: 'index' },
+  ].filter(Boolean)
+  const actionColumn = hasActions && {
+    key: '__actions',
+    title: '操作',
+    width: actionColumnWidth,
+    fixed: actionFixed ? (actionsAtLeft ? 'left' : 'right') : undefined,
+    className: 'ds-data-table__actions-col',
+    system: 'actions',
+  }
+  const headerColumns = [
+    ...systemLeftColumns,
+    actionsAtLeft && actionColumn,
+    ...columns,
+    actionsAtRight && actionColumn,
+  ].filter(Boolean)
+  const leafColumns = applyFixedOffsets(flattenColumns(headerColumns))
+  const leafColumnMap = new Map(leafColumns.map((column) => [column.key, column]))
+  const headerRows = buildHeaderRows(headerColumns, getMaxDepth(headerColumns)).map((row) => (
+    row.map((column) => ({ ...column, ...leafColumnMap.get(column.key) }))
+  ))
+  const tableMinWidth = minWidth || leafColumns.reduce((total, column) => total + getColumnWidth(column), 0)
+  const colSpan = leafColumns.length
+
+  const renderSelectionCheckbox = (record, index, key) => {
+    const disabled = typeof rowSelectable === 'function' ? !rowSelectable(record, index) : !rowSelectable
+    return (
+      <input
+        type="checkbox"
+        checked={currentSelectedKeys.includes(key)}
+        disabled={disabled}
+        readOnly={!onSelectRow}
+        aria-label={`选择第 ${index + 1} 行`}
+        onChange={(event) => onSelectRow?.(key, event.target.checked, record)}
+      />
+    )
+  }
 
   const renderActionsCell = (record) => (
-    <td className="ds-data-table__actions-col">
-      <span className="ds-data-table__row-actions">
-        {actions.map((action) => (
-          <DSButton
-            variant="link"
-            danger={action.danger}
-            disabled={typeof action.disabled === 'function' ? action.disabled(record) : action.disabled}
-            key={action.key || action.label}
-            onClick={() => action.onClick?.(record)}
-          >
-            {action.label}
-          </DSButton>
-        ))}
-      </span>
-    </td>
+    <span className="ds-data-table__row-actions">
+      {actions.slice(0, actionsMaxVisible).map((action) => (
+        <DSButton
+          variant="link"
+          danger={action.danger}
+          disabled={typeof action.disabled === 'function' ? action.disabled(record) : action.disabled}
+          key={action.key || action.label}
+          onClick={() => action.onClick?.(record)}
+        >
+          {action.label}
+        </DSButton>
+      ))}
+      {actions.length > actionsMaxVisible && (
+        <button className="ds-data-table__more" type="button" aria-label="更多操作">
+          <span aria-hidden="true">...</span>
+        </button>
+      )}
+    </span>
   )
 
-  const renderCell = (column, record, index) => {
-    const value = record[column.key]
-    return column.render ? column.render(value, record, index) : value ?? '-'
+  const renderBodyCell = (column, record, index, key) => {
+    if (column.system === 'drag') {
+      return <span className="ds-data-table__drag-handle" aria-hidden="true" />
+    }
+    if (column.system === 'check') {
+      return renderSelectionCheckbox(record, index, key)
+    }
+    if (column.system === 'index') {
+      return index + 1
+    }
+    if (column.system === 'actions') {
+      return renderActionsCell(record)
+    }
+
+    return renderCellValue(column, record, index)
   }
 
   const renderTableTools = () => {
@@ -81,6 +246,42 @@ export default function DSDataTable({
     )
   }
 
+  const renderHeaderCell = (column) => {
+    const fixedColumn = leafColumnMap.get(column.key) || column
+    const cellClasses = [
+      column.className,
+      fixedColumn.fixed && `ds-data-table__cell--fixed-${fixedColumn.fixed}`,
+      fixedColumn.fixed === 'left' && fixedColumn.stickyOffset > 0 && 'ds-data-table__cell--fixed-left-shadow',
+      fixedColumn.fixed === 'right' && 'ds-data-table__cell--fixed-right-shadow',
+      column.align && `ds-data-table__cell--${column.align}`,
+    ].filter(Boolean).join(' ')
+
+    return (
+      <th
+        className={cellClasses}
+        colSpan={column.colSpan}
+        rowSpan={column.rowSpan}
+        style={{
+          width: column.width,
+          minWidth: column.minWidth,
+          textAlign: column.align,
+          ...getFixedStyle(fixedColumn),
+        }}
+        key={column.key}
+      >
+        {column.system === 'check' ? (
+          <input
+            type="checkbox"
+            aria-label="全选"
+            checked={data.length > 0 && data.every((record, index) => currentSelectedKeys.includes(record[rowKey] ?? index))}
+            readOnly={!onSelectAll}
+            onChange={(event) => onSelectAll?.(event.target.checked, data)}
+          />
+        ) : column.title}
+      </th>
+    )
+  }
+
   return (
     <section className={classes} aria-label={title}>
       {showToolbar && (
@@ -98,22 +299,17 @@ export default function DSDataTable({
 
       <div className="ds-data-table__wrap">
         <table className="ds-data-table__table" style={{ minWidth: tableMinWidth }}>
+          <colgroup>
+            {leafColumns.map((column) => (
+              <col style={{ width: getColumnWidth(column) }} key={column.key} />
+            ))}
+          </colgroup>
           <thead>
-            <tr>
-              {rowDraggable && <th className="ds-data-table__drag" aria-label="拖拽排序" />}
-              {selectable && <th className="ds-data-table__check"><input type="checkbox" aria-label="全选" /></th>}
-              {actionsAtLeft && <th className="ds-data-table__actions-col">操作</th>}
-              {columns.map((column) => (
-                <th
-                  className={column.className}
-                  style={{ width: column.width, minWidth: column.minWidth, textAlign: column.align }}
-                  key={column.key}
-                >
-                  {column.title}
-                </th>
-              ))}
-              {actionsAtRight && <th className="ds-data-table__actions-col">操作</th>}
-            </tr>
+            {headerRows.map((row, rowIndex) => (
+              <tr key={`header-${rowIndex}`}>
+                {row.map(renderHeaderCell)}
+              </tr>
+            ))}
           </thead>
           <tbody>
             {data.length === 0 && (
@@ -125,24 +321,40 @@ export default function DSDataTable({
             )}
             {data.map((record, index) => {
               const key = record[rowKey] ?? index
-              const trClassName = typeof rowClassName === 'function' ? rowClassName(record, index) : rowClassName
+              const trClassName = [
+                currentSelectedKeys.includes(key) && 'is-selected',
+                typeof rowClassName === 'function' ? rowClassName(record, index) : rowClassName,
+              ].filter(Boolean).join(' ')
               return (
                 <tr className={trClassName} key={key}>
-                  {rowDraggable && (
-                    <td className="ds-data-table__drag">
-                      <span className="ds-data-table__drag-handle" aria-hidden="true" />
-                    </td>
-                  )}
-                  {selectable && (
-                    <td className="ds-data-table__check">
-                      <input type="checkbox" defaultChecked={selectedKeys.includes(key)} aria-label={`选择第 ${index + 1} 行`} />
-                    </td>
-                  )}
-                  {actionsAtLeft && renderActionsCell(record)}
-                  {columns.map((column) => (
-                    <td className={column.cellClassName} style={{ textAlign: column.align }} key={column.key}>{renderCell(column, record, index)}</td>
-                  ))}
-                  {actionsAtRight && renderActionsCell(record)}
+                  {leafColumns.map((column) => {
+                    const cellClasses = [
+                      column.cellClassName,
+                      column.className,
+                      column.fixed && `ds-data-table__cell--fixed-${column.fixed}`,
+                      column.fixed === 'left' && column.stickyOffset > 0 && 'ds-data-table__cell--fixed-left-shadow',
+                      column.fixed === 'right' && 'ds-data-table__cell--fixed-right-shadow',
+                      column.align && `ds-data-table__cell--${column.align}`,
+                      column.editable && 'ds-data-table__cell--editable',
+                      column.error && 'ds-data-table__cell--error',
+                    ].filter(Boolean).join(' ')
+
+                    return (
+                      <td
+                        className={cellClasses}
+                        style={{ textAlign: column.align, ...getFixedStyle(column) }}
+                        key={column.key}
+                      >
+                        {renderBodyCell(column, record, index, key)}
+                        {typeof column.error === 'function' && column.error(record) && (
+                          <span className="ds-data-table__cell-error-text">{column.error(record)}</span>
+                        )}
+                        {typeof column.error === 'string' && (
+                          <span className="ds-data-table__cell-error-text">{column.error}</span>
+                        )}
+                      </td>
+                    )
+                  })}
                 </tr>
               )
             })}

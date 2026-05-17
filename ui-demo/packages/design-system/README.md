@@ -306,6 +306,135 @@ import {
 
 `variant="lowcode"` 会按教学 6.0 低代码系统贴近 VXE 表格视觉：首列拖拽手柄、次列复选框、40px 表头、46px 行高、右侧表格工具图标、文字操作列和 `暂无数据` 空态。
 
+### 基础表格 DSDataTable
+
+基础表格用于 PC 端列表、配置页和低代码页面的标准数据承载。默认结构支持拖拽列、复选列、序号列、固定列、右侧操作列、多级表头、斑马纹、选中行、可编辑单元格和分页组合。
+
+```jsx
+<DSDataTable
+  variant="lowcode"
+  title="基础表格"
+  showToolbar={false}
+  draggable
+  selectable
+  showIndex
+  striped
+  selectedRowKeys={[1]}
+  actions={[
+    { key: 'view', label: '按钮' },
+    { key: 'edit', label: '按钮' },
+    { key: 'delete', label: '按钮' },
+  ]}
+  columns={[
+    { key: 'name', title: '标题', width: 240, fixed: 'left' },
+    {
+      key: 'owner',
+      title: '标题',
+      width: 240,
+      render: (value) => (
+        <span className="ds-data-table__avatar-cell">
+          <img className="ds-data-table__avatar" src={value.avatar} alt="" />
+          <span>{value.name}</span>
+        </span>
+      ),
+    },
+    { key: 'count', title: '标题', width: 129, align: 'right' },
+    {
+      key: 'tag',
+      title: '标题',
+      width: 160,
+      render: () => <span className="ds-data-table__tag">标签</span>,
+    },
+    {
+      key: 'enabled',
+      title: '标题',
+      width: 160,
+      render: (value) => <DSSwitch checked={value} checkedText="是" uncheckedText="否" />,
+    },
+    {
+      key: 'progress',
+      title: '标题',
+      width: 200,
+      render: (value) => (
+        <span className="ds-data-table__progress">
+          <span className="ds-data-table__progress-track">
+            <span className="ds-data-table__progress-bar" style={{ width: `${value}%` }} />
+          </span>
+          <span className="ds-data-table__progress-text">{value}%</span>
+        </span>
+      ),
+    },
+  ]}
+  data={rows}
+/>
+```
+
+多级表头通过 `children` 描述分组，子列仍按普通列渲染：
+
+```jsx
+<DSDataTable
+  showToolbar={false}
+  selectable={false}
+  columns={[
+    { key: 'college', title: '院系所', width: 240, fixed: 'left' },
+    {
+      key: 'totalGroup',
+      title: '总计',
+      children: [
+        { key: 'total', title: '总计', width: 124 },
+        { key: 'fullTime', title: '全日制', width: 124 },
+        { key: 'partTime', title: '非全日制', width: 124 },
+      ],
+    },
+    {
+      key: 'examGroup',
+      title: '统考',
+      children: [
+        { key: 'examFullTime', title: '全日制', width: 124 },
+        { key: 'examPartTime', title: '非全日制', width: 124 },
+      ],
+    },
+  ]}
+  data={rows}
+/>
+```
+
+可编辑表格保持表格结构不变，在列上标记 `editable`，并在 `render` 内放入输入控件；`error` 可以传字符串或函数，错误行会按设计稿自动撑高展示错误文案。
+
+```jsx
+<DSDataTable
+  variant="lowcode"
+  showToolbar={false}
+  showIndex
+  striped
+  columns={[
+    {
+      key: 'status',
+      title: '标题',
+      width: 240,
+      editable: true,
+      error: (row) => row.status ? '' : '报错',
+      render: (value) => (
+        <span className="ds-data-table__edit-control">{value || '请选择'}</span>
+      ),
+    },
+  ]}
+  data={rows}
+  actions={[
+    { key: 'save', label: '保存' },
+    { key: 'cancel', label: '取消' },
+  ]}
+/>
+```
+
+状态规范：
+
+- 默认行底色 `#FFFFFF`，悬浮 `#F6F6F7`。
+- 斑马纹偶数行底色 `#FAFAFA`。
+- 选中行底色 `#F5F5FF`，选中后悬浮 `#EBECFF`。
+- 表头底色 `#FAFAFA`，边框 `#EEEEF0`，基础行高 46px。
+- 操作列默认展示前 2 个文字按钮，超过后出现 `...` 更多按钮；可通过 `actionsMaxVisible` 调整。
+
 ## 状态字段
 
 状态统一使用 `DSTag`，避免页面级重复写胶囊样式：
