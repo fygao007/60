@@ -246,19 +246,30 @@
 .operation-table tbody tr.selected td { background: var(--ds-color-bg-active); }
 
 /* lowcode 风格的拖拽 / 复选首两列 */
-.operation-table .col-drag  { width: 48px;  text-align: center; }
+.operation-table .col-drag {
+  width: 48px;
+  padding: 0;
+  overflow: visible;
+  text-align: center;
+  text-overflow: clip;
+}
 .operation-table .col-check { width: 40px;  text-align: center; }
 
 .drag-handle {
-  display: inline-grid;
-  place-items: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 20px;
   height: 20px;
   color: #000;
   cursor: grab;
-  background: url("../../../../assets/icons/drag-sort-line.svg") center / 16px 16px no-repeat;
 }
 .drag-handle:active { cursor: grabbing; }
+.drag-handle img {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
 .stage input[type="checkbox"] { width: 14px; height: 14px; accent-color: var(--ds-color-primary); cursor: pointer; }
 .dash { color: var(--ds-color-text-tertiary); }
 

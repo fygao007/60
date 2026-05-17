@@ -203,7 +203,13 @@
     .basic-table tbody tr.is-selected td { background: #f5f5ff; }
     .basic-table tbody tr.is-selected:hover td { background: #ebecff; }
 
-    .col-drag { width: 40px; text-align: center; }
+    .basic-table .col-drag {
+      width: 40px;
+      padding: 0;
+      overflow: visible;
+      text-align: center;
+      text-overflow: clip;
+    }
     .col-check { width: 48px; text-align: center; }
     .col-index { width: 64px; }
     .col-title { width: 240px; }
@@ -231,17 +237,23 @@
     .fixed-actions { right: 0; box-shadow: -1px 0 4px rgba(70, 79, 105, 0.08); }
 
     .drag-handle {
-      display: inline-grid;
-      place-items: center;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       width: 20px;
       height: 20px;
       color: #000;
       cursor: grab;
-      background: url("./assets/icons/drag-sort-line.svg") center / 16px 16px no-repeat;
     }
 
     .drag-handle:active {
       cursor: grabbing;
+    }
+
+    .drag-handle img {
+      display: block;
+      width: 16px;
+      height: 16px;
     }
 
     .basic-table input[type="checkbox"] {
@@ -597,7 +609,7 @@
     const color = progressColors[index] || '#333fff';
     return `
       <tr>
-        <td class="col-drag is-fixed-left fixed-drag"><span class="drag-handle" role="img" aria-label="按住后可以拖拽更换顺序" title="按住后可以拖拽更换顺序"></span></td>
+        <td class="col-drag is-fixed-left fixed-drag"><span class="drag-handle" role="img" aria-label="按住后可以拖拽更换顺序" title="按住后可以拖拽更换顺序"><img src="./assets/icons/drag-sort-line.svg" alt="" /></span></td>
         <td class="col-check is-fixed-left fixed-check"><input class="row-check" type="checkbox" aria-label="选择第 ${index + 1} 行" /></td>
         <td class="col-index is-fixed-left fixed-index">${index + 1}</td>
         <td class="col-title is-fixed-left fixed-title" title="${row.title}">${row.title}</td>
