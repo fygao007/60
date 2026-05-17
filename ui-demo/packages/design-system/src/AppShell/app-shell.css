@@ -249,8 +249,16 @@
 .operation-table .col-drag  { width: 48px;  text-align: center; }
 .operation-table .col-check { width: 40px;  text-align: center; }
 
-.drag-handle { display: inline-grid; place-items: center; width: 20px; height: 20px; color: #000; cursor: grab; }
-.drag-handle::before { content: "::"; transform: rotate(90deg); font-weight: 700; letter-spacing: 1px; }
+.drag-handle {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  color: #000;
+  cursor: grab;
+  background: url("../../../../assets/icons/drag-sort-line.svg") center / 16px 16px no-repeat;
+}
+.drag-handle:active { cursor: grabbing; }
 .stage input[type="checkbox"] { width: 14px; height: 14px; accent-color: var(--ds-color-primary); cursor: pointer; }
 .dash { color: var(--ds-color-text-tertiary); }
 

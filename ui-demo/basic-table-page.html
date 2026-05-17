@@ -237,13 +237,11 @@
       height: 20px;
       color: #000;
       cursor: grab;
+      background: url("./assets/icons/drag-sort-line.svg") center / 16px 16px no-repeat;
     }
 
-    .drag-handle::before {
-      content: "::";
-      font-weight: 700;
-      letter-spacing: 1px;
-      transform: rotate(90deg);
+    .drag-handle:active {
+      cursor: grabbing;
     }
 
     .basic-table input[type="checkbox"] {
@@ -599,7 +597,7 @@
     const color = progressColors[index] || '#333fff';
     return `
       <tr>
-        <td class="col-drag is-fixed-left fixed-drag"><span class="drag-handle" aria-hidden="true"></span></td>
+        <td class="col-drag is-fixed-left fixed-drag"><span class="drag-handle" role="img" aria-label="按住后可以拖拽更换顺序" title="按住后可以拖拽更换顺序"></span></td>
         <td class="col-check is-fixed-left fixed-check"><input class="row-check" type="checkbox" aria-label="选择第 ${index + 1} 行" /></td>
         <td class="col-index is-fixed-left fixed-index">${index + 1}</td>
         <td class="col-title is-fixed-left fixed-title" title="${row.title}">${row.title}</td>
