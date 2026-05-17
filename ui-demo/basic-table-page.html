@@ -244,6 +244,8 @@
       height: 20px;
       color: #000;
       cursor: grab;
+      touch-action: none;
+      user-select: none;
     }
 
     .drag-handle:hover {
@@ -272,11 +274,45 @@
 
     .basic-table tbody tr.is-dragging td {
       background: #ebecff;
-      opacity: 0.72;
+      opacity: 0.46;
     }
 
     .basic-table tbody tr.is-drag-over td {
       background: #f5f5ff;
+    }
+
+    .row-drag-ghost {
+      position: fixed;
+      z-index: 1000;
+      pointer-events: none;
+      overflow: hidden;
+      background: #fff;
+      border: 1px solid #d6d9ff;
+      box-shadow: 0 10px 24px rgba(31, 35, 41, 0.16);
+      opacity: 0.96;
+    }
+
+    .row-drag-ghost table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: 14px;
+      line-height: 22px;
+    }
+
+    .row-drag-ghost td {
+      height: 46px;
+      padding: 0 12px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      border-right: 1px solid rgba(238, 238, 240, 0.72);
+      background: #f5f5ff;
+    }
+
+    .row-drag-ghost .col-drag {
+      padding: 0;
+      text-align: center;
     }
 
     .avatar-cell {
@@ -672,7 +708,7 @@
     switchNode.textContent = switchNode.classList.contains('is-off') ? '否' : '是';
   });
 
-  let draggingRow = null;
+  let dragState = null;
 
   function refreshRowIndex() {
     [...tbody.querySelectorAll('tr')].forEach((row, index) => {
@@ -694,48 +730,90 @@
     }, { offset: Number.NEGATIVE_INFINITY, row: null }).row;
   }
 
-  tbody.addEventListener('mousedown', (event) => {
+  function createDragGhost(row, pointerEvent) {
+    const rowRect = row.getBoundingClientRect();
+    const ghost = document.createElement('div');
+    ghost.className = 'row-drag-ghost';
+    ghost.style.left = `${rowRect.left}px`;
+    ghost.style.top = `${rowRect.top}px`;
+    ghost.style.width = `${rowRect.width}px`;
+    ghost.style.height = `${rowRect.height}px`;
+
+    const table = document.createElement('table');
+    const colgroup = document.createElement('colgroup');
+    const ghostBody = document.createElement('tbody');
+    [...row.children].forEach((cell) => {
+      const col = document.createElement('col');
+      col.style.width = `${cell.getBoundingClientRect().width}px`;
+      colgroup.appendChild(col);
+    });
+    table.appendChild(colgroup);
+    ghostBody.appendChild(row.cloneNode(true));
+    table.appendChild(ghostBody);
+    ghost.appendChild(table);
+    document.body.appendChild(ghost);
+
+    return {
+      ghost,
+      offsetX: pointerEvent.clientX - rowRect.left,
+      offsetY: pointerEvent.clientY - rowRect.top,
+    };
+  }
+
+  function moveDragGhost(pointerEvent) {
+    if (!dragState?.ghost) return;
+    dragState.ghost.style.left = `${pointerEvent.clientX - dragState.offsetX}px`;
+    dragState.ghost.style.top = `${pointerEvent.clientY - dragState.offsetY}px`;
+  }
+
+  function finishDrag() {
+    if (!dragState) return;
+    dragState.row.classList.remove('is-dragging');
+    dragState.ghost?.remove();
+    tbody.querySelectorAll('.is-drag-over').forEach((row) => row.classList.remove('is-drag-over'));
+    dragState = null;
+    refreshRowIndex();
+  }
+
+  tbody.addEventListener('pointerdown', (event) => {
     const handle = event.target.closest('.drag-handle');
     if (!handle) return;
     const row = handle.closest('tr');
-    row.draggable = true;
-  });
-
-  tbody.addEventListener('dragstart', (event) => {
-    const handle = event.target.querySelector?.('.drag-handle');
-    if (!event.target.matches('tr') || !handle) return;
-    draggingRow = event.target;
-    draggingRow.classList.add('is-dragging');
-    event.dataTransfer.effectAllowed = 'move';
-    event.dataTransfer.setData('text/plain', '');
-  });
-
-  tbody.addEventListener('dragover', (event) => {
-    if (!draggingRow) return;
     event.preventDefault();
+    handle.setPointerCapture?.(event.pointerId);
+    const ghostState = createDragGhost(row, event);
+    dragState = {
+      row,
+      pointerId: event.pointerId,
+      ...ghostState,
+    };
+    row.classList.add('is-dragging');
+  });
+
+  tbody.addEventListener('pointermove', (event) => {
+    if (!dragState || event.pointerId !== dragState.pointerId) return;
+    event.preventDefault();
+    moveDragGhost(event);
     const afterRow = getDragAfterRow(tbody, event.clientY);
     tbody.querySelectorAll('.is-drag-over').forEach((row) => row.classList.remove('is-drag-over'));
     if (afterRow) {
       afterRow.classList.add('is-drag-over');
-      tbody.insertBefore(draggingRow, afterRow);
+      tbody.insertBefore(dragState.row, afterRow);
     } else {
-      tbody.appendChild(draggingRow);
+      tbody.appendChild(dragState.row);
     }
   });
 
-  tbody.addEventListener('dragend', () => {
-    if (!draggingRow) return;
-    draggingRow.classList.remove('is-dragging');
-    draggingRow.draggable = false;
-    draggingRow = null;
-    tbody.querySelectorAll('.is-drag-over').forEach((row) => row.classList.remove('is-drag-over'));
-    refreshRowIndex();
+  tbody.addEventListener('pointerup', (event) => {
+    if (!dragState || event.pointerId !== dragState.pointerId) return;
+    finishDrag();
   });
 
-  document.addEventListener('mouseup', () => {
-    tbody.querySelectorAll('tr[draggable="true"]').forEach((row) => {
-      if (row !== draggingRow) row.draggable = false;
-    });
+  tbody.addEventListener('pointercancel', finishDrag);
+  window.addEventListener('blur', finishDrag);
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') finishDrag();
   });
 </script>
 </body>
