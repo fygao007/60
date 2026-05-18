@@ -43,7 +43,7 @@ HTML 预览页只需要：
 </body>
 ```
 
-参考样例：`ui-demo/component-library-index.html`、`ui-demo/clause-library.html`、`ui-demo/campus-info.html`、`ui-demo/form-components-page.html`。
+参考样例：`ui-demo/component-library-index.html`、`ui-demo/form-components-page.html`、`ui-demo/basic-table-page.html`、`ui-demo/multi-level-table-page.html`。
 
 `app-shell.css` 同时包含 **CRUD 列表通用模式**（`.operation-query-row` / `.operation-table` / `.ds-switch` / `.pages` / `.operation-footer`），业务页只需在 `<style>` 里写自己表格的列宽。
 

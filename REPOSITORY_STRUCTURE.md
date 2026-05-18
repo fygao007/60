@@ -1,50 +1,43 @@
 # 仓库目录结构
 
-本仓库只维护 60 系统相关资产。新项目、新模块、新页面都应创建在仓库内，避免散落到仓库外目录。
+本仓库只维护 60 系统组件库相关资产。新组件、新组件预览和组件规范都应创建在仓库内，避免散落到仓库外目录。
 
 ## 根目录
 
 | 路径 | 用途 |
 | --- | --- |
-| `README.md` | 仓库总入口，说明当前重点、预览页面和维护约定 |
+| `README.md` | 仓库总入口，说明当前重点、组件预览页面和维护约定 |
 | `VERSIONING.md` | 版本制度 |
 | `MODULE_VERSIONS.md` | 模块版本清单 |
 | `CHANGELOG.md` | 变更记录 |
 | `REPOSITORY_STRUCTURE.md` | 仓库目录结构说明 |
-| `ui-demo/` | 页面原型、组件库、规范和导出资产 |
+| `ui-demo/` | 组件预览、组件库源码、规范和图标资产 |
 
 ## `ui-demo/`
 
 | 路径 | 用途 |
 | --- | --- |
-| `*.html` | 可直接打开的 HTML 预览页，保留在当前层级便于快速访问 |
+| `*.html` | 可直接打开的 HTML 组件预览页，保留在当前层级便于快速访问 |
 | `assets/` | 项目公共静态资产、图标和图标注册表 |
 | `packages/design-system/` | 60 系统本地 React 设计组件库 |
-| `specs/` | 框架、页面生成、低代码组件等规范文档 |
-| `pages/` | 按页面或模块归档的补充材料、导出文件和参考资源 |
-| `.mastergo/` | MasterGo 导出的设计参考和 DSL 原始材料 |
+| `specs/` | 框架、组件生成、低代码组件等规范文档 |
 
-## 页面归档规则
+## 组件预览规则
 
-HTML 预览页可以继续放在 `ui-demo/` 根层，保证本地打开路径稳定。与某个页面相关的导出包、截图、参考文件放到：
+HTML 组件预览页继续放在 `ui-demo/` 根层，保证本地打开路径稳定。组件源码统一放在 `ui-demo/packages/design-system/src/`。
 
 ```text
-ui-demo/pages/<page-key>/
+ui-demo/<component-name>-page.html
+ui-demo/<component-name>-states.html
 ```
 
-推荐子目录：
+命名建议：
 
-| 子目录 | 用途 |
+| 类型 | 命名 |
 | --- | --- |
-| `export/` | 浏览器或第三方平台导出的完整页面包 |
-| `reference/` | 设计稿截图、业务参考图、对照材料 |
-| `notes/` | 页面分析、验收说明、问题记录 |
-
-示例：
-
-```text
-ui-demo/pages/campus-info/export/
-```
+| 完整组件页 | `*-page.html` |
+| 状态展示页 | `*-states.html` |
+| 组件索引 | `component-library-index.html` |
 
 ## 组件库规则
 
@@ -69,6 +62,6 @@ src/ComponentName/
 - `.DS_Store`
 - 临时截图
 - 本地编辑器缓存
-- 无明确归属的根目录导出文件
-
-如果确实需要保留导出文件，先归档到 `ui-demo/pages/<page-key>/export/`。
+- 业务页面原型
+- 第三方平台导出的完整页面包
+- MasterGo 原始 DSL 或截图缓存
