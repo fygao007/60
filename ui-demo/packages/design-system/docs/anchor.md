@@ -24,6 +24,7 @@ mastergo://getd2c/139272150501659-4096-82458
 - Active：主色文字、浅主色背景、加粗。
 - Disabled：禁用文字色，不可点击。
 - Bordered：左侧显示竖向基线，Active 显示主色指示线。
+- Right：右侧显示竖向基线，Active 指示线靠右，文本右对齐。
 
 ## React 用法
 
@@ -31,6 +32,7 @@ mastergo://getd2c/139272150501659-4096-82458
 <DSAnchor
   activeKey="overview"
   bordered
+  placement="right"
   items={[
     { key: 'overview', href: '#overview', title: '组件概览' },
     {
@@ -51,7 +53,7 @@ mastergo://getd2c/139272150501659-4096-82458
 ```html
 <link rel="stylesheet" href="./packages/design-system/src/Anchor/index.css" />
 
-<nav class="ds-anchor ds-anchor--bordered" aria-label="锚点导航">
+<nav class="ds-anchor ds-anchor--bordered ds-anchor--right" aria-label="锚点导航">
   <ol class="ds-anchor__list">
     <li class="ds-anchor__item is-active" style="--ds-anchor-depth: 0">
       <a class="ds-anchor__link" href="#overview"><span>组件概览</span></a>

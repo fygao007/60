@@ -57,6 +57,7 @@ export default function DSAnchor({
   items = defaultItems,
   activeKey,
   direction = 'vertical',
+  placement = 'left',
   size = 'default',
   bordered = false,
   offset = false,
@@ -68,6 +69,7 @@ export default function DSAnchor({
   const classes = [
     'ds-anchor',
     `ds-anchor--${direction}`,
+    placement === 'right' && 'ds-anchor--right',
     size === 'small' && 'ds-anchor--small',
     bordered && 'ds-anchor--bordered',
     offset && 'ds-anchor--offset',
