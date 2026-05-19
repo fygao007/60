@@ -1,42 +1,35 @@
 # UI Demo / 组件库资产
 
-这个目录用于沉淀 PC 前端组件生成所需的设计规范、组件库和 HTML 组件预览页。
+这个目录用于沉淀 PC 前端组件库和 HTML 组件预览页。
 
 ## 目录说明
 
 - `packages/design-system/`：本地 React 设计组件库，包名 `@wisedu/design-system`。
-- `specs/pc-app-shell-spec.md`：PC 应用三层框架外壳规范，沉淀一级导航、二级导航区、右侧操作区和交互规则。
-- `specs/pc-framework-layout-spec.md`：PC 框架布局规范，来自 MasterGo《📌【PC】框架布局》。
-- `specs/page-generation-rules.md`：组件和页面生成规则。
-- `specs/lowcode-component-learning.md`：从教学 6.0 低代码页面学习到的组件与交互规则。
 - `*.html`：独立 HTML 组件预览页。
-
-## 版本管理
-
-60 项目按模块管理版本：
-
-- 根目录 `VERSIONING.md`：版本制度、发布规则和提交规范。
-- 根目录 `MODULE_VERSIONS.md`：各模块当前版本。
-- 根目录 `CHANGELOG.md`：按版本和模块记录变更。
-
-新增组件或组件预览时，先登记到 `MODULE_VERSIONS.md`，发布前同步更新 `CHANGELOG.md`。
-
-## 后续生成组件预览时的默认流程
-
-1. 读取 `specs/pc-app-shell-spec.md`，确定三层框架、导航、标签和操作区。
-2. 读取 `specs/pc-framework-layout-spec.md`。
-3. 读取 `specs/page-generation-rules.md`。
-4. 根据组件需求生成 HTML 预览页。
-5. 用户确认后，再沉淀到 React 组件或组件文档。
 
 ## 当前框架预览
 
-- `component-library-index.html`：组件库索引页，汇总表单、表格、框架与 React 源码入口。
+- `component-library-index.html`：功能索引页，是组件库总入口。
+- `current-components-index.html`：当前组件页，按本地组件库实际已沉淀组件整理预览和源码入口。
+- `all-components-index.html`：Ant 全量目录，按 Ant Design 组件体系排查待补齐组件。
+- `ant-components-page.html`：按 Ant Design 官方分类生成的 70 个基础组件交互稿，后续逐个组件调整样式。
+- `link-button-components.html`：从 MasterGo 链接样式提取出的 LinkButton / LinkButtonGroup 独立组件。
 - `primary-nav.html`：一级导航 + 二级导航区 + 右侧操作区的完整框架原型。
 - `assets/icon-registry.js`：统一图标注册表。
 - `assets/icons/`：框架图标和组件图标资产。
 
 ## HTML 组件预览索引
+
+总览：
+
+- `component-library-index.html`：功能索引，总入口。
+- `current-components-index.html`：当前组件，按源码组件逐项进入。
+- `all-components-index.html`：Ant 全量目录，按 Ant 组件体系逐项排查。
+- `ant-components-page.html`：组件总览，按钮、布局、导航、数据录入、数据展示、反馈和其他组件的全量交互预览。
+- `button-states.html`：按钮类型、尺寸和状态样例。
+- `button-group-states.html`：按钮组类型、尺寸和状态样例。
+- `link-button-components.html`：链接按钮、链接按钮组和表格操作列样例。
+- `steps-components.html`：步骤条组件，覆盖横向、纵向、小尺寸、点状、错误态和可点击状态。
 
 表单：
 
@@ -60,7 +53,7 @@
 
 ## 60 组件库当前覆盖
 
-- 基础：`DSButton`、`DSButtonGroup`、`DSIconButton`、`DSField`、`DSInput`、`DSSelect`、`DSTextarea`、`DSTag`。
+- 基础：`DSButton`、`DSButtonGroup`、`DSLinkButton`、`DSLinkButtonGroup`、`DSSteps`、`DSIconButton`、`DSField`、`DSInput`、`DSSelect`、`DSTextarea`、`DSTag`。
 - 布局：`DSAppShell`、`DSPageHeader`、`DSCard`、`DSTabs`。
 - 数据：`DSFilterBar`、`DSDataTable`、`DSParentChildTable`、`DSPagination`、`DSEmptyState`。
 - 浮层：`DSModal`、`DSDrawer`。

@@ -24,7 +24,7 @@
 
 .ds-icon-button:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(48, 63, 255, 0.18);
+  box-shadow: 0 0 0 2px var(--ds-color-focus-ring-strong);
 }
 
 .ds-icon-button svg {

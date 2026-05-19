@@ -15,7 +15,7 @@
   gap: var(--ds-space-2);
   height: 56px;
   padding: 0;
-  color: #55586b;
+  color: var(--ds-color-text-secondary);
   background: transparent;
   border: 0;
   font-family: var(--ds-font-family);
@@ -37,7 +37,7 @@
   bottom: -1px;
   left: 0;
   height: 8px;
-  background: #d8dcff;
+  background: var(--ds-color-primary-weak);
 }
 
 .ds-audit-status-tabs__item em {

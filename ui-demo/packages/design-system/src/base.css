@@ -81,7 +81,7 @@
 .ds-tag--warning {
   color: var(--ds-color-warning-text);
   background: var(--ds-color-warning-light);
-  border: 1px solid #ffd591;
+  border: 1px solid var(--ds-color-warning-border);
 }
 
 .ds-tag--danger {
@@ -124,7 +124,7 @@
 .ds-select:focus,
 .ds-textarea:focus {
   border-color: var(--ds-color-primary);
-  box-shadow: 0 0 0 2px rgba(48, 63, 255, 0.12);
+  box-shadow: 0 0 0 2px var(--ds-color-focus-ring);
 }
 
 .ds-input::placeholder,

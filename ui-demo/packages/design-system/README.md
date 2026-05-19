@@ -215,6 +215,11 @@ import {
 - `DSTag`
 - `DSSwitch`
 
+按钮专项规范：
+
+- `docs/button.md`：MasterGo《📌【PC】基础控件 / Button》设计链接与落地规则。
+- `docs/button-group.md`：MasterGo《📌【PC】基础控件 / ButtonGroup》设计链接与落地规则。
+
 HTML 表单预览：
 
 - 完整表单页：`ui-demo/form-components-page.html`

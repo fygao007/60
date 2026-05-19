@@ -30,7 +30,7 @@
   position: relative;
   width: 40px;
   height: 20px;
-  background: #dcdce0;
+  background: var(--ds-color-border);
   border-radius: 999px;
   transition: background var(--ds-motion-duration) var(--ds-motion-ease);
 }
@@ -42,9 +42,9 @@
   left: 2px;
   width: 16px;
   height: 16px;
-  background: #ffffff;
+  background: var(--ds-color-white);
   border-radius: 50%;
-  box-shadow: 0 1px 2px rgba(10, 13, 51, 0.2);
+  box-shadow: 0 1px 2px rgba(var(--ds-color-text-rgb), 0.2);
   transition: transform var(--ds-motion-duration) var(--ds-motion-ease);
 }
 

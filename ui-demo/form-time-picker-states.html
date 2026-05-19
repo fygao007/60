@@ -52,8 +52,25 @@
 <script>
   WiseAppShell.init({
     activeModule: 'doctor',
-    secondaryNav: { title: '组件库', status: ['进行', 6], items: ['按钮', '表单', '表格', '弹窗', '导航', '反馈'], foot: '设计规范' },
-    activeFeature: '表单'
+    secondaryNav: {
+      title: '组件库',
+      status: ['进行', 6],
+      items: ['功能索引', '当前组件', 'Ant目录', '组件总览', '表单', '表格', '框架'],
+      foot: '设计规范'
+    },
+    activeFeature: '表单',
+    onFeatureChange(feature) {
+      const routes = {
+        '功能索引': './component-library-index.html',
+        '当前组件': './current-components-index.html',
+        'Ant目录': './all-components-index.html',
+        '组件总览': './ant-components-page.html',
+        '表单': './form-components-page.html',
+        '表格': './basic-table-page.html',
+        '框架': './primary-nav.html'
+      };
+      window.location.href = routes[feature] || './component-library-index.html';
+    }
   });
 </script>
 </body>

@@ -16,6 +16,10 @@
 - `src/tokens.css`：全局设计变量。
 - `src/base.css`：页面生成常用基础类。
 - `src/Button` / `src/ButtonGroup`：按钮与按钮组。
+- `src/LinkButton` / `src/LinkButtonGroup`：链接样式按钮和表格行内操作按钮组。
+- `src/Steps`：通用步骤条。
+- `docs/button.md`：按钮组件专项规范，来源为 MasterGo《📌【PC】基础控件 / Button》。
+- `docs/button-group.md`：按钮组组件专项规范，来源为 MasterGo《📌【PC】基础控件 / ButtonGroup》。
 - `src/Field`：表单字段、输入框、选择器、文本域。
 - `src/Tag` / `src/Tabs`：状态标签与页签。
 - `src/Card` / `src/PageHeader`：内容容器与页面标题区。

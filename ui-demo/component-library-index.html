@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>组件库索引</title>
+  <title>功能索引</title>
   <link rel="stylesheet" href="./packages/design-system/src/base.css" />
   <link rel="stylesheet" href="./packages/design-system/src/AppShell/app-shell.css" />
   <style>
@@ -230,13 +230,57 @@
     <section class="index-stage">
       <header class="index-head">
         <div>
-          <h1 class="index-title"><span>组件库索引</span></h1>
-          <p class="index-desc">集中整理 60 系统组件库的 HTML 预览页、状态稿和 React 组件源码入口。</p>
+          <h1 class="index-title"><span>功能索引</span></h1>
+          <p class="index-desc">组件库总入口。先从这里进入当前组件、Ant 全量目录、组件预览、表单、表格和框架规范。</p>
         </div>
-        <div class="index-summary"><strong>21</strong><span>个预览入口</span></div>
+        <div class="index-summary"><strong>28</strong><span>个预览入口</span></div>
       </header>
 
       <div class="index-grid">
+        <section class="index-section is-wide">
+          <div class="index-section-head">
+            <h2 class="index-section-title">核心入口</h2>
+            <span class="index-section-count">7 个入口</span>
+          </div>
+          <div class="index-list">
+            <article class="index-item">
+              <a class="index-link" href="./current-components-index.html">当前组件</a>
+              <span class="index-meta">按本地组件库实际已沉淀组件整理，包含预览页和源码入口</span>
+              <div class="index-tag-row"><span class="index-tag">推荐入口</span><span class="index-tag">已组件化</span></div>
+            </article>
+            <article class="index-item">
+              <a class="index-link" href="./ant-components-page.html">Ant 风格组件总览</a>
+              <span class="index-meta">按 Ant Design 官方分类生成 70 个基础组件交互稿</span>
+              <div class="index-tag-row"><span class="index-tag">推荐入口</span><span class="index-tag">待逐项调样式</span></div>
+            </article>
+            <article class="index-item">
+              <a class="index-link" href="./button-states.html">按钮状态</a>
+              <span class="index-meta">展示 Primary、Default、Ghost、Text、Link、Danger、AI 的默认、悬浮、按下、聚焦、禁用、加载状态</span>
+              <div class="index-tag-row"><span class="index-tag">Button</span><span class="index-tag">状态稿</span></div>
+            </article>
+            <article class="index-item">
+              <a class="index-link" href="./button-group-states.html">按钮组状态</a>
+              <span class="index-meta">展示普通按钮组、主次组合、工具栏、分段、图标、块级、禁用和加载状态</span>
+              <div class="index-tag-row"><span class="index-tag">ButtonGroup</span><span class="index-tag">状态稿</span></div>
+            </article>
+            <article class="index-item">
+              <a class="index-link" href="./link-button-components.html">链接按钮组件</a>
+              <span class="index-meta">从 MasterGo 链接样式提取 LinkButton 和 LinkButtonGroup 独立组件</span>
+              <div class="index-tag-row"><span class="index-tag">LinkButton</span><span class="index-tag">已组件化</span></div>
+            </article>
+            <article class="index-item">
+              <a class="index-link" href="./steps-components.html">步骤条组件</a>
+              <span class="index-meta">从 MasterGo 步骤条样式提取 DSSteps 通用组件</span>
+              <div class="index-tag-row"><span class="index-tag">Steps</span><span class="index-tag">已组件化</span></div>
+            </article>
+            <article class="index-item">
+              <a class="index-link" href="./all-components-index.html">Ant 全量目录</a>
+              <span class="index-meta">按组件逐项管理入口、分类、用途和样式调整状态</span>
+              <div class="index-tag-row"><span class="index-tag">总目录</span><span class="index-tag">组件级菜单</span></div>
+            </article>
+          </div>
+        </section>
+
         <section class="index-section is-wide">
           <div class="index-section-head">
             <h2 class="index-section-title">表单组件</h2>
@@ -327,7 +371,7 @@
         <section class="index-section">
           <div class="index-section-head">
             <h2 class="index-section-title">框架与规范</h2>
-            <span class="index-section-count">4 个入口</span>
+            <span class="index-section-count">3 个入口</span>
           </div>
           <div class="index-list">
             <article class="index-item">
@@ -341,10 +385,6 @@
             <article class="index-item">
               <a class="index-link" href="./packages/design-system/README.md">组件库 README</a>
               <span class="index-meta">React 组件用法与 HTML 预览规则</span>
-            </article>
-            <article class="index-item">
-              <a class="index-link" href="./specs/lowcode-component-learning.md">低代码组件学习</a>
-              <span class="index-meta">低代码页面组件与交互沉淀</span>
             </article>
           </div>
         </section>
@@ -361,6 +401,11 @@
             <a class="source-link" href="./packages/design-system/src/Pagination/index.jsx">Pagination</a>
             <a class="source-link" href="./packages/design-system/src/AppShell/index.jsx">AppShell</a>
             <a class="source-link" href="./packages/design-system/src/Button/index.jsx">Button</a>
+            <a class="source-link" href="./packages/design-system/src/LinkButton/index.jsx">LinkButton</a>
+            <a class="source-link" href="./packages/design-system/src/LinkButtonGroup/index.jsx">LinkButtonGroup</a>
+            <a class="source-link" href="./packages/design-system/src/Steps/index.jsx">Steps</a>
+            <a class="source-link" href="./packages/design-system/docs/button.md">Button Spec</a>
+            <a class="source-link" href="./packages/design-system/docs/button-group.md">ButtonGroup Spec</a>
             <a class="source-link" href="./packages/design-system/src/Modal/index.jsx">Modal</a>
             <a class="source-link" href="./packages/design-system/src/Drawer/index.jsx">Drawer</a>
             <a class="source-link" href="./packages/design-system/src/Tabs/index.jsx">Tabs</a>
@@ -375,15 +420,30 @@
 <script src="./assets/icon-registry.js"></script>
 <script src="./packages/design-system/src/AppShell/app-shell.js"></script>
 <script>
+  const componentFeatureRoutes = {
+    '功能索引': './component-library-index.html',
+    '当前组件': './current-components-index.html',
+    'Ant目录': './all-components-index.html',
+    '组件总览': './ant-components-page.html',
+    '表单': './form-components-page.html',
+    '表格': './basic-table-page.html',
+    '框架': './primary-nav.html'
+  };
+
   WiseAppShell.init({
     activeModule: 'doctor',
     secondaryNav: {
       title: '组件库',
       status: ['进行', 6],
-      items: ['按钮', '表单', '表格', '弹窗', '导航', '反馈'],
+      items: ['功能索引', '当前组件', 'Ant目录', '组件总览', '表单', '表格', '框架'],
       foot: '设计规范'
     },
-    activeFeature: '表单'
+    activeFeature: '功能索引',
+    onFeatureChange(feature) {
+      const target = componentFeatureRoutes[feature];
+      if (!target) return;
+      window.location.href = target;
+    }
   });
 </script>
 </body>

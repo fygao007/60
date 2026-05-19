@@ -3,56 +3,98 @@
   --ds-font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Alibaba PuHuiTi 2.0', 'Alibaba PuHuiTi', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
   --ds-font-family-code: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
 
-  /* Brand / 品牌色：来自全局规则色彩页，按 HSL/RGB 关系扩展 */
-  --ds-color-primary: #303fff;
+  /* Brand / 品牌色：来自 60 设计稿组件规范 */
+  --ds-color-primary: #333fff;
   --ds-color-primary-hover: #5a66ff;
-  --ds-color-primary-active: #2632cc;
+  --ds-color-primary-active: #1f2cff;
   --ds-color-primary-disabled: #b8c3ff;
-  --ds-color-primary-light: #eef2ff;
-  --ds-color-primary-lighter: #f7f8ff;
+  --ds-color-primary-light: #f5f5ff;
+  --ds-color-primary-lighter: #fbfbff;
+  --ds-color-primary-selected: #ebecff;
+  --ds-color-primary-weak: #d6d9ff;
+  --ds-color-primary-rgb: 51, 63, 255;
 
   /* Functional / 功能色 */
-  --ds-color-success: #1f9d55;
-  --ds-color-success-hover: #2fbf70;
-  --ds-color-success-active: #187f44;
+  --ds-color-success: #20b486;
+  --ds-color-success-hover: #2fb8a6;
+  --ds-color-success-active: #168a66;
   --ds-color-success-light: #e9f8ef;
+  --ds-color-success-rgb: 32, 180, 134;
 
-  --ds-color-warning: #faad14;
+  --ds-color-warning: #ff994a;
   --ds-color-warning-text: #b26a00;
-  --ds-color-warning-hover: #ffc53d;
-  --ds-color-warning-active: #d48806;
+  --ds-color-warning-hover: #ffb36f;
+  --ds-color-warning-active: #e78915;
   --ds-color-warning-light: #fff7e6;
+  --ds-color-warning-border: #ffd591;
 
-  --ds-color-danger: #ff4d4f;
-  --ds-color-danger-hover: #ff7875;
+  --ds-color-danger: #fa5151;
+  --ds-color-danger-hover: #ff5555;
   --ds-color-danger-active: #d9363e;
   --ds-color-danger-light: #fff1f0;
 
   --ds-color-info: #1677ff;
   --ds-color-info-light: #eaf3ff;
+  --ds-color-info-gradient-start: #50bfed;
+  --ds-color-info-gradient-end-rgb: 80, 191, 238;
 
   /* Neutral / 中性色 */
   --ds-color-black: #000000;
   --ds-color-white: #ffffff;
-  --ds-color-text: #1f2329;
-  --ds-color-text-heading: #0f1114;
-  --ds-color-text-secondary: #4e5969;
-  --ds-color-text-tertiary: #86909c;
-  --ds-color-text-placeholder: #a8abb2;
+  --ds-color-text: #000000;
+  --ds-color-text-heading: #000000;
+  --ds-color-text-secondary: #505266;
+  --ds-color-text-tertiary: #737585;
+  --ds-color-text-placeholder: #9697a3;
   --ds-color-text-disabled: #c9cdd4;
+  --ds-color-text-inverse: #ffffff;
+  --ds-color-text-strong: #0a0d33;
+  --ds-color-text-disabled-strong: #b9bac2;
+  --ds-color-text-rgb: 0, 0, 0;
+  --ds-color-white-rgb: 255, 255, 255;
 
   --ds-color-bg: #ffffff;
-  --ds-color-bg-page: #f5f7fb;
+  --ds-color-bg-page: #eef5ff;
   --ds-color-bg-container: #ffffff;
-  --ds-color-bg-hover: #f7f8fa;
-  --ds-color-bg-active: #eef2ff;
+  --ds-color-bg-hover: #f6f6f7;
+  --ds-color-bg-active: #ebecff;
   --ds-color-bg-disabled: #f2f3f5;
+  --ds-color-bg-subtle: #fafafa;
+  --ds-color-bg-soft: #f5f7fb;
+  --ds-color-bg-soft-hover: #f7f8fa;
+  --ds-color-bg-info: #f7faff;
+  --ds-color-bg-child: #fbfcff;
   --ds-color-bg-mask: rgba(0, 0, 0, 0.45);
+  --ds-color-bg-mask-light: rgba(0, 0, 0, 0.28);
 
-  --ds-color-border: #d9dce3;
-  --ds-color-border-secondary: #edf0f5;
-  --ds-color-border-hover: #b8c3ff;
+  --ds-color-border: #dcdce0;
+  --ds-color-border-secondary: #eeeef0;
+  --ds-color-border-tertiary: #edf0f5;
+  --ds-color-border-hover: #333fff;
   --ds-color-border-disabled: #e5e6eb;
+  --ds-color-border-weak: #f6f6f7;
+  --ds-color-border-primary-weak: #ebecff;
+  --ds-color-border-rgb: 238, 238, 240;
+
+  /* Component color aliases / 组件色别名 */
+  --ds-color-focus-ring: rgba(var(--ds-color-primary-rgb), 0.12);
+  --ds-color-focus-ring-strong: rgba(var(--ds-color-primary-rgb), 0.18);
+  --ds-color-hover-mask: rgba(var(--ds-color-text-rgb), 0.04);
+  --ds-color-hover-mask-strong: rgba(var(--ds-color-text-rgb), 0.06);
+  --ds-color-divider-alpha: rgba(var(--ds-color-border-rgb), 0.72);
+  --ds-color-divider-alpha-soft: rgba(var(--ds-color-border-rgb), 0.65);
+  --ds-color-primary-tint: rgba(var(--ds-color-primary-rgb), 0.08);
+  --ds-color-primary-tint-strong: rgba(var(--ds-color-primary-rgb), 0.10);
+  --ds-color-success-border: rgba(var(--ds-color-success-rgb), 0.24);
+  --ds-color-ai-gradient: linear-gradient(90deg, #7b61ff 0%, #3d5afe 52%, #00b2ff 100%);
+  --ds-color-nav-bg: linear-gradient(180deg, #7454f1 0%, #6a52f1 25%, #524ae4 53%, #5753e4 75%, #507aee 100%);
+  --ds-color-nav-panel-bg: linear-gradient(270deg, #f3faff 5%, #f0f7ff 31%, #f1f4ff 64%, #eef1ff 100%);
+  --ds-color-steps-bg: linear-gradient(0deg, rgba(var(--ds-color-primary-rgb), 0.04) 0%, rgba(var(--ds-color-primary-rgb), 0.04) 100%), var(--ds-color-white);
+  --ds-color-table-group-bg: linear-gradient(90deg, #fbfbff 0%, #f5f5ff 100%);
+  --ds-color-info-gradient: linear-gradient(90deg, var(--ds-color-info-gradient-start) 0%, rgba(var(--ds-color-info-gradient-end-rgb), 0.7) 100%);
+  --ds-color-avatar-bg: #ffdcc8;
+  --ds-color-scrollbar-thumb: #c9cdd4;
+  --ds-color-scrollbar-thumb-hover: #a9aeb8;
 
   /* RGB alpha scale / RGB(A) 叠色透明度 */
   --ds-alpha-0: 0;
@@ -128,10 +170,10 @@
 
   /* Shadow / 阴影 */
   --ds-shadow-none: none;
-  --ds-shadow-xs: 0 1px 2px rgba(31, 35, 41, 0.06);
-  --ds-shadow-sm: 0 4px 12px rgba(31, 35, 41, 0.06);
-  --ds-shadow-md: 0 8px 24px rgba(31, 35, 41, 0.10);
-  --ds-shadow-lg: 0 12px 32px rgba(31, 35, 41, 0.14);
+  --ds-shadow-xs: 0 1px 2px rgba(var(--ds-color-text-rgb), 0.06);
+  --ds-shadow-sm: 0 4px 12px rgba(var(--ds-color-text-rgb), 0.06);
+  --ds-shadow-md: 0 8px 24px rgba(var(--ds-color-text-rgb), 0.10);
+  --ds-shadow-lg: 0 12px 32px rgba(var(--ds-color-text-rgb), 0.14);
 
   /* Motion / 动效 */
   --ds-motion-duration-fast: 120ms;

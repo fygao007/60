@@ -90,7 +90,7 @@
   min-width: 22px;
   height: 22px;
   padding: 0 7px;
-  color: #fff;
+  color: var(--ds-color-white);
   background: var(--ds-color-danger);
   border-radius: var(--ds-radius-pill);
   font-style: normal;
@@ -119,7 +119,7 @@
 
 .ds-tabs__more:hover {
   color: var(--ds-color-text-heading);
-  background: rgba(0, 0, 0, 0.06);
+  background: var(--ds-color-hover-mask-strong);
 }
 
 .ds-tabs-overflow {
@@ -158,7 +158,7 @@
 }
 
 .ds-tabs-overflow__button:hover {
-  background: rgba(0, 0, 0, 0.06);
+  background: var(--ds-color-hover-mask-strong);
 }
 
 .ds-tabs--section {
@@ -170,14 +170,14 @@
 .ds-tabs--section .ds-tabs__item {
   height: auto;
   padding: 2px;
-  color: #505266;
+  color: var(--ds-color-text-secondary);
   font-size: 16px;
   font-weight: var(--ds-font-weight-semibold);
   line-height: 24px;
 }
 
 .ds-tabs--section .ds-tabs__item.is-active {
-  color: #000;
+  color: var(--ds-color-text);
 }
 
 .ds-tabs--section .ds-tabs__entry.is-active > .ds-tabs__item::after {
@@ -186,7 +186,7 @@
   bottom: 2px;
   z-index: 0;
   height: 8px;
-  background: #d6d9ff;
+  background: var(--ds-color-primary-weak);
   border-radius: 0;
 }
 
@@ -218,7 +218,7 @@
 
 .ds-tabs--vertical .ds-tabs__entry.is-active > .ds-tabs__item {
   color: var(--ds-color-primary);
-  background: rgba(48, 63, 255, 0.08);
+  background: var(--ds-color-primary-tint);
 }
 
 .ds-tabs--vertical .ds-tabs__entry.is-active > .ds-tabs__item::after {
