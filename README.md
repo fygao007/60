@@ -1,39 +1,43 @@
 # 60 系统前端组件库
 
-本仓库用于沉淀 60 系统 PC 端前端组件库和 HTML 组件预览。
+本仓库用于沉淀 60 系统 PC 端组件资产，包含 HTML 组件预览、本地 React 设计组件库和组件规范文档。
 
-## 当前重点
+## 快速入口
 
-- PC 三层框架组件：一级导航、二级导航区、右侧操作区。
-- 图标资产管理：统一维护在 `ui-demo/assets/icon-registry.js` 和 `ui-demo/assets/icons/`。
-- 组件预览页：表单、表格、框架、浮层、导航与反馈等组件能力。
-- 本地设计组件库：`ui-demo/packages/design-system`。
+| 入口 | 用途 |
+|---|---|
+| [UI Demo 说明](ui-demo/README.md) | 预览页清单和组件覆盖范围。 |
+| [功能索引](ui-demo/component-library-index.html) | 组件库总入口。 |
+| [当前组件](ui-demo/current-components-index.html) | 已沉淀组件的预览和源码入口。 |
+| [Ant 全量目录](ui-demo/all-components-index.html) | 按 Ant Design 体系排查待补齐组件。 |
+| [设计组件库文档](ui-demo/packages/design-system/README.md) | React 组件库使用方式和框架说明。 |
+| [仓库结构](docs/repository-structure.md) | 目录分工和维护规则。 |
 
-## 主要入口
+## 当前内容
 
-- [UI Demo 说明](ui-demo/README.md)
-- [功能索引](ui-demo/component-library-index.html)
-- [设计组件库文档](ui-demo/packages/design-system/README.md)
+- PC 三层框架：一级导航、二级导航区、右侧操作区。
+- 基础控件：按钮、按钮组、链接按钮、步骤条、表单控件、标签、开关等。
+- 数据组件：筛选区、基础表格、多级表格、父子表格、分页、空状态。
+- 浮层与模板：弹窗、抽屉、CRUD 模板、审核模板、导入向导。
+- 图标资产：统一维护在 `ui-demo/assets/icon-registry.js` 和 `ui-demo/assets/icons/`。
+- 设计变量：统一维护在 `ui-demo/packages/design-system/src/tokens.css`。
 
-## 组件预览页面
+## 重点预览页
 
-- [功能索引](ui-demo/component-library-index.html)
-- [当前组件](ui-demo/current-components-index.html)
-- [Ant 全量目录](ui-demo/all-components-index.html)
-- [组件总览](ui-demo/ant-components-page.html)
-- [按钮状态](ui-demo/button-states.html)
-- [按钮组状态](ui-demo/button-group-states.html)
-- [链接按钮组件](ui-demo/link-button-components.html)
-- [步骤条组件](ui-demo/steps-components.html)
-- [表单组件](ui-demo/form-components-page.html)
-- [基础表格](ui-demo/basic-table-page.html)
-- [多级表格](ui-demo/multi-level-table-page.html)
-- [低代码表格](ui-demo/lowcode-table-page.html)
-- [一级/二级导航与操作区框架](ui-demo/primary-nav.html)
+| 分类 | 页面 |
+|---|---|
+| 总览 | [组件总览](ui-demo/ant-components-page.html)、[当前组件](ui-demo/current-components-index.html) |
+| 框架 | [一级/二级导航与操作区框架](ui-demo/primary-nav.html) |
+| 按钮 | [按钮状态](ui-demo/button-states.html)、[按钮组状态](ui-demo/button-group-states.html)、[链接按钮组件](ui-demo/link-button-components.html) |
+| 步骤 | [步骤条组件](ui-demo/steps-components.html) |
+| 表单 | [表单组件](ui-demo/form-components-page.html) |
+| 表格 | [基础表格](ui-demo/basic-table-page.html)、[多级表格](ui-demo/multi-level-table-page.html)、[低代码表格](ui-demo/lowcode-table-page.html) |
+| 业务样例 | [考核结果卡片](ui-demo/assessment-result-card-page.html) |
 
 ## 维护约定
 
-1. 新组件、新组件预览和组件规范都放在本仓库内。
-2. 新增图标先放入 `ui-demo/assets/icons/`，再登记到 `icon-registry.js`。
-3. 新增 HTML 组件预览优先复用 `AppShell` 和现有组件样式。
-4. 组件确认后，再沉淀到 `ui-demo/packages/design-system` 的 React 组件。
+1. 新组件源码放在 `ui-demo/packages/design-system/src/<Component>/`，并从 `src/index.js` 导出。
+2. 新增 HTML 预览页放在 `ui-demo/`，并同步更新 `ui-demo/README.md`。
+3. 新增图标先放入 `ui-demo/assets/icons/`，需要脚本复用时再登记到 `icon-registry.js`。
+4. 组件颜色使用 `tokens.css` 变量，不在组件 CSS 中直接写设计色值。
+5. 本地工具配置、系统文件、临时截图不提交到仓库。

@@ -5,7 +5,9 @@
 ## 目录说明
 
 - `packages/design-system/`：本地 React 设计组件库，包名 `@wisedu/design-system`。
+- `assets/`：图标、导航背景和组件静态资源。
 - `*.html`：独立 HTML 组件预览页。
+- [`../docs/repository-structure.md`](../docs/repository-structure.md)：仓库级目录和维护规则。
 
 ## 当前框架预览
 
@@ -30,6 +32,7 @@
 - `button-group-states.html`：按钮组类型、尺寸和状态样例。
 - `link-button-components.html`：链接按钮、链接按钮组和表格操作列样例。
 - `steps-components.html`：步骤条组件，覆盖横向、纵向、小尺寸、点状、错误态和可点击状态。
+- `assessment-result-card-page.html`：考核结果卡片业务样例。
 
 表单：
 
@@ -62,6 +65,15 @@
 - 模板：`DSCrudTemplate`、`DSAuditTemplate`、`DSImportWizard`。
 
 React 页面统一从 `@wisedu/design-system` 引用组件；独立 HTML 预览优先复用 `packages/design-system/src/base.css` 与 `tokens.css`。
+
+## 更新索引时机
+
+新增或调整以下内容时，请同步更新本文件：
+
+1. 新增 HTML 预览页。
+2. 新增 `@wisedu/design-system` 导出组件。
+3. 新增组件专项规范文档。
+4. 调整资源目录或框架底座用法。
 
 ## 用户提供需求的最简格式
 
