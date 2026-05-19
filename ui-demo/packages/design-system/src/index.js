@@ -1,4 +1,5 @@
 import './base.css'
+export { default as DSAnchor } from './Anchor'
 export { default as DSAuditActions } from './AuditActions'
 export { default as DSAuditDetailDrawer } from './AuditDetailDrawer'
 export { default as DSAuditOpinionModal } from './AuditOpinionModal'

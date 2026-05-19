@@ -16,7 +16,7 @@
 ## 当前内容
 
 - PC 三层框架：一级导航、二级导航区、右侧操作区。
-- 基础控件：按钮、按钮组、链接按钮、步骤条、表单控件、标签、开关等。
+- 基础控件：锚点、按钮、按钮组、链接按钮、步骤条、表单控件、标签、开关等。
 - 数据组件：筛选区、基础表格、多级表格、父子表格、分页、空状态。
 - 浮层与模板：弹窗、抽屉、CRUD 模板、审核模板、导入向导。
 - 图标资产：统一维护在 `ui-demo/assets/icon-registry.js` 和 `ui-demo/assets/icons/`。
@@ -29,7 +29,7 @@
 | 总览 | [组件总览](ui-demo/ant-components-page.html)、[当前组件](ui-demo/current-components-index.html) |
 | 框架 | [一级/二级导航与操作区框架](ui-demo/primary-nav.html) |
 | 按钮 | [按钮状态](ui-demo/button-states.html)、[按钮组状态](ui-demo/button-group-states.html)、[链接按钮组件](ui-demo/link-button-components.html) |
-| 步骤 | [步骤条组件](ui-demo/steps-components.html) |
+| 导航 | [锚点组件](ui-demo/anchor-components.html)、[步骤条组件](ui-demo/steps-components.html) |
 | 表单 | [表单组件](ui-demo/form-components-page.html) |
 | 表格 | [基础表格](ui-demo/basic-table-page.html)、[多级表格](ui-demo/multi-level-table-page.html)、[低代码表格](ui-demo/lowcode-table-page.html) |
 | 业务样例 | [考核结果卡片](ui-demo/assessment-result-card-page.html) |

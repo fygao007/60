@@ -1,0 +1,63 @@
+# Anchor / 锚点
+
+MasterGo 设计来源：
+
+```text
+mastergo://getd2c/139272150501659-4096-82458
+```
+
+## 用途
+
+`DSAnchor` 用于长页面目录导航、详情章节定位、复杂表单分组跳转和帮助文档目录。
+
+## 结构
+
+- 容器：`.ds-anchor`
+- 列表：`.ds-anchor__list`
+- 项：`.ds-anchor__item`
+- 链接：`.ds-anchor__link`
+
+## 状态
+
+- 默认：次级文字色。
+- Hover：正文文字色，浅灰背景。
+- Active：主色文字、浅主色背景、加粗。
+- Disabled：禁用文字色，不可点击。
+- Bordered：左侧显示竖向基线，Active 显示主色指示线。
+
+## React 用法
+
+```jsx
+<DSAnchor
+  activeKey="overview"
+  bordered
+  items={[
+    { key: 'overview', href: '#overview', title: '组件概览' },
+    {
+      key: 'usage',
+      href: '#usage',
+      title: '使用方式',
+      children: [
+        { key: 'basic', href: '#basic', title: '基础锚点' },
+        { key: 'horizontal', href: '#horizontal', title: '横向锚点' },
+      ],
+    },
+  ]}
+/>
+```
+
+## HTML 预览用法
+
+```html
+<link rel="stylesheet" href="./packages/design-system/src/Anchor/index.css" />
+
+<nav class="ds-anchor ds-anchor--bordered" aria-label="锚点导航">
+  <ol class="ds-anchor__list">
+    <li class="ds-anchor__item is-active" style="--ds-anchor-depth: 0">
+      <a class="ds-anchor__link" href="#overview"><span>组件概览</span></a>
+    </li>
+  </ol>
+</nav>
+```
+
+预览页：`ui-demo/anchor-components.html`。

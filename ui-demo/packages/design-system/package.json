@@ -8,6 +8,7 @@
     ".": "./src/index.js",
     "./tokens.css": "./src/tokens.css",
     "./base.css": "./src/base.css",
+    "./anchor.css": "./src/Anchor/index.css",
     "./audit-actions.css": "./src/AuditActions/index.css",
     "./audit-detail-drawer.css": "./src/AuditDetailDrawer/index.css",
     "./audit-opinion-modal.css": "./src/AuditOpinionModal/index.css",
