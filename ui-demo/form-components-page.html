@@ -6,6 +6,7 @@
   <title>表单组件</title>
   <link rel="stylesheet" href="./packages/design-system/src/base.css" />
   <link rel="stylesheet" href="./packages/design-system/src/AppShell/app-shell.css" />
+  <link rel="stylesheet" href="./packages/design-system/src/Radio/index.css" />
   <style>
     .form-page {
       display: flex;
@@ -870,10 +871,10 @@
             <div class="form-item">
               <span class="form-label">单选组</span>
               <div class="form-control">
-                <div class="choice-group js-radio-group" role="radiogroup">
-                  <span class="choice is-radio is-checked" role="radio" aria-checked="true" tabindex="0"><span class="choice-mark"></span><span>公开</span></span>
-                  <span class="choice is-radio" role="radio" aria-checked="false" tabindex="0"><span class="choice-mark"></span><span>内部</span></span>
-                  <span class="choice is-radio" role="radio" aria-checked="false" tabindex="0"><span class="choice-mark"></span><span>仅管理员</span></span>
+                <div class="ds-radio-group js-radio-group" role="radiogroup">
+                  <label class="ds-radio is-checked"><input class="ds-radio__input" type="radio" name="visibleScope" value="公开" checked /><span class="ds-radio__mark"></span><span class="ds-radio__label">公开</span></label>
+                  <label class="ds-radio"><input class="ds-radio__input" type="radio" name="visibleScope" value="内部" /><span class="ds-radio__mark"></span><span class="ds-radio__label">内部</span></label>
+                  <label class="ds-radio"><input class="ds-radio__input" type="radio" name="visibleScope" value="仅管理员" /><span class="ds-radio__mark"></span><span class="ds-radio__label">仅管理员</span></label>
                 </div>
               </div>
             </div>
@@ -1086,12 +1087,14 @@
       return;
     }
 
-    const radio = event.target.closest('.js-radio-group .choice');
+    const radio = event.target.closest('.js-radio-group .ds-radio');
     if (radio) {
       const group = radio.closest('.js-radio-group');
-      group.querySelectorAll('.choice').forEach(item => {
+      if (radio.classList.contains('is-disabled') || radio.querySelector('.ds-radio__input')?.disabled) return;
+      group.querySelectorAll('.ds-radio').forEach(item => {
+        const input = item.querySelector('.ds-radio__input');
         item.classList.toggle('is-checked', item === radio);
-        item.setAttribute('aria-checked', String(item === radio));
+        input.checked = item === radio;
       });
       return;
     }
