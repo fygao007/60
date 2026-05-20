@@ -165,6 +165,16 @@
     return [];
   }
 
+  function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, (char) => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[char]));
+  }
+
   function renderCascader(root, state) {
     const placeholder = root.dataset.placeholder || '请选择';
     const clearable = root.dataset.clearable === 'true';
@@ -175,7 +185,7 @@
     root.classList.toggle('has-value', hasValue);
     root.innerHTML = `
       <button class="ds-cascader__trigger" type="button" ${disabled ? 'disabled' : ''} aria-haspopup="listbox" aria-expanded="${root.classList.contains('is-open')}">
-        <span class="${hasValue ? 'ds-cascader__text' : 'ds-cascader__placeholder'}">${hasValue ? state.selectedPath.map((item) => item.label).join(' / ') : placeholder}</span>
+        <span class="${hasValue ? 'ds-cascader__text' : 'ds-cascader__placeholder'}">${escapeHtml(hasValue ? state.selectedPath.map((item) => item.label).join(' / ') : placeholder)}</span>
         ${clearable && hasValue && !disabled ? '<span class="ds-cascader__clear" role="button" tabindex="-1" aria-label="清除"></span>' : ''}
         <span class="ds-cascader__arrow" aria-hidden="true"></span>
       </button>
@@ -201,10 +211,14 @@
   }
 
   function renderPopup(displayPath, query, searchable) {
-    const search = searchable ? `<div class="ds-cascader__search-wrap"><input class="ds-cascader__search" value="${query}" placeholder="搜索选项" /></div>` : '';
+    const search = searchable ? `<div class="ds-cascader__search-wrap"><input class="ds-cascader__search" value="${escapeHtml(query)}" placeholder="搜索选项" /></div>` : '';
+    return `<div class="ds-cascader__popup">${search}<div class="ds-cascader__body">${renderPopupBody(displayPath, query)}</div></div>`;
+  }
+
+  function renderPopupBody(displayPath, query) {
     if (query) {
       const results = flattenLeaves(cascaderOptions).filter((item) => item.path.map((node) => node.label).join(' / ').includes(query));
-      return `<div class="ds-cascader__popup">${search}<div class="ds-cascader__search-list" role="listbox">${results.length ? results.map((item) => `<button class="ds-cascader__search-option" type="button" data-path="${item.path.map((node) => node.value).join('|')}">${item.path.map((node) => node.label).join(' / ')}</button>`).join('') : '<div class="ds-cascader__empty">无匹配数据</div>'}</div></div>`;
+      return `<div class="ds-cascader__search-list" role="listbox">${results.length ? results.map((item) => `<button class="ds-cascader__search-option" type="button" data-path="${escapeHtml(item.path.map((node) => node.value).join('|'))}">${escapeHtml(item.path.map((node) => node.label).join(' / '))}</button>`).join('') : '<div class="ds-cascader__empty">无匹配数据</div>'}</div>`;
     }
 
     const columns = [cascaderOptions];
@@ -216,10 +230,18 @@
         currentOptions = current.children;
       }
     });
-    return `<div class="ds-cascader__popup">${search}<div class="ds-cascader__columns">${columns.map((column, columnIndex) => `<div class="ds-cascader__column" role="listbox">${column.map((option) => {
+    return `<div class="ds-cascader__columns">${columns.map((column, columnIndex) => `<div class="ds-cascader__column" role="listbox">${column.map((option) => {
       const selected = displayPath[columnIndex]?.value === option.value;
-      return `<button class="ds-cascader__option ${selected ? 'is-selected' : ''} ${option.children ? 'has-children' : ''}" type="button" data-column="${columnIndex}" data-value="${option.value}"><span>${option.label}</span>${option.children ? '<span class="ds-cascader__option-arrow" aria-hidden="true"></span>' : ''}</button>`;
-    }).join('')}</div>`).join('')}</div></div>`;
+      return `<button class="ds-cascader__option ${selected ? 'is-selected' : ''} ${option.children ? 'has-children' : ''}" type="button" data-column="${columnIndex}" data-value="${escapeHtml(option.value)}"><span>${escapeHtml(option.label)}</span>${option.children ? '<span class="ds-cascader__option-arrow" aria-hidden="true"></span>' : ''}</button>`;
+    }).join('')}</div>`).join('')}</div>`;
+  }
+
+  function updateCascaderPopupBody(root, state) {
+    const body = root.querySelector('.ds-cascader__body');
+    if (!body) return;
+    const hasValue = state.selectedPath.length > 0;
+    const displayPath = hasValue ? state.selectedPath : state.activePath;
+    body.innerHTML = renderPopupBody(displayPath, state.query);
   }
 
   function initCascader(root) {
@@ -281,8 +303,7 @@
       event.stopPropagation();
       if (!event.target.classList.contains('ds-cascader__search')) return;
       state.query = event.target.value;
-      renderCascader(root, state);
-      root.querySelector('.ds-cascader__search')?.focus();
+      updateCascaderPopupBody(root, state);
     });
   }
 
