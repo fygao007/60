@@ -132,6 +132,11 @@
   background: var(--ds-color-hover-mask-strong);
 }
 
+.ds-select__clear[hidden],
+.ds-select__dropdown[hidden] {
+  display: none;
+}
+
 .ds-select__dropdown {
   position: absolute;
   z-index: var(--ds-z-dropdown);

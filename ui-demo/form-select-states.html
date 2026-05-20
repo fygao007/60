@@ -206,36 +206,207 @@
 <script src="./assets/icon-registry.js"></script>
 <script src="./packages/design-system/src/AppShell/app-shell.js"></script>
 <script>
-  const demoSelect = document.querySelector('.js-select-demo');
-  const trigger = demoSelect.querySelector('.ds-select__trigger');
-  const dropdown = demoSelect.querySelector('.ds-select__dropdown');
-  const valueNode = demoSelect.querySelector('.ds-select__value');
-  const clearNode = demoSelect.querySelector('.ds-select__clear');
-  trigger.addEventListener('click', () => {
-    const open = demoSelect.classList.toggle('is-open');
+  const defaultSelectOptions = ['人才项目', '招生配置', '岗位聘任', '考核评价', '申报审核'];
+
+  function readOptionLabel(option) {
+    return option.dataset.value || option.querySelector('span')?.textContent?.trim() || option.textContent.trim();
+  }
+
+  function ensureSelectClear(select, trigger) {
+    let clearNode = select.querySelector('.ds-select__clear');
+    if (!clearNode) {
+      clearNode = document.createElement('span');
+      clearNode.className = 'ds-select__clear';
+      clearNode.textContent = '×';
+      trigger.insertBefore(clearNode, trigger.querySelector('.ds-select__arrow'));
+    }
+    clearNode.hidden = !select.classList.contains('has-value');
+    return clearNode;
+  }
+
+  function ensureSelectDropdown(select) {
+    let dropdown = select.querySelector('.ds-select__dropdown');
+    if (!dropdown) {
+      dropdown = document.createElement('div');
+      dropdown.className = 'ds-select__dropdown';
+      dropdown.setAttribute('role', 'listbox');
+      defaultSelectOptions.forEach((label) => {
+        const option = document.createElement('button');
+        option.className = 'ds-select__option';
+        option.type = 'button';
+        option.dataset.value = label;
+        option.innerHTML = `<span>${label}</span>`;
+        dropdown.appendChild(option);
+      });
+      select.appendChild(dropdown);
+    }
+    return dropdown;
+  }
+
+  function renderSelectValue(select, state) {
+    const valueNode = select.querySelector('.ds-select__value');
+    const clearNode = select.querySelector('.ds-select__clear');
+    const multiple = select.classList.contains('ds-select--multiple');
+    const hasValue = state.values.length > 0;
+
+    select.classList.toggle('has-value', hasValue);
+    if (clearNode) clearNode.hidden = !hasValue;
+
+    if (!hasValue) {
+      valueNode.innerHTML = '<span class="ds-select__placeholder">请选择</span>';
+      return;
+    }
+
+    if (multiple) {
+      valueNode.innerHTML = `<span class="ds-select__tags">${state.values
+        .map((value) => `<span class="ds-select__tag"><span>${value}</span><span>×</span></span>`)
+        .join('')}</span>`;
+      return;
+    }
+
+    valueNode.innerHTML = `<span class="ds-select__text">${state.values[0]}</span>`;
+  }
+
+  function renderSelectOptions(select, state) {
+    const dropdown = select.querySelector('.ds-select__dropdown');
+    const options = Array.from(dropdown.querySelectorAll('.ds-select__option'));
+    const query = state.query.trim().toLowerCase();
+    let visibleCount = 0;
+
+    dropdown.querySelectorAll('.ds-select__empty').forEach((node) => node.remove());
+    options.forEach((option) => {
+      const label = readOptionLabel(option);
+      const selected = state.values.includes(label);
+      const matched = !query || label.toLowerCase().includes(query);
+
+      option.hidden = !matched;
+      visibleCount += matched ? 1 : 0;
+      option.classList.toggle('is-selected', selected);
+      option.setAttribute('aria-selected', String(selected));
+      option.querySelectorAll('.ds-select__check').forEach((node) => node.remove());
+      if (selected) option.insertAdjacentHTML('beforeend', '<span class="ds-select__check">✓</span>');
+    });
+
+    if (visibleCount === 0) {
+      const emptyNode = document.createElement('div');
+      emptyNode.className = 'ds-select__empty';
+      emptyNode.textContent = '无匹配数据';
+      dropdown.appendChild(emptyNode);
+    }
+  }
+
+  function setSelectOpen(select, open) {
+    if (select.classList.contains('is-disabled')) return;
+    const trigger = select.querySelector('.ds-select__trigger');
+    const dropdown = ensureSelectDropdown(select);
+    select.classList.toggle('is-open', open);
     trigger.setAttribute('aria-expanded', String(open));
     dropdown.hidden = !open;
-  });
-  clearNode.addEventListener('click', (event) => {
-    event.stopPropagation();
-    demoSelect.classList.remove('has-value');
-    valueNode.innerHTML = '<span class="ds-select__placeholder">请选择</span>';
-    clearNode.hidden = true;
-    demoSelect.querySelectorAll('.ds-select__option').forEach((option) => option.classList.remove('is-selected'));
-    demoSelect.querySelectorAll('.ds-select__check').forEach((node) => node.remove());
-  });
-  demoSelect.querySelectorAll('.ds-select__option').forEach((option) => {
-    option.addEventListener('click', () => {
-      demoSelect.classList.add('has-value');
-      valueNode.innerHTML = `<span class="ds-select__text">${option.dataset.value}</span>`;
-      clearNode.hidden = false;
-      demoSelect.querySelectorAll('.ds-select__option').forEach((item) => item.classList.remove('is-selected'));
-      demoSelect.querySelectorAll('.ds-select__check').forEach((node) => node.remove());
-      option.classList.add('is-selected');
-      option.insertAdjacentHTML('beforeend', '<span class="ds-select__check">✓</span>');
-      demoSelect.classList.remove('is-open');
-      trigger.setAttribute('aria-expanded', 'false');
+
+    if (open && select.classList.contains('ds-select--searchable')) {
+      const searchNode = select.querySelector('.ds-select__search');
+      searchNode?.focus();
+    }
+  }
+
+  function initInteractiveSelect(select) {
+    if (select.dataset.interactiveReady === 'true') return;
+    select.dataset.interactiveReady = 'true';
+
+    const trigger = select.querySelector('.ds-select__trigger');
+    const dropdown = ensureSelectDropdown(select);
+    const clearNode = ensureSelectClear(select, trigger);
+    if (select.classList.contains('is-disabled')) {
       dropdown.hidden = true;
+      clearNode.hidden = true;
+      return;
+    }
+
+    const multiple = select.classList.contains('ds-select--multiple');
+    const searchable = select.classList.contains('ds-select--searchable');
+    const initialSelected = Array.from(dropdown.querySelectorAll('.ds-select__option.is-selected')).map(readOptionLabel);
+    const initialText = select.querySelector('.ds-select__text')?.textContent?.trim();
+    const initialTags = Array.from(select.querySelectorAll('.ds-select__tag span:first-child')).map((node) => node.textContent.trim());
+    const state = {
+      values: initialSelected.length ? initialSelected : (multiple ? initialTags : (initialText ? [initialText] : [])),
+      query: searchable ? select.querySelector('.ds-select__search')?.value || '' : ''
+    };
+
+    if (dropdown.querySelectorAll('.ds-select__option').length === 0 && !dropdown.querySelector('.ds-select__empty')) {
+      defaultSelectOptions.forEach((label) => {
+        const option = document.createElement('button');
+        option.className = 'ds-select__option';
+        option.type = 'button';
+        option.dataset.value = label;
+        option.innerHTML = `<span>${label}</span>`;
+        dropdown.insertBefore(option, dropdown.querySelector('.ds-select__empty'));
+      });
+    }
+
+    if (searchable) {
+      select.querySelector('.ds-select__value').innerHTML = '<input class="ds-select__search" aria-label="搜索" placeholder="请输入关键词" />';
+      const searchNode = select.querySelector('.ds-select__search');
+      searchNode.value = state.query;
+      select.classList.toggle('has-value', state.values.length > 0);
+      clearNode.hidden = state.values.length === 0;
+      searchNode.addEventListener('click', (event) => event.stopPropagation());
+      searchNode.addEventListener('input', () => {
+        state.query = searchNode.value;
+        renderSelectOptions(select, state);
+        setSelectOpen(select, true);
+      });
+    } else {
+      renderSelectValue(select, state);
+    }
+    renderSelectOptions(select, state);
+    setSelectOpen(select, select.classList.contains('is-open'));
+
+    trigger.addEventListener('click', () => setSelectOpen(select, !select.classList.contains('is-open')));
+    clearNode.addEventListener('click', (event) => {
+      event.stopPropagation();
+      state.values = [];
+      state.query = '';
+      if (searchable) {
+        select.querySelector('.ds-select__search').value = '';
+        select.classList.remove('has-value');
+        clearNode.hidden = true;
+      } else {
+        renderSelectValue(select, state);
+      }
+      renderSelectOptions(select, state);
+      setSelectOpen(select, false);
+    });
+
+    dropdown.addEventListener('click', (event) => {
+      const option = event.target.closest('.ds-select__option');
+      if (!option || option.disabled) return;
+
+      const label = readOptionLabel(option);
+      if (multiple) {
+        state.values = state.values.includes(label)
+          ? state.values.filter((value) => value !== label)
+          : [...state.values, label];
+      } else {
+        state.values = [label];
+      }
+
+      if (searchable) {
+        state.query = label;
+        select.querySelector('.ds-select__search').value = label;
+        select.classList.add('has-value');
+        clearNode.hidden = false;
+      } else {
+        renderSelectValue(select, state);
+      }
+      renderSelectOptions(select, state);
+      if (!multiple) setSelectOpen(select, false);
+    });
+  }
+
+  document.querySelectorAll('.ds-select--custom').forEach(initInteractiveSelect);
+  document.addEventListener('click', (event) => {
+    document.querySelectorAll('.ds-select--custom.is-open').forEach((select) => {
+      if (!select.contains(event.target)) setSelectOpen(select, false);
     });
   });
 

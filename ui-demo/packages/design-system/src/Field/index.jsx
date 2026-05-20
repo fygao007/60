@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import './index.css'
 
 export function DSInput({ className = '', ...props }) {
@@ -43,6 +43,41 @@ export function DSSelect({
   const [internalValue, setInternalValue] = useState(initialValue)
   const [internalOpen, setInternalOpen] = useState(false)
   const [query, setQuery] = useState('')
+  const selectRef = useRef(null)
+
+  const currentValue = value !== undefined ? value : internalValue
+  const isOpen = controlledOpen !== undefined ? controlledOpen : internalOpen
+  const selectedValues = multiple ? (Array.isArray(currentValue) ? currentValue : []) : [currentValue].filter(Boolean)
+  const selectedOptions = normalizedOptions.filter((option) => selectedValues.includes(getOptionValue(option)))
+  const hasValue = selectedValues.length > 0
+  const filteredOptions = searchable && query
+    ? normalizedOptions.filter((option) => String(option.label).toLowerCase().includes(query.toLowerCase()))
+    : normalizedOptions
+
+  const setOpen = (nextOpen) => {
+    if (disabled) return
+    if (controlledOpen === undefined) setInternalOpen(nextOpen)
+    onOpenChange?.(nextOpen)
+  }
+
+  useEffect(() => {
+    if (!isOpen) return undefined
+
+    const handlePointerDown = (event) => {
+      if (!selectRef.current?.contains(event.target)) setOpen(false)
+    }
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') setOpen(false)
+    }
+
+    document.addEventListener('mousedown', handlePointerDown)
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.removeEventListener('mousedown', handlePointerDown)
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [isOpen])
 
   if (children || native) {
     return (
@@ -67,21 +102,6 @@ export function DSSelect({
           })}
       </select>
     )
-  }
-
-  const currentValue = value !== undefined ? value : internalValue
-  const isOpen = controlledOpen !== undefined ? controlledOpen : internalOpen
-  const selectedValues = multiple ? (Array.isArray(currentValue) ? currentValue : []) : [currentValue].filter(Boolean)
-  const selectedOptions = normalizedOptions.filter((option) => selectedValues.includes(getOptionValue(option)))
-  const hasValue = selectedValues.length > 0
-  const filteredOptions = searchable && query
-    ? normalizedOptions.filter((option) => String(option.label).toLowerCase().includes(query.toLowerCase()))
-    : normalizedOptions
-
-  const setOpen = (nextOpen) => {
-    if (disabled) return
-    if (controlledOpen === undefined) setInternalOpen(nextOpen)
-    onOpenChange?.(nextOpen)
   }
 
   const commitValue = (nextValue, option) => {
@@ -110,6 +130,12 @@ export function DSSelect({
     setQuery('')
   }
 
+  const removeTag = (event, optionValue) => {
+    event.stopPropagation()
+    const nextValue = selectedValues.filter((item) => item !== optionValue)
+    commitValue(nextValue)
+  }
+
   const classes = [
     'ds-select',
     'ds-select--custom',
@@ -123,7 +149,7 @@ export function DSSelect({
   ].filter(Boolean).join(' ')
 
   return (
-    <div className={classes} {...props}>
+    <div className={classes} ref={selectRef} {...props}>
       {name && multiple && selectedValues.map((item) => <input type="hidden" name={name} value={item} key={item} />)}
       {name && !multiple && hasValue && <input type="hidden" name={name} value={selectedValues[0]} />}
       <button
@@ -135,25 +161,26 @@ export function DSSelect({
         onClick={() => setOpen(!isOpen)}
       >
         <span className="ds-select__value">
-          {multiple && hasValue ? (
+          {!multiple && searchable && isOpen ? (
+            <input
+              className="ds-select__search"
+              value={query}
+              placeholder={hasValue ? selectedOptions[0]?.label : placeholder}
+              autoFocus
+              onChange={(event) => setQuery(event.target.value)}
+              onClick={(event) => event.stopPropagation()}
+            />
+          ) : multiple && hasValue ? (
             <span className="ds-select__tags">
               {selectedOptions.map((option) => (
                 <span className="ds-select__tag" key={getOptionValue(option)}>
                   <span>{option.label}</span>
-                  <span aria-hidden="true">×</span>
+                  <span aria-hidden="true" onClick={(event) => removeTag(event, getOptionValue(option))}>×</span>
                 </span>
               ))}
             </span>
           ) : hasValue ? (
             <span className="ds-select__text">{selectedOptions[0]?.label}</span>
-          ) : searchable && isOpen ? (
-            <input
-              className="ds-select__search"
-              value={query}
-              placeholder={placeholder}
-              onChange={(event) => setQuery(event.target.value)}
-              onClick={(event) => event.stopPropagation()}
-            />
           ) : (
             <span className="ds-select__placeholder">{placeholder}</span>
           )}
