@@ -1,23 +1,192 @@
+import { useMemo, useState } from 'react'
 import './index.css'
 
 export function DSInput({ className = '', ...props }) {
   return <input className={['ds-input', className].filter(Boolean).join(' ')} {...props} />
 }
 
-export function DSSelect({ options = [], className = '', children, ...props }) {
+function normalizeOptions(options) {
+  return options.map((option) => {
+    if (typeof option === 'string') {
+      return { value: option, label: option }
+    }
+
+    return option
+  })
+}
+
+function getOptionValue(option) {
+  return option?.value ?? option?.label
+}
+
+export function DSSelect({
+  options = [],
+  className = '',
+  children,
+  value,
+  defaultValue,
+  placeholder = '请选择',
+  multiple = false,
+  searchable = false,
+  clearable = false,
+  disabled = false,
+  error = false,
+  open: controlledOpen,
+  native = false,
+  name,
+  onChange,
+  onOpenChange,
+  ...props
+}) {
+  const normalizedOptions = useMemo(() => normalizeOptions(options), [options])
+  const initialValue = multiple ? defaultValue || [] : defaultValue
+  const [internalValue, setInternalValue] = useState(initialValue)
+  const [internalOpen, setInternalOpen] = useState(false)
+  const [query, setQuery] = useState('')
+
+  if (children || native) {
+    return (
+      <select
+        className={['ds-select', className].filter(Boolean).join(' ')}
+        disabled={disabled}
+        name={name}
+        value={value}
+        defaultValue={defaultValue}
+        multiple={multiple}
+        onChange={onChange}
+        {...props}
+      >
+        {children ||
+          options.map((option) => {
+            const item = typeof option === 'string' ? { value: option, label: option } : option
+            return (
+              <option value={item.value} key={item.value} disabled={item.disabled}>
+                {item.label}
+              </option>
+            )
+          })}
+      </select>
+    )
+  }
+
+  const currentValue = value !== undefined ? value : internalValue
+  const isOpen = controlledOpen !== undefined ? controlledOpen : internalOpen
+  const selectedValues = multiple ? (Array.isArray(currentValue) ? currentValue : []) : [currentValue].filter(Boolean)
+  const selectedOptions = normalizedOptions.filter((option) => selectedValues.includes(getOptionValue(option)))
+  const hasValue = selectedValues.length > 0
+  const filteredOptions = searchable && query
+    ? normalizedOptions.filter((option) => String(option.label).toLowerCase().includes(query.toLowerCase()))
+    : normalizedOptions
+
+  const setOpen = (nextOpen) => {
+    if (disabled) return
+    if (controlledOpen === undefined) setInternalOpen(nextOpen)
+    onOpenChange?.(nextOpen)
+  }
+
+  const commitValue = (nextValue, option) => {
+    if (value === undefined) setInternalValue(nextValue)
+    onChange?.(nextValue, option)
+  }
+
+  const toggleOption = (option) => {
+    if (option.disabled) return
+    const optionValue = getOptionValue(option)
+    if (multiple) {
+      const nextValue = selectedValues.includes(optionValue)
+        ? selectedValues.filter((item) => item !== optionValue)
+        : [...selectedValues, optionValue]
+      commitValue(nextValue, option)
+      return
+    }
+
+    commitValue(optionValue, option)
+    setOpen(false)
+  }
+
+  const clearValue = (event) => {
+    event.stopPropagation()
+    commitValue(multiple ? [] : undefined)
+    setQuery('')
+  }
+
+  const classes = [
+    'ds-select',
+    'ds-select--custom',
+    multiple && 'ds-select--multiple',
+    searchable && 'ds-select--searchable',
+    isOpen && 'is-open',
+    hasValue && 'has-value',
+    disabled && 'is-disabled',
+    error && 'is-error',
+    className,
+  ].filter(Boolean).join(' ')
+
   return (
-    <select className={['ds-select', className].filter(Boolean).join(' ')} {...props}>
-      {children ||
-        options.map((option) => {
-          const value = typeof option === 'string' ? option : option.value
-          const label = typeof option === 'string' ? option : option.label
-          return (
-            <option value={value} key={value}>
-              {label}
-            </option>
-          )
-        })}
-    </select>
+    <div className={classes} {...props}>
+      {name && multiple && selectedValues.map((item) => <input type="hidden" name={name} value={item} key={item} />)}
+      {name && !multiple && hasValue && <input type="hidden" name={name} value={selectedValues[0]} />}
+      <button
+        className="ds-select__trigger"
+        type="button"
+        disabled={disabled}
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
+        onClick={() => setOpen(!isOpen)}
+      >
+        <span className="ds-select__value">
+          {multiple && hasValue ? (
+            <span className="ds-select__tags">
+              {selectedOptions.map((option) => (
+                <span className="ds-select__tag" key={getOptionValue(option)}>
+                  <span>{option.label}</span>
+                  <span aria-hidden="true">×</span>
+                </span>
+              ))}
+            </span>
+          ) : hasValue ? (
+            <span className="ds-select__text">{selectedOptions[0]?.label}</span>
+          ) : searchable && isOpen ? (
+            <input
+              className="ds-select__search"
+              value={query}
+              placeholder={placeholder}
+              onChange={(event) => setQuery(event.target.value)}
+              onClick={(event) => event.stopPropagation()}
+            />
+          ) : (
+            <span className="ds-select__placeholder">{placeholder}</span>
+          )}
+        </span>
+        {clearable && hasValue && !disabled && (
+          <span className="ds-select__clear" role="button" tabIndex={-1} aria-label="清除" onClick={clearValue}>×</span>
+        )}
+        <span className="ds-select__arrow" aria-hidden="true">⌄</span>
+      </button>
+      {isOpen && (
+        <div className="ds-select__dropdown" role="listbox" aria-multiselectable={multiple || undefined}>
+          {filteredOptions.map((option) => {
+            const optionValue = getOptionValue(option)
+            const selected = selectedValues.includes(optionValue)
+            return (
+              <button
+                className={['ds-select__option', selected && 'is-selected', option.disabled && 'is-disabled'].filter(Boolean).join(' ')}
+                type="button"
+                role="option"
+                aria-selected={selected}
+                disabled={option.disabled}
+                key={optionValue}
+                onClick={() => toggleOption(option)}
+              >
+                <span>{option.label}</span>
+                {selected && <span className="ds-select__check" aria-hidden="true">✓</span>}
+              </button>
+            )
+          })}
+          {filteredOptions.length === 0 && <div className="ds-select__empty">无匹配数据</div>}
+        </div>
+      )}
+    </div>
   )
 }
 

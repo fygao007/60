@@ -222,6 +222,7 @@ import {
 - `docs/button.md`：MasterGo《📌【PC】基础控件 / Button》设计链接与落地规则。
 - `docs/button-group.md`：MasterGo《📌【PC】基础控件 / ButtonGroup》设计链接与落地规则。
 - `docs/anchor.md`：MasterGo 锚点设计链接与落地规则。
+- `docs/select.md`：MasterGo 选择器设计链接与落地规则。
 
 HTML 表单预览：
 

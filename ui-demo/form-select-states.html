@@ -6,42 +6,198 @@
   <title>下拉选择状态</title>
   <link rel="stylesheet" href="./packages/design-system/src/base.css" />
   <link rel="stylesheet" href="./packages/design-system/src/AppShell/app-shell.css" />
+  <link rel="stylesheet" href="./packages/design-system/src/Field/index.css" />
   <style>
-    .fis-page { display: flex; flex: 1; flex-direction: column; min-height: 0; background: #fff; }
-    .fis-stage { flex: 1; min-height: 0; padding: 24px; overflow: auto; background: #fff; }
-    .fis-content { display: flex; flex-direction: column; gap: 24px; width: 693px; }
-    .fis-title { color: #000; font-size: 14px; font-weight: 600; line-height: 22px; font-family: 'PingFang SC', var(--ds-font-family); }
-    .fis-rows { display: grid; grid-template-columns: 133px 560px; row-gap: 20px; }
-    .fis-state { align-self: start; padding-top: 5px; color: #505266; font-size: 14px; line-height: 22px; font-family: 'PingFang SC', var(--ds-font-family); }
-    .fis-field { display: flex; align-items: flex-start; gap: 16px; }
-    .fis-field-label { flex: none; display: flex; align-items: center; justify-content: flex-end; width: 94px; height: 32px; color: #505266; font-size: 14px; line-height: 20px; text-align: right; font-family: 'PingFang SC', var(--ds-font-family); }
-    .fis-field-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
-
-    .fis-picker { box-sizing: border-box; width: 100%; height: 32px; display: flex; align-items: center; gap: 8px; padding: 5px 12px; background: #FFFFFF; border: 1px solid #DCDCE0; border-radius: 4px; }
-    .fis-picker-text { flex: 1; color: #9697A3; font-size: 14px; line-height: 22px; font-family: 'PingFang SC', var(--ds-font-family); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .fis-picker-text.is-filled { color: #000; }
-    .fis-picker-icon { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 14px; height: 14px; color: #505266; }
-    .fis-picker-icon img, .fis-picker-icon svg { width: 100%; height: 100%; display: block; }
+    body { margin: 0; color: var(--ds-color-text); background: var(--ds-color-bg); font-family: var(--ds-font-family); }
+    .select-page { display: flex; flex: 1; flex-direction: column; min-height: 0; background: var(--ds-color-white); }
+    .select-stage { flex: 1; min-height: 0; padding: 24px; overflow: auto; background: var(--ds-color-white); }
+    .select-content { display: grid; gap: 24px; width: min(1120px, 100%); }
+    .select-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+    .select-title { position: relative; display: inline-flex; margin: 0; padding: 2px; color: var(--ds-color-text); font-size: 16px; font-weight: 600; line-height: 24px; }
+    .select-title::after { content: ""; position: absolute; left: 2px; right: 2px; bottom: 2px; height: 8px; background: var(--ds-color-primary-weak); }
+    .select-title span { position: relative; z-index: 1; }
+    .select-desc { margin: 6px 0 0; color: var(--ds-color-text-secondary); font-size: 13px; line-height: 20px; }
+    .select-section { border: 1px solid var(--ds-color-border-secondary); background: var(--ds-color-white); }
+    .select-section-head { display: flex; align-items: center; justify-content: space-between; min-height: 44px; padding: 10px 16px; background: var(--ds-color-bg-subtle); border-bottom: 1px solid var(--ds-color-border-secondary); }
+    .select-section-title { margin: 0; color: var(--ds-color-text); font-size: 14px; font-weight: 600; line-height: 22px; }
+    .select-section-meta { color: var(--ds-color-text-tertiary); font-size: 12px; line-height: 20px; }
+    .select-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; padding: 16px; }
+    .select-card { min-width: 0; min-height: 128px; padding: 16px; border: 1px solid var(--ds-color-border-secondary); background: var(--ds-color-white); }
+    .select-section--dropdown .select-card { min-height: 292px; }
+    .select-card h3 { margin: 0 0 12px; color: var(--ds-color-text); font-size: 14px; font-weight: 600; line-height: 22px; }
+    .select-card .ds-select { width: 100%; }
+    .select-card p { margin: 10px 0 0; color: var(--ds-color-text-tertiary); font-size: 12px; line-height: 20px; }
+    .select-row { display: grid; grid-template-columns: 108px minmax(0, 360px); gap: 16px; align-items: start; padding: 16px; border-top: 1px solid var(--ds-color-border-secondary); }
+    .select-label { height: 32px; display: flex; align-items: center; justify-content: flex-end; color: var(--ds-color-text-secondary); font-size: 14px; line-height: 20px; text-align: right; }
+    .select-panel { position: relative; }
+    .select-panel .ds-select { width: 100%; }
+    @media (max-width: 1100px) {
+      .select-grid { grid-template-columns: 1fr; }
+      .select-row { grid-template-columns: 1fr; }
+      .select-label { justify-content: flex-start; }
+    }
   </style>
 </head>
 <body>
 <div class="stage ds-scope">
-  <main class="fis-page">
-    <section class="fis-stage">
-      <div class="fis-content">
-        <span class="fis-title">状态</span>
-        <div class="fis-rows">
-          <div class="fis-state">未编辑态</div>
-          <div class="fis-field">
-            <span class="fis-field-label">标题名称</span>
-            <div class="fis-field-body">
-              <div class="fis-picker" role="combobox" aria-haspopup="listbox" aria-expanded="false">
-                <span class="fis-picker-text">请选择</span>
-                <span class="fis-picker-icon" data-wise-icon="arrowDown"></span>
+  <main class="select-page">
+    <section class="select-stage">
+      <div class="select-content">
+        <header class="select-head">
+          <div>
+            <h1 class="select-title"><span>下拉选择</span></h1>
+            <p class="select-desc">基于 MasterGo 选择器设计稿扩展 DSSelect，覆盖单选、多选、搜索、清除、下拉面板、禁用、错误和空数据状态。</p>
+          </div>
+        </header>
+
+        <section class="select-section select-section--dropdown">
+          <div class="select-section-head">
+            <h2 class="select-section-title">基础状态</h2>
+            <span class="select-section-meta">Default / Hover / Focus / Disabled / Error</span>
+          </div>
+          <div class="select-grid">
+            <article class="select-card">
+              <h3>未选择</h3>
+              <div class="ds-select ds-select--custom">
+                <button class="ds-select__trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+                  <span class="ds-select__value"><span class="ds-select__placeholder">请选择</span></span>
+                  <span class="ds-select__arrow">⌄</span>
+                </button>
+              </div>
+              <p>默认使用占位文字和下拉箭头。</p>
+            </article>
+            <article class="select-card">
+              <h3>已选择</h3>
+              <div class="ds-select ds-select--custom has-value">
+                <button class="ds-select__trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+                  <span class="ds-select__value"><span class="ds-select__text">招生配置</span></span>
+                  <span class="ds-select__clear">×</span>
+                  <span class="ds-select__arrow">⌄</span>
+                </button>
+              </div>
+              <p>有值时展示正文色，可显示清除按钮。</p>
+            </article>
+            <article class="select-card">
+              <h3>聚焦</h3>
+              <div class="ds-select ds-select--custom is-open has-value">
+                <button class="ds-select__trigger" type="button" aria-haspopup="listbox" aria-expanded="true">
+                  <span class="ds-select__value"><span class="ds-select__text">人才项目</span></span>
+                  <span class="ds-select__arrow">⌄</span>
+                </button>
+              </div>
+              <p>聚焦态使用主色边框和浅主色投影。</p>
+            </article>
+            <article class="select-card">
+              <h3>禁用</h3>
+              <div class="ds-select ds-select--custom is-disabled">
+                <button class="ds-select__trigger" type="button" disabled>
+                  <span class="ds-select__value"><span class="ds-select__placeholder">请选择</span></span>
+                  <span class="ds-select__arrow">⌄</span>
+                </button>
+              </div>
+              <p>禁用态不可点击，背景和文字置灰。</p>
+            </article>
+            <article class="select-card">
+              <h3>错误</h3>
+              <div class="ds-select ds-select--custom is-error">
+                <button class="ds-select__trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+                  <span class="ds-select__value"><span class="ds-select__placeholder">请选择项目类型</span></span>
+                  <span class="ds-select__arrow">⌄</span>
+                </button>
+              </div>
+              <p>错误态使用危险色边框，可配合字段错误提示。</p>
+            </article>
+            <article class="select-card">
+              <h3>搜索输入</h3>
+              <div class="ds-select ds-select--custom ds-select--searchable is-open">
+                <button class="ds-select__trigger" type="button" aria-haspopup="listbox" aria-expanded="true">
+                  <span class="ds-select__value"><input class="ds-select__search" value="人才" aria-label="搜索" /></span>
+                  <span class="ds-select__arrow">⌄</span>
+                </button>
+              </div>
+              <p>搜索态在触发器内输入关键词。</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="select-section">
+          <div class="select-section-head">
+            <h2 class="select-section-title">下拉面板</h2>
+            <span class="select-section-meta">Single / Multiple / Empty</span>
+          </div>
+          <div class="select-grid">
+            <article class="select-card">
+              <h3>单选展开</h3>
+              <div class="ds-select ds-select--custom is-open has-value">
+                <button class="ds-select__trigger" type="button" aria-haspopup="listbox" aria-expanded="true">
+                  <span class="ds-select__value"><span class="ds-select__text">招生配置</span></span>
+                  <span class="ds-select__arrow">⌄</span>
+                </button>
+                <div class="ds-select__dropdown" role="listbox">
+                  <button class="ds-select__option is-selected" type="button"><span>招生配置</span><span class="ds-select__check">✓</span></button>
+                  <button class="ds-select__option" type="button"><span>岗位管理</span></button>
+                  <button class="ds-select__option" type="button"><span>考核评价</span></button>
+                  <button class="ds-select__option is-disabled" type="button" disabled><span>已停用分类</span></button>
+                </div>
+              </div>
+            </article>
+            <article class="select-card">
+              <h3>多选展开</h3>
+              <div class="ds-select ds-select--custom ds-select--multiple is-open has-value">
+                <button class="ds-select__trigger" type="button" aria-haspopup="listbox" aria-expanded="true">
+                  <span class="ds-select__value">
+                    <span class="ds-select__tags">
+                      <span class="ds-select__tag"><span>重点</span><span>×</span></span>
+                      <span class="ds-select__tag"><span>启用</span><span>×</span></span>
+                    </span>
+                  </span>
+                  <span class="ds-select__arrow">⌄</span>
+                </button>
+                <div class="ds-select__dropdown" role="listbox" aria-multiselectable="true">
+                  <button class="ds-select__option is-selected" type="button"><span>重点</span><span class="ds-select__check">✓</span></button>
+                  <button class="ds-select__option is-selected" type="button"><span>启用</span><span class="ds-select__check">✓</span></button>
+                  <button class="ds-select__option" type="button"><span>待审核</span></button>
+                </div>
+              </div>
+            </article>
+            <article class="select-card">
+              <h3>空数据</h3>
+              <div class="ds-select ds-select--custom is-open">
+                <button class="ds-select__trigger" type="button" aria-haspopup="listbox" aria-expanded="true">
+                  <span class="ds-select__value"><span class="ds-select__placeholder">请选择</span></span>
+                  <span class="ds-select__arrow">⌄</span>
+                </button>
+                <div class="ds-select__dropdown" role="listbox">
+                  <div class="ds-select__empty">无匹配数据</div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="select-section">
+          <div class="select-section-head">
+            <h2 class="select-section-title">表单行示例</h2>
+            <span class="select-section-meta">Form Field</span>
+          </div>
+          <div class="select-row">
+            <span class="select-label">标题名称</span>
+            <div class="select-panel">
+              <div class="ds-select ds-select--custom js-select-demo">
+                <button class="ds-select__trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+                  <span class="ds-select__value"><span class="ds-select__placeholder">请选择</span></span>
+                  <span class="ds-select__clear" hidden>×</span>
+                  <span class="ds-select__arrow">⌄</span>
+                </button>
+                <div class="ds-select__dropdown" role="listbox" hidden>
+                  <button class="ds-select__option" type="button" data-value="人才项目"><span>人才项目</span></button>
+                  <button class="ds-select__option" type="button" data-value="岗位聘任"><span>岗位聘任</span></button>
+                  <button class="ds-select__option" type="button" data-value="考核评价"><span>考核评价</span></button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </section>
       </div>
     </section>
   </main>
@@ -50,6 +206,39 @@
 <script src="./assets/icon-registry.js"></script>
 <script src="./packages/design-system/src/AppShell/app-shell.js"></script>
 <script>
+  const demoSelect = document.querySelector('.js-select-demo');
+  const trigger = demoSelect.querySelector('.ds-select__trigger');
+  const dropdown = demoSelect.querySelector('.ds-select__dropdown');
+  const valueNode = demoSelect.querySelector('.ds-select__value');
+  const clearNode = demoSelect.querySelector('.ds-select__clear');
+  trigger.addEventListener('click', () => {
+    const open = demoSelect.classList.toggle('is-open');
+    trigger.setAttribute('aria-expanded', String(open));
+    dropdown.hidden = !open;
+  });
+  clearNode.addEventListener('click', (event) => {
+    event.stopPropagation();
+    demoSelect.classList.remove('has-value');
+    valueNode.innerHTML = '<span class="ds-select__placeholder">请选择</span>';
+    clearNode.hidden = true;
+    demoSelect.querySelectorAll('.ds-select__option').forEach((option) => option.classList.remove('is-selected'));
+    demoSelect.querySelectorAll('.ds-select__check').forEach((node) => node.remove());
+  });
+  demoSelect.querySelectorAll('.ds-select__option').forEach((option) => {
+    option.addEventListener('click', () => {
+      demoSelect.classList.add('has-value');
+      valueNode.innerHTML = `<span class="ds-select__text">${option.dataset.value}</span>`;
+      clearNode.hidden = false;
+      demoSelect.querySelectorAll('.ds-select__option').forEach((item) => item.classList.remove('is-selected'));
+      demoSelect.querySelectorAll('.ds-select__check').forEach((node) => node.remove());
+      option.classList.add('is-selected');
+      option.insertAdjacentHTML('beforeend', '<span class="ds-select__check">✓</span>');
+      demoSelect.classList.remove('is-open');
+      trigger.setAttribute('aria-expanded', 'false');
+      dropdown.hidden = true;
+    });
+  });
+
   WiseAppShell.init({
     activeModule: 'doctor',
     secondaryNav: {
