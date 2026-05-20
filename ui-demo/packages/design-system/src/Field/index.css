@@ -43,10 +43,10 @@
 .ds-select__trigger {
   display: inline-flex;
   align-items: center;
-  gap: var(--ds-space-2);
+  gap: var(--ds-space-1);
   width: 100%;
   min-height: var(--ds-control-height-md);
-  padding: 5px var(--ds-space-3);
+  padding: 5px var(--ds-space-2) 5px var(--ds-space-3);
   color: var(--ds-color-text);
   background: var(--ds-color-white);
   border: 1px solid var(--ds-color-border);
@@ -111,25 +111,32 @@
   display: inline-grid;
   flex: none;
   place-items: center;
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   color: var(--ds-color-text-secondary);
-  font-size: 14px;
-  line-height: 16px;
+  font-size: 0;
+  line-height: 0;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 14px 14px;
+}
+
+.ds-select__arrow {
+  background-image: url('../../../../assets/select-icons/arrow-down-s-line.png');
 }
 
 .ds-select.is-open .ds-select__arrow {
-  transform: rotate(180deg);
+  background-image: url('../../../../assets/select-icons/arrow-up-s-line.png');
 }
 
 .ds-select__clear {
   color: var(--ds-color-text-placeholder);
+  background-image: url('../../../../assets/select-icons/close-circle-fill.png');
   border-radius: var(--ds-radius-sm);
 }
 
 .ds-select__clear:hover {
   color: var(--ds-color-text);
-  background: var(--ds-color-hover-mask-strong);
 }
 
 .ds-select__clear[hidden],
@@ -188,7 +195,14 @@
 }
 
 .ds-select__check {
+  display: inline-block;
+  flex: none;
+  width: 14px;
+  height: 14px;
   color: var(--ds-color-primary);
+  font-size: 0;
+  line-height: 0;
+  background: url('../../../../assets/select-icons/icon-wrapper.png') center / 14px 14px no-repeat;
 }
 
 .ds-select__empty {
@@ -219,6 +233,17 @@
   border-radius: var(--ds-radius-sm);
   font-size: var(--ds-font-size-xs);
   line-height: var(--ds-line-height-xs);
+}
+
+.ds-select__tag span:last-child {
+  display: inline-block;
+  flex: none;
+  width: 14px;
+  height: 14px;
+  font-size: 0;
+  line-height: 0;
+  background: url('../../../../assets/select-icons/close-line.png') center / 14px 14px no-repeat;
+  cursor: pointer;
 }
 
 .ds-select__tag span:first-child {
