@@ -31,6 +31,8 @@
     .cascader-label { height: 32px; display: flex; align-items: center; justify-content: flex-end; color: var(--ds-color-text-secondary); font-size: 14px; line-height: 20px; text-align: right; }
     .cascader-message { margin-top: 4px; color: var(--ds-color-text-tertiary); font-size: 12px; line-height: 20px; }
     .cascader-message.is-error { color: var(--ds-color-danger); }
+    .cascader-output { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 8px; margin-top: 12px; padding: 10px 12px; color: var(--ds-color-text-secondary); background: var(--ds-color-bg-subtle); border: 1px solid var(--ds-color-border-secondary); font-size: 12px; line-height: 20px; }
+    .cascader-output strong { color: var(--ds-color-text); font-weight: 500; }
     @media (max-width: 1100px) {
       .cascader-grid { grid-template-columns: 1fr; }
       .cascader-row { grid-template-columns: 1fr; }
@@ -97,8 +99,12 @@
           <div class="cascader-row">
             <span class="cascader-label">所在地区</span>
             <div>
-              <div class="ds-cascader js-cascader" data-placeholder="请选择省 / 市 / 区" data-clearable="true" data-searchable="true"></div>
+              <div class="ds-cascader js-cascader js-cascader-live" data-placeholder="请选择省 / 市 / 区" data-clearable="true" data-searchable="true"></div>
               <p class="cascader-message">支持点击列选择、搜索路径、清除已选值。</p>
+              <div class="cascader-output" aria-live="polite">
+                <span>当前值</span>
+                <strong class="js-cascader-output">未选择</strong>
+              </div>
             </div>
           </div>
         </section>
@@ -175,6 +181,23 @@
       </button>
       ${root.classList.contains('is-open') ? renderPopup(displayPath, state.query, searchable) : ''}
     `;
+    updateCascaderOutput(root, state);
+  }
+
+  function updateCascaderOutput(root, state) {
+    if (!root.classList.contains('js-cascader-live')) return;
+    const output = document.querySelector('.js-cascader-output');
+    if (!output) return;
+    output.textContent = state.selectedPath.length ? state.selectedPath.map((item) => item.label).join(' / ') : '未选择';
+  }
+
+  function closeOtherCascaders(currentRoot) {
+    document.querySelectorAll('.js-cascader.is-open').forEach((root) => {
+      if (root === currentRoot) return;
+      root.classList.remove('is-open');
+      root.querySelector('.ds-cascader__popup')?.remove();
+      root.querySelector('.ds-cascader__trigger')?.setAttribute('aria-expanded', 'false');
+    });
   }
 
   function renderPopup(displayPath, query, searchable) {
@@ -207,6 +230,7 @@
     };
     renderCascader(root, state);
     root.addEventListener('click', (event) => {
+      event.stopPropagation();
       if (root.classList.contains('is-disabled')) return;
       const clear = event.target.closest('.ds-cascader__clear');
       if (clear) {
@@ -221,7 +245,9 @@
 
       const trigger = event.target.closest('.ds-cascader__trigger');
       if (trigger) {
-        root.classList.toggle('is-open');
+        const nextOpen = !root.classList.contains('is-open');
+        closeOtherCascaders(root);
+        root.classList.toggle('is-open', nextOpen);
         renderCascader(root, state);
         return;
       }
@@ -252,6 +278,7 @@
     });
 
     root.addEventListener('input', (event) => {
+      event.stopPropagation();
       if (!event.target.classList.contains('ds-cascader__search')) return;
       state.query = event.target.value;
       renderCascader(root, state);
