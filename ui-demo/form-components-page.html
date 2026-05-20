@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="./packages/design-system/src/base.css" />
   <link rel="stylesheet" href="./packages/design-system/src/AppShell/app-shell.css" />
   <link rel="stylesheet" href="./packages/design-system/src/Radio/index.css" />
+  <link rel="stylesheet" href="./packages/design-system/src/RichTextEditor/index.css" />
   <style>
     .form-page {
       display: flex;
@@ -102,6 +103,10 @@
       align-items: start;
       gap: 16px;
       min-width: 0;
+    }
+
+    .form-item.is-wide {
+      grid-column: 1 / -1;
     }
 
     .form-label {
@@ -904,6 +909,17 @@
                 <input class="ant-input" value="已归档字段不可编辑" disabled />
               </span>
             </label>
+
+            <div class="form-item is-wide">
+              <span class="form-label">富文本</span>
+              <div class="form-control">
+                <div class="ds-richtext js-richtext" data-max="5000">
+                  <div class="ds-richtext__toolbar" role="toolbar" aria-label="富文本工具栏"></div>
+                  <div class="ds-richtext__editor" contenteditable="true" data-placeholder="请输入正文内容"><p>用于演示组件库里的富文本编辑区域和常见工具栏。</p></div>
+                  <div class="ds-richtext__footer"><span class="ds-richtext__hint">支持基础文字、列表、引用、链接和图片内容</span><span class="ds-richtext__counter">0/5000</span></div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -1145,6 +1161,53 @@
     item.innerHTML = `<span>${name}</span><button type="button">删除</button>`;
     list.appendChild(item);
   }
+
+  const richTextTools = [
+    ['undo', 'arrow-go-back-line', '撤销', 'undo'],
+    ['redo', 'arrow-go-forward-line', '重做', 'redo'],
+    ['heading1', 'heading-1', '一级标题', 'formatBlock', 'h1'],
+    ['heading2', 'heading-2', '二级标题', 'formatBlock', 'h2'],
+    ['bold', 'bold', '加粗', 'bold'],
+    ['italic', 'italic', '斜体', 'italic'],
+    ['underline', 'underline', '下划线', 'underline'],
+    ['strike', 'strikethrough', '删除线', 'strikeThrough'],
+    ['ordered', 'list-ordered', '有序列表', 'insertOrderedList'],
+    ['unordered', 'list-unordered', '无序列表', 'insertUnorderedList'],
+    ['quote', 'double-quotes-r', '引用', 'formatBlock', 'blockquote'],
+    ['code', 'code-s-slash-line', '代码', 'formatBlock', 'pre'],
+    ['link', 'link-s', '链接', 'createLink', '#'],
+    ['image', 'image-2-line', '图片', 'insertImage', '']
+  ];
+
+  function updateRichTextCounter(root) {
+    const editor = root.querySelector('.ds-richtext__editor');
+    const counter = root.querySelector('.ds-richtext__counter');
+    const max = root.dataset.max || '5000';
+    counter.textContent = `${editor.textContent.trim().length}/${max}`;
+  }
+
+  document.querySelectorAll('.js-richtext').forEach((root) => {
+    const toolbar = root.querySelector('.ds-richtext__toolbar');
+    const editor = root.querySelector('.ds-richtext__editor');
+    richTextTools.forEach(([key, icon, label, command, value]) => {
+      const button = document.createElement('button');
+      button.className = 'ds-richtext__tool';
+      button.type = 'button';
+      button.title = label;
+      button.setAttribute('aria-label', label);
+      button.dataset.icon = icon;
+      button.disabled = root.classList.contains('is-disabled');
+      button.addEventListener('click', () => {
+        if (root.classList.contains('is-disabled')) return;
+        editor.focus();
+        document.execCommand(command, false, value);
+        updateRichTextCounter(root);
+      });
+      toolbar.appendChild(button);
+    });
+    editor.addEventListener('input', () => updateRichTextCounter(root));
+    updateRichTextCounter(root);
+  });
 
   document.querySelectorAll('.js-dragger').forEach((dragger) => {
     dragger.addEventListener('dragover', (event) => {

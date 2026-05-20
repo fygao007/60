@@ -214,6 +214,7 @@ import {
 - `DSInput`
 - `DSSelect`
 - `DSRadioGroup`
+- `DSRichTextEditor`
 - `DSTextarea`
 - `DSTag`
 - `DSSwitch`
@@ -225,11 +226,12 @@ import {
 - `docs/anchor.md`：MasterGo 锚点设计链接与落地规则。
 - `docs/select.md`：MasterGo 选择器设计链接与落地规则。
 - `docs/radio.md`：MasterGo 单选设计链接与落地规则。
+- `docs/rich-text-editor.md`：MasterGo 富文本编辑器设计链接与落地规则。
 
 HTML 表单预览：
 
 - 完整表单页：`ui-demo/form-components-page.html`
-- 状态页：`ui-demo/form-input-states.html`、`ui-demo/form-select-states.html`、`ui-demo/form-textarea-states.html`
+- 状态页：`ui-demo/form-input-states.html`、`ui-demo/form-select-states.html`、`ui-demo/form-textarea-states.html`、`ui-demo/form-rich-text-editor-states.html`
 - 选项页：`ui-demo/form-radio-group-states.html`、`ui-demo/form-checkbox-group-states.html`、`ui-demo/form-switch-states.html`
 - 日期时间页：`ui-demo/form-date-picker-states.html`、`ui-demo/form-date-range-states.html`、`ui-demo/form-time-picker-states.html`、`ui-demo/form-time-range-states.html`、`ui-demo/form-datetime-picker-states.html`、`ui-demo/form-datetime-range-states.html`
 - 上传页：`ui-demo/form-upload-button-states.html`、`ui-demo/form-upload-dragger-states.html`
