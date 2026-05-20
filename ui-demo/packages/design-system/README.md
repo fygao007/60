@@ -213,6 +213,7 @@ import {
 - `DSField`
 - `DSInput`
 - `DSSelect`
+- `DSRadioGroup`
 - `DSTextarea`
 - `DSTag`
 - `DSSwitch`
@@ -223,6 +224,7 @@ import {
 - `docs/button-group.md`：MasterGo《📌【PC】基础控件 / ButtonGroup》设计链接与落地规则。
 - `docs/anchor.md`：MasterGo 锚点设计链接与落地规则。
 - `docs/select.md`：MasterGo 选择器设计链接与落地规则。
+- `docs/radio.md`：MasterGo 单选设计链接与落地规则。
 
 HTML 表单预览：
 
