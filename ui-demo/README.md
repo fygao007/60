@@ -40,6 +40,7 @@
 - `form-components-page.html`：完整表单页面，整合输入、下拉、日期时间、单选、多选、开关、上传等控件。
 - `form-input-states.html`：录入输入框状态。
 - `form-select-states.html`：下拉选择状态。
+- `form-cascader-states.html`：级联选择器状态。
 - `form-textarea-states.html`：文本域状态。
 - `form-rich-text-editor-states.html`：富文本编辑器状态。
 - `form-radio-group-states.html`：单选组状态。
@@ -58,7 +59,7 @@
 
 ## 60 组件库当前覆盖
 
-- 基础：`DSAnchor`、`DSButton`、`DSButtonGroup`、`DSLinkButton`、`DSLinkButtonGroup`、`DSSteps`、`DSIconButton`、`DSField`、`DSInput`、`DSSelect`、`DSTextarea`、`DSRichTextEditor`、`DSTag`。
+- 基础：`DSAnchor`、`DSButton`、`DSButtonGroup`、`DSLinkButton`、`DSLinkButtonGroup`、`DSSteps`、`DSIconButton`、`DSField`、`DSInput`、`DSSelect`、`DSCascader`、`DSTextarea`、`DSRichTextEditor`、`DSTag`。
 - 布局：`DSAppShell`、`DSPageHeader`、`DSCard`、`DSTabs`。
 - 数据：`DSFilterBar`、`DSDataTable`、`DSParentChildTable`、`DSPagination`、`DSEmptyState`。
 - 浮层：`DSModal`、`DSDrawer`。
