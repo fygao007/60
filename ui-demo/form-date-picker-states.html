@@ -221,6 +221,8 @@
   }
 
   function renderDatePanel(state) {
+    if (state.panelMode === 'month') return renderDateMonthSelectPanel(state);
+    if (state.panelMode === 'year') return renderDateYearSelectPanel(state);
     const todayValue = formatDateValue(new Date());
     const currentMonth = state.viewDate.getMonth();
     const days = monthDays(state.viewDate);
@@ -228,7 +230,7 @@
       <div class="ds-date-picker__panel">
         <div class="ds-date-picker__header">
           <button class="ds-date-picker__nav js-date-prev" type="button" aria-label="上个月">‹</button>
-          <span class="ds-date-picker__title">${state.viewDate.getFullYear()} 年 ${state.viewDate.getMonth() + 1} 月</span>
+          <button class="ds-date-picker__title-button js-date-title" type="button">${state.viewDate.getFullYear()} 年 ${state.viewDate.getMonth() + 1} 月</button>
           <button class="ds-date-picker__nav js-date-next" type="button" aria-label="下个月">›</button>
         </div>
         <div class="ds-date-picker__grid">
@@ -252,6 +254,33 @@
     `;
   }
 
+  function renderDateMonthSelectPanel(state) {
+    return `
+      <div class="ds-date-picker__panel">
+        <div class="ds-date-picker__header">
+          <button class="ds-date-picker__nav js-date-month-prev" type="button" aria-label="上一年">«</button>
+          <button class="ds-date-picker__title-button js-date-year-title" type="button">${state.viewDate.getFullYear()} 年</button>
+          <button class="ds-date-picker__nav js-date-month-next" type="button" aria-label="下一年">»</button>
+        </div>
+        ${renderMonthGrid(state.viewDate.getFullYear(), { draftValue: `${state.viewDate.getFullYear()}-${padDatePart(state.viewDate.getMonth() + 1)}` }, false)}
+      </div>
+    `;
+  }
+
+  function renderDateYearSelectPanel(state) {
+    const start = yearRangeStart(state.viewDate.getFullYear());
+    return `
+      <div class="ds-date-picker__panel">
+        <div class="ds-date-picker__header">
+          <button class="ds-date-picker__nav js-date-year-prev" type="button" aria-label="上一组年份">«</button>
+          <span class="ds-date-picker__title">${start} 年 - ${start + 11} 年</span>
+          <button class="ds-date-picker__nav js-date-year-next" type="button" aria-label="下一组年份">»</button>
+        </div>
+        ${renderYearGrid(start, { draftValue: String(state.viewDate.getFullYear()) }, false)}
+      </div>
+    `;
+  }
+
   function closeOtherDatePickers(currentRoot) {
     document.querySelectorAll('.js-date-picker.is-open').forEach((root) => {
       if (root === currentRoot) return;
@@ -266,7 +295,8 @@
     const state = {
       value: root.dataset.value || '',
       draftValue: root.dataset.value || '',
-      viewDate: selectedDate || new Date()
+      viewDate: selectedDate || new Date(),
+      panelMode: 'date'
     };
     renderDatePicker(root, state);
 
@@ -289,12 +319,66 @@
         root.classList.toggle('is-open', nextOpen);
         state.draftValue = state.value;
         state.viewDate = parseDateValue(state.value) || state.viewDate || new Date();
+        state.panelMode = 'date';
+        renderDatePicker(root, state);
+        return;
+      }
+
+      if (event.target.closest('.js-date-title')) {
+        state.panelMode = 'month';
+        renderDatePicker(root, state);
+        return;
+      }
+
+      if (event.target.closest('.js-date-year-title')) {
+        state.panelMode = 'year';
+        renderDatePicker(root, state);
+        return;
+      }
+
+      if (event.target.closest('.js-date-month-prev')) {
+        state.viewDate = new Date(state.viewDate.getFullYear() - 1, state.viewDate.getMonth(), 1);
+        renderDatePicker(root, state);
+        return;
+      }
+
+      if (event.target.closest('.js-date-month-next')) {
+        state.viewDate = new Date(state.viewDate.getFullYear() + 1, state.viewDate.getMonth(), 1);
+        renderDatePicker(root, state);
+        return;
+      }
+
+      if (event.target.closest('.js-date-year-prev')) {
+        state.viewDate = new Date(state.viewDate.getFullYear() - 12, state.viewDate.getMonth(), 1);
+        renderDatePicker(root, state);
+        return;
+      }
+
+      if (event.target.closest('.js-date-year-next')) {
+        state.viewDate = new Date(state.viewDate.getFullYear() + 12, state.viewDate.getMonth(), 1);
         renderDatePicker(root, state);
         return;
       }
 
       if (event.target.closest('.js-date-prev')) {
         state.viewDate = new Date(state.viewDate.getFullYear(), state.viewDate.getMonth() - 1, 1);
+        renderDatePicker(root, state);
+        return;
+      }
+
+      const monthCell = event.target.closest('[data-month]');
+      if (monthCell && state.panelMode === 'month') {
+        const [, month] = monthCell.dataset.month.split('-').map(Number);
+        state.viewDate = new Date(state.viewDate.getFullYear(), month - 1, 1);
+        state.panelMode = 'date';
+        renderDatePicker(root, state);
+        return;
+      }
+
+      const yearCell = event.target.closest('[data-year]');
+      if (yearCell && state.panelMode === 'year') {
+        state.viewDate = new Date(Number(yearCell.dataset.year), state.viewDate.getMonth(), 1);
+        state.panelMode = 'month';
         renderDatePicker(root, state);
         return;
       }
@@ -384,6 +468,8 @@
   }
 
   function renderDateRangePanel(state) {
+    if (state.panelMode === 'month') return renderDateRangeMonthSelectPanel(state);
+    if (state.panelMode === 'year') return renderDateRangeYearSelectPanel(state);
     const nextMonth = new Date(state.viewDate.getFullYear(), state.viewDate.getMonth() + 1, 1);
     return `
       <div class="ds-date-picker__panel ds-date-picker__panel--wide">
@@ -392,7 +478,7 @@
             <div class="ds-date-picker__header">
               <button class="ds-date-picker__nav js-range-prev-year" type="button" aria-label="上一年">«</button>
               <button class="ds-date-picker__nav js-range-prev" type="button" aria-label="上个月">‹</button>
-              <span class="ds-date-picker__title">${state.viewDate.getFullYear()} 年 ${state.viewDate.getMonth() + 1} 月</span>
+              <button class="ds-date-picker__title-button js-range-title" type="button">${state.viewDate.getFullYear()} 年 ${state.viewDate.getMonth() + 1} 月</button>
               <span class="ds-date-picker__nav" aria-hidden="true"></span>
               <span class="ds-date-picker__nav" aria-hidden="true"></span>
             </div>
@@ -402,11 +488,64 @@
             <div class="ds-date-picker__header">
               <span class="ds-date-picker__nav" aria-hidden="true"></span>
               <span class="ds-date-picker__nav" aria-hidden="true"></span>
-              <span class="ds-date-picker__title">${nextMonth.getFullYear()} 年 ${nextMonth.getMonth() + 1} 月</span>
+              <button class="ds-date-picker__title-button js-range-title" type="button">${nextMonth.getFullYear()} 年 ${nextMonth.getMonth() + 1} 月</button>
               <button class="ds-date-picker__nav js-range-next" type="button" aria-label="下个月">›</button>
               <button class="ds-date-picker__nav js-range-next-year" type="button" aria-label="下一年">»</button>
             </div>
             ${renderDateRangeMonth(nextMonth, state)}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderDateRangeMonthSelectPanel(state) {
+    const nextYear = state.viewDate.getFullYear() + 1;
+    return `
+      <div class="ds-date-picker__panel ds-date-picker__panel--wide">
+        <div class="ds-date-picker__panels">
+          <div class="ds-date-picker__subpanel">
+            <div class="ds-date-picker__header">
+              <button class="ds-date-picker__nav js-range-month-prev" type="button">«</button>
+              <button class="ds-date-picker__title-button js-range-year-title" type="button">${state.viewDate.getFullYear()} 年</button>
+              <span class="ds-date-picker__nav" aria-hidden="true"></span>
+            </div>
+            ${renderMonthGrid(state.viewDate.getFullYear(), { draftValue: `${state.viewDate.getFullYear()}-${padDatePart(state.viewDate.getMonth() + 1)}` }, false)}
+          </div>
+          <div class="ds-date-picker__subpanel">
+            <div class="ds-date-picker__header">
+              <span class="ds-date-picker__nav" aria-hidden="true"></span>
+              <button class="ds-date-picker__title-button js-range-year-title" type="button">${nextYear} 年</button>
+              <button class="ds-date-picker__nav js-range-month-next" type="button">»</button>
+            </div>
+            ${renderMonthGrid(nextYear, { draftValue: `${state.viewDate.getFullYear()}-${padDatePart(state.viewDate.getMonth() + 1)}` }, false)}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderDateRangeYearSelectPanel(state) {
+    const start = yearRangeStart(state.viewDate.getFullYear());
+    const secondStart = start + 12;
+    return `
+      <div class="ds-date-picker__panel ds-date-picker__panel--wide">
+        <div class="ds-date-picker__panels">
+          <div class="ds-date-picker__subpanel">
+            <div class="ds-date-picker__header">
+              <button class="ds-date-picker__nav js-range-year-panel-prev" type="button">«</button>
+              <span class="ds-date-picker__title">${start} 年 - ${start + 11} 年</span>
+              <span class="ds-date-picker__nav" aria-hidden="true"></span>
+            </div>
+            ${renderYearGrid(start, { draftValue: String(state.viewDate.getFullYear()) }, false)}
+          </div>
+          <div class="ds-date-picker__subpanel">
+            <div class="ds-date-picker__header">
+              <span class="ds-date-picker__nav" aria-hidden="true"></span>
+              <span class="ds-date-picker__title">${secondStart} 年 - ${secondStart + 11} 年</span>
+              <button class="ds-date-picker__nav js-range-year-panel-next" type="button">»</button>
+            </div>
+            ${renderYearGrid(secondStart, { draftValue: String(state.viewDate.getFullYear()) }, false)}
           </div>
         </div>
       </div>
@@ -428,7 +567,8 @@
       start: root.dataset.start || '',
       end: root.dataset.end || '',
       step: root.dataset.start && !root.dataset.end ? 'end' : 'start',
-      viewDate: selectedStart || new Date(2025, 2, 1)
+      viewDate: selectedStart || new Date(2025, 2, 1),
+      panelMode: 'date'
     };
     renderDateRangePicker(root, state);
 
@@ -447,14 +587,36 @@
         closeOtherDatePickers(root);
         closeOtherRangePickers(root);
         root.classList.toggle('is-open', nextOpen);
+        state.panelMode = 'date';
         renderDateRangePicker(root, state);
         return;
       }
-      if (event.target.closest('.js-range-prev-year')) state.viewDate = new Date(state.viewDate.getFullYear() - 1, state.viewDate.getMonth(), 1);
+      if (event.target.closest('.js-range-title')) { state.panelMode = 'month'; }
+      else if (event.target.closest('.js-range-year-title')) { state.panelMode = 'year'; }
+      else if (event.target.closest('.js-range-month-prev')) state.viewDate = new Date(state.viewDate.getFullYear() - 1, state.viewDate.getMonth(), 1);
+      else if (event.target.closest('.js-range-month-next')) state.viewDate = new Date(state.viewDate.getFullYear() + 1, state.viewDate.getMonth(), 1);
+      else if (event.target.closest('.js-range-year-panel-prev')) state.viewDate = new Date(state.viewDate.getFullYear() - 12, state.viewDate.getMonth(), 1);
+      else if (event.target.closest('.js-range-year-panel-next')) state.viewDate = new Date(state.viewDate.getFullYear() + 12, state.viewDate.getMonth(), 1);
+      else if (event.target.closest('.js-range-prev-year')) state.viewDate = new Date(state.viewDate.getFullYear() - 1, state.viewDate.getMonth(), 1);
       else if (event.target.closest('.js-range-next-year')) state.viewDate = new Date(state.viewDate.getFullYear() + 1, state.viewDate.getMonth(), 1);
       else if (event.target.closest('.js-range-prev')) state.viewDate = new Date(state.viewDate.getFullYear(), state.viewDate.getMonth() - 1, 1);
       else if (event.target.closest('.js-range-next')) state.viewDate = new Date(state.viewDate.getFullYear(), state.viewDate.getMonth() + 1, 1);
       else {
+        const month = event.target.closest('[data-month]');
+        if (month && state.panelMode === 'month') {
+          const [year, monthIndex] = month.dataset.month.split('-').map(Number);
+          state.viewDate = new Date(year, monthIndex - 1, 1);
+          state.panelMode = 'date';
+          renderDateRangePicker(root, state);
+          return;
+        }
+        const year = event.target.closest('[data-year]');
+        if (year && state.panelMode === 'year') {
+          state.viewDate = new Date(Number(year.dataset.year), state.viewDate.getMonth(), 1);
+          state.panelMode = 'month';
+          renderDateRangePicker(root, state);
+          return;
+        }
         const day = event.target.closest('.ds-date-picker__day');
         if (!day) return;
         const value = day.dataset.date;
@@ -505,13 +667,14 @@
   }
 
   function renderMonthLikePanel(state, isRange) {
+    if (state.panelMode === 'year') return renderMonthYearSelectPanel(state, isRange);
     const nextYear = state.viewYear + 1;
     if (!isRange) {
       return `
         <div class="ds-date-picker__panel">
           <div class="ds-date-picker__header">
             <button class="ds-date-picker__nav js-month-prev" type="button">«</button>
-            <span class="ds-date-picker__title">${state.viewYear} 年</span>
+            <button class="ds-date-picker__title-button js-month-title" type="button">${state.viewYear} 年</button>
             <button class="ds-date-picker__nav js-month-next" type="button">»</button>
           </div>
           ${renderMonthGrid(state.viewYear, state, isRange)}
@@ -524,7 +687,7 @@
           <div class="ds-date-picker__subpanel">
             <div class="ds-date-picker__header">
               <button class="ds-date-picker__nav js-month-prev" type="button">«</button>
-              <span class="ds-date-picker__title">${state.viewYear} 年</span>
+              <button class="ds-date-picker__title-button js-month-title" type="button">${state.viewYear} 年</button>
               <span class="ds-date-picker__nav" aria-hidden="true"></span>
             </div>
             ${renderMonthGrid(state.viewYear, state, isRange)}
@@ -532,7 +695,7 @@
           <div class="ds-date-picker__subpanel">
             <div class="ds-date-picker__header">
               <span class="ds-date-picker__nav" aria-hidden="true"></span>
-              <span class="ds-date-picker__title">${nextYear} 年</span>
+              <button class="ds-date-picker__title-button js-month-title" type="button">${nextYear} 年</button>
               <button class="ds-date-picker__nav js-month-next" type="button">»</button>
             </div>
             ${renderMonthGrid(nextYear, state, isRange)}
@@ -542,9 +705,48 @@
     `;
   }
 
+  function renderMonthYearSelectPanel(state, isRange) {
+    const start = yearRangeStart(state.viewYear);
+    const secondStart = start + 12;
+    if (!isRange) {
+      return `
+        <div class="ds-date-picker__panel">
+          <div class="ds-date-picker__header">
+            <button class="ds-date-picker__nav js-month-year-prev" type="button">«</button>
+            <span class="ds-date-picker__title">${start} 年 - ${start + 11} 年</span>
+            <button class="ds-date-picker__nav js-month-year-next" type="button">»</button>
+          </div>
+          ${renderYearGrid(start, { draftValue: String(state.viewYear) }, false)}
+        </div>
+      `;
+    }
+    return `
+      <div class="ds-date-picker__panel ds-date-picker__panel--wide">
+        <div class="ds-date-picker__panels">
+          <div class="ds-date-picker__subpanel">
+            <div class="ds-date-picker__header">
+              <button class="ds-date-picker__nav js-month-year-prev" type="button">«</button>
+              <span class="ds-date-picker__title">${start} 年 - ${start + 11} 年</span>
+              <span class="ds-date-picker__nav" aria-hidden="true"></span>
+            </div>
+            ${renderYearGrid(start, { draftValue: String(state.viewYear) }, false)}
+          </div>
+          <div class="ds-date-picker__subpanel">
+            <div class="ds-date-picker__header">
+              <span class="ds-date-picker__nav" aria-hidden="true"></span>
+              <span class="ds-date-picker__title">${secondStart} 年 - ${secondStart + 11} 年</span>
+              <button class="ds-date-picker__nav js-month-year-next" type="button">»</button>
+            </div>
+            ${renderYearGrid(secondStart, { draftValue: String(state.viewYear) }, false)}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
   function initMonthPicker(root, isRange) {
     const baseYear = Number((root.dataset.value || root.dataset.start || '2025').slice(0, 4)) || 2025;
-    const state = isRange ? { start: root.dataset.start || '', end: root.dataset.end || '', viewYear: baseYear } : { value: root.dataset.value || '', draftValue: root.dataset.value || '', viewYear: baseYear };
+    const state = isRange ? { start: root.dataset.start || '', end: root.dataset.end || '', viewYear: baseYear, panelMode: 'month' } : { value: root.dataset.value || '', draftValue: root.dataset.value || '', viewYear: baseYear, panelMode: 'month' };
     renderMonthLikePicker(root, state, isRange);
     root.addEventListener('click', (event) => {
       event.stopPropagation();
@@ -560,12 +762,23 @@
         closeOtherRangePickers(root);
         root.classList.toggle('is-open', nextOpen);
         if (!isRange) state.draftValue = state.value;
+        state.panelMode = 'month';
         renderMonthLikePicker(root, state, isRange);
         return;
       }
-      if (event.target.closest('.js-month-prev')) state.viewYear -= 1;
+      if (event.target.closest('.js-month-title')) state.panelMode = 'year';
+      else if (event.target.closest('.js-month-year-prev')) state.viewYear -= 12;
+      else if (event.target.closest('.js-month-year-next')) state.viewYear += 12;
+      else if (event.target.closest('.js-month-prev')) state.viewYear -= 1;
       else if (event.target.closest('.js-month-next')) state.viewYear += 1;
       else {
+        const year = event.target.closest('[data-year]');
+        if (year && state.panelMode === 'year') {
+          state.viewYear = Number(year.dataset.year);
+          state.panelMode = 'month';
+          renderMonthLikePicker(root, state, isRange);
+          return;
+        }
         const month = event.target.closest('[data-month]');
         if (!month) return;
         const value = month.dataset.month;

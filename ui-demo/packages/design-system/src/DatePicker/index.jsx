@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import './index.css'
 
 const weekLabels = ['一', '二', '三', '四', '五', '六', '日']
+const monthLabels = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
 
 function pad(value) {
   return String(value).padStart(2, '0')
@@ -31,6 +32,10 @@ function getMonthDays(viewDate) {
   })
 }
 
+function yearRangeStart(year) {
+  return Math.floor((year - 2020) / 12) * 12 + 2020
+}
+
 export default function DSDatePicker({
   value,
   defaultValue,
@@ -49,12 +54,14 @@ export default function DSDatePicker({
   const selectedDate = useMemo(() => parseDate(currentValue), [currentValue])
   const [viewDate, setViewDate] = useState(selectedDate || new Date())
   const [draftValue, setDraftValue] = useState(currentValue || '')
+  const [panelMode, setPanelMode] = useState('date')
   const todayValue = formatDate(new Date())
 
   useEffect(() => {
     if (!open) return
     setDraftValue(currentValue || '')
     setViewDate(selectedDate || new Date())
+    setPanelMode('date')
   }, [open, currentValue, selectedDate])
 
   useEffect(() => {
@@ -104,6 +111,102 @@ export default function DSDatePicker({
     setOpen(false)
   }
 
+  const renderPanelBody = () => {
+    if (panelMode === 'year') {
+      const start = yearRangeStart(viewDate.getFullYear())
+      return (
+        <>
+          <div className="ds-date-picker__header">
+            <button className="ds-date-picker__nav" type="button" aria-label="上一组年份" onClick={() => setViewDate(new Date(viewDate.getFullYear() - 12, viewDate.getMonth(), 1))}>«</button>
+            <span className="ds-date-picker__title">{start} 年 - {start + 11} 年</span>
+            <button className="ds-date-picker__nav" type="button" aria-label="下一组年份" onClick={() => setViewDate(new Date(viewDate.getFullYear() + 12, viewDate.getMonth(), 1))}>»</button>
+          </div>
+          <div className="ds-date-picker__year-grid">
+            {Array.from({ length: 12 }, (_, index) => start + index).map((year) => (
+              <button
+                className={['ds-date-picker__cell', year === viewDate.getFullYear() && 'is-selected'].filter(Boolean).join(' ')}
+                type="button"
+                key={year}
+                onClick={() => {
+                  setViewDate(new Date(year, viewDate.getMonth(), 1))
+                  setPanelMode('month')
+                }}
+              >
+                {year}
+              </button>
+            ))}
+          </div>
+        </>
+      )
+    }
+
+    if (panelMode === 'month') {
+      const currentMonthValue = `${viewDate.getFullYear()}-${pad(viewDate.getMonth() + 1)}`
+      return (
+        <>
+          <div className="ds-date-picker__header">
+            <button className="ds-date-picker__nav" type="button" aria-label="上一年" onClick={() => setViewDate(new Date(viewDate.getFullYear() - 1, viewDate.getMonth(), 1))}>«</button>
+            <button className="ds-date-picker__title-button" type="button" onClick={() => setPanelMode('year')}>{viewDate.getFullYear()} 年</button>
+            <button className="ds-date-picker__nav" type="button" aria-label="下一年" onClick={() => setViewDate(new Date(viewDate.getFullYear() + 1, viewDate.getMonth(), 1))}>»</button>
+          </div>
+          <div className="ds-date-picker__month-grid">
+            {monthLabels.map((label, index) => {
+              const monthValue = `${viewDate.getFullYear()}-${pad(index + 1)}`
+              return (
+                <button
+                  className={['ds-date-picker__cell', monthValue === currentMonthValue && 'is-selected'].filter(Boolean).join(' ')}
+                  type="button"
+                  key={label}
+                  onClick={() => {
+                    setViewDate(new Date(viewDate.getFullYear(), index, 1))
+                    setPanelMode('date')
+                  }}
+                >
+                  {label}
+                </button>
+              )
+            })}
+          </div>
+        </>
+      )
+    }
+
+    return (
+      <>
+        <div className="ds-date-picker__header">
+          <button className="ds-date-picker__nav" type="button" aria-label="上个月" onClick={() => setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1))}>‹</button>
+          <button className="ds-date-picker__title-button" type="button" onClick={() => setPanelMode('month')}>{viewDate.getFullYear()} 年 {viewDate.getMonth() + 1} 月</button>
+          <button className="ds-date-picker__nav" type="button" aria-label="下个月" onClick={() => setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1))}>›</button>
+        </div>
+        <div className="ds-date-picker__grid">
+          {weekLabels.map((label) => <span className="ds-date-picker__week" key={label}>{label}</span>)}
+          {days.map((date) => {
+            const dateValue = formatDate(date)
+            return (
+              <button
+                className={[
+                  'ds-date-picker__day',
+                  date.getMonth() !== currentMonth && 'is-muted',
+                  dateValue === todayValue && 'is-today',
+                  dateValue === draftValue && 'is-selected',
+                ].filter(Boolean).join(' ')}
+                type="button"
+                key={dateValue}
+                onClick={() => selectDraftDate(date)}
+              >
+                {date.getDate()}
+              </button>
+            )
+          })}
+        </div>
+        <div className="ds-date-picker__footer">
+          <button className="ds-date-picker__link" type="button" onClick={useToday}>今天</button>
+          <button className="ds-date-picker__confirm" type="button" onClick={confirmValue}>确定</button>
+        </div>
+      </>
+    )
+  }
+
   const classes = [
     'ds-date-picker',
     open && 'is-open',
@@ -132,36 +235,7 @@ export default function DSDatePicker({
       </button>
       {open && (
         <div className="ds-date-picker__panel">
-          <div className="ds-date-picker__header">
-            <button className="ds-date-picker__nav" type="button" aria-label="上个月" onClick={() => setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1))}>‹</button>
-            <span className="ds-date-picker__title">{viewDate.getFullYear()} 年 {viewDate.getMonth() + 1} 月</span>
-            <button className="ds-date-picker__nav" type="button" aria-label="下个月" onClick={() => setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1))}>›</button>
-          </div>
-          <div className="ds-date-picker__grid">
-            {weekLabels.map((label) => <span className="ds-date-picker__week" key={label}>{label}</span>)}
-            {days.map((date) => {
-              const dateValue = formatDate(date)
-              return (
-                <button
-                  className={[
-                    'ds-date-picker__day',
-                    date.getMonth() !== currentMonth && 'is-muted',
-                    dateValue === todayValue && 'is-today',
-                    dateValue === draftValue && 'is-selected',
-                  ].filter(Boolean).join(' ')}
-                  type="button"
-                  key={dateValue}
-                  onClick={() => selectDraftDate(date)}
-                >
-                  {date.getDate()}
-                </button>
-              )
-            })}
-          </div>
-          <div className="ds-date-picker__footer">
-            <button className="ds-date-picker__link" type="button" onClick={useToday}>今天</button>
-            <button className="ds-date-picker__confirm" type="button" onClick={confirmValue}>确定</button>
-          </div>
+          {renderPanelBody()}
         </div>
       )}
     </div>

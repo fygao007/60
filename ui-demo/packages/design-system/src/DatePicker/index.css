@@ -129,6 +129,23 @@
   line-height: var(--ds-line-height-md);
 }
 
+.ds-date-picker__title-button {
+  height: 28px;
+  padding: 0 var(--ds-space-2);
+  color: var(--ds-color-text);
+  background: transparent;
+  border: 0;
+  border-radius: var(--ds-radius-sm);
+  font: inherit;
+  font-weight: var(--ds-font-weight-semibold);
+  cursor: pointer;
+}
+
+.ds-date-picker__title-button:hover {
+  color: var(--ds-color-primary);
+  background: var(--ds-color-bg-hover);
+}
+
 .ds-date-picker__nav {
   display: inline-grid;
   place-items: center;
