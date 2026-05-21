@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>框架2</title>
+  <link rel="stylesheet" href="./packages/design-system/src/base.css" />
+  <link rel="stylesheet" href="./packages/design-system/src/AppShellV2/app-shell-v2.css" />
+  <style>
+    body { margin: 0; }
+    .frame2-demo-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--ds-space-3); margin-bottom: var(--ds-space-4); }
+    .frame2-demo-card { min-height: 88px; padding: var(--ds-space-4); background: var(--ds-color-bg-subtle); border: 1px solid var(--ds-color-border-secondary); border-radius: var(--ds-radius-md); }
+    .frame2-demo-card span { color: var(--ds-color-text-tertiary); font-size: var(--ds-font-size-xs); line-height: var(--ds-line-height-xs); }
+    .frame2-demo-card strong { display: block; margin-top: var(--ds-space-1); font-size: var(--ds-font-size-title); line-height: var(--ds-line-height-title); }
+    .frame2-demo-table { width: 100%; border: 1px solid var(--ds-color-border-secondary); border-collapse: collapse; font-size: var(--ds-font-size-md); line-height: var(--ds-line-height-md); }
+    .frame2-demo-table th, .frame2-demo-table td { height: 44px; padding: 0 var(--ds-space-3); border-bottom: 1px solid var(--ds-color-border-secondary); text-align: left; }
+    .frame2-demo-table th { background: var(--ds-color-bg-subtle); font-weight: var(--ds-font-weight-semibold); }
+  </style>
+</head>
+<body>
+<div class="frame2-stage ds-scope">
+  <header class="frame2-page-head">
+    <div class="frame2-page-title">
+      <h1 data-frame2-title>功能索引</h1>
+      <p>框架2独立预览。设计来源记录：mastergo://getd2c/193705377860925-21-112711</p>
+    </div>
+    <div class="frame2-action-row">
+      <a class="ds-link-button" href="./primary-nav.html">查看框架1</a>
+      <a class="ds-link-button" href="./component-library-index.html">返回索引</a>
+    </div>
+  </header>
+  <div class="frame2-content-body">
+    <section class="frame2-demo-grid">
+      <article class="frame2-demo-card"><span>版本</span><strong>框架2</strong></article>
+      <article class="frame2-demo-card"><span>布局</span><strong>顶部主导航</strong></article>
+      <article class="frame2-demo-card"><span>侧栏</span><strong>可收起</strong></article>
+      <article class="frame2-demo-card"><span>状态</span><strong>新增独立版</strong></article>
+    </section>
+    <table class="frame2-demo-table">
+      <thead><tr><th>业务编号</th><th>业务名称</th><th>所属模块</th><th>状态</th><th>更新时间</th></tr></thead>
+      <tbody>
+        <tr><td>F2-001</td><td>框架2首页布局</td><td>组件库</td><td><span class="ds-tag" style="background: var(--ds-color-success-light); color: var(--ds-color-success-active)">已启用</span></td><td>2026-05-21</td></tr>
+        <tr><td>F2-002</td><td>横向主模块切换</td><td>框架</td><td><span class="ds-tag" style="background: var(--ds-color-primary-selected); color: var(--ds-color-primary)">进行中</span></td><td>2026-05-21</td></tr>
+        <tr><td>F2-003</td><td>侧栏折叠状态</td><td>框架</td><td><span class="ds-tag" style="background: var(--ds-color-bg-disabled); color: var(--ds-color-text-secondary)">待确认</span></td><td>2026-05-21</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script src="./assets/icon-registry.js"></script>
+<script src="./packages/design-system/src/AppShellV2/app-shell-v2.js"></script>
+<script>
+  WiseAppShellV2.init({
+    activeModule: 'doctor',
+    systemName: '60系统',
+    versionLabel: '框架2',
+    secondaryNav: {
+      title: '组件库',
+      items: ['功能索引', '当前组件', 'Ant目录', '组件总览', '表单', '表格', '框架1', '框架2']
+    },
+    activeFeature: '框架2',
+    tabs: ['功能索引', '当前组件', 'Ant目录', '组件总览', '表单', '表格', '框架2'],
+    onFeatureChange(feature) {
+      const routes = {
+        '功能索引': './component-library-index.html',
+        '当前组件': './current-components-index.html',
+        'Ant目录': './all-components-index.html',
+        '组件总览': './ant-components-page.html',
+        '表单': './form-components-page.html',
+        '表格': './basic-table-page.html',
+        '框架1': './primary-nav.html',
+        '框架2': './framework-2.html'
+      };
+      if (routes[feature] && feature !== '框架2') window.location.href = routes[feature];
+    }
+  });
+</script>
+</body>
+</html>
