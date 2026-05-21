@@ -1,29 +1,66 @@
 (function () {
-  const MODULES = [
-    { key: 'home', icon: 'home', label: '首页' },
-    { key: 'prepare', icon: 'prepare', label: '准备工作' },
-    { key: 'master', icon: 'master', label: '硕士' },
-    { key: 'doctor', icon: 'doctor', label: '博士' },
-    { key: 'camp', icon: 'camp', label: '夏令营' },
-    { key: 'recommend', icon: 'recommend', label: '推免' },
-    { key: 'hkmt', icon: 'hkmt', label: '港澳台' },
-    { key: 'exam', icon: 'exam', label: '考务管理' }
+  const DEFAULT_APPS = [
+    { key: 'portal', icon: 'home', label: '门户' },
+    { key: 'admission', label: '招生应用', apps: [
+      { key: 'prepare', icon: 'prepare', label: '准备工作' },
+      { key: 'master', icon: 'master', label: '硕士招生' },
+      { key: 'doctor', icon: 'doctor', label: '博士招生' },
+      { key: 'camp', icon: 'camp', label: '夏令营' }
+    ] },
+    { key: 'recommend', icon: 'recommend', label: '推免管理' },
+    { key: 'student', label: '学生服务', apps: [
+      { key: 'hkmt', icon: 'hkmt', label: '港澳台' },
+      { key: 'exam', icon: 'exam', label: '考务管理' }
+    ] }
   ];
 
-  function renderModules(activeModule) {
-    return MODULES.map((item) => `
-      <button class="frame2-module${item.key === activeModule ? ' is-active' : ''}" type="button" data-module="${item.key}">
-        <span class="frame2-module-icon"><span class="wise-icon" data-wise-icon="${item.icon}"></span></span>
-        <span>${item.label}</span>
-      </button>
-    `).join('');
+  function shortLabel(label) {
+    const text = String(label || '');
+    return text.length > 7 ? `${text.slice(0, 7)}...` : text;
+  }
+
+  function appGroupActive(group, activeApp) {
+    return group.key === activeApp || (group.apps || []).some((item) => item.key === activeApp);
+  }
+
+  function renderApps(groups, activeApp) {
+    return (groups || DEFAULT_APPS).map((item) => {
+      if (item.apps && item.apps.length) {
+        return `
+          <div class="frame2-app-group${appGroupActive(item, activeApp) ? ' is-active' : ''}" data-app-group="${item.key}">
+            <button class="frame2-app-trigger" type="button" title="${item.label}" aria-haspopup="menu" aria-expanded="false">
+              <span>${shortLabel(item.label)}</span>
+              <span class="frame2-app-arrow">⌄</span>
+            </button>
+            <div class="frame2-app-menu" role="menu">
+              ${item.apps.map((app) => `
+                <button class="frame2-app-option${app.key === activeApp ? ' is-active' : ''}" type="button" role="menuitem" data-app="${app.key}" title="${app.label}">
+                  <span class="frame2-module-icon"><span class="wise-icon" data-wise-icon="${app.icon || 'home'}"></span></span>
+                  <span>${shortLabel(app.label)}</span>
+                </button>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+      return `
+        <button class="frame2-module${item.key === activeApp ? ' is-active' : ''}" type="button" data-app="${item.key}" title="${item.label}">
+          <span class="frame2-module-icon"><span class="wise-icon" data-wise-icon="${item.icon || 'home'}"></span></span>
+          <span>${shortLabel(item.label)}</span>
+        </button>
+      `;
+    }).join('');
+  }
+
+  function normalizeMenuItem(item) {
+    return typeof item === 'string' ? { key: item, label: item, icon: 'chevronRight' } : item;
   }
 
   function renderMenu(items, activeFeature) {
-    return (items || []).map((item) => `
-      <button class="frame2-side-item${item === activeFeature ? ' is-active' : ''}" type="button" data-feature="${item}">
-        <span class="frame2-side-icon"><span class="wise-icon" data-wise-icon="chevronRight"></span></span>
-        <span class="frame2-side-label">${item}</span>
+    return (items || []).map(normalizeMenuItem).map((item) => `
+      <button class="frame2-side-item${item.key === activeFeature || item.label === activeFeature ? ' is-active' : ''}" type="button" data-feature="${item.key || item.label}">
+        <span class="frame2-side-icon"><span class="wise-icon" data-wise-icon="${item.icon || 'chevronRight'}"></span></span>
+        <span class="frame2-side-label">${item.label}</span>
       </button>
     `).join('');
   }
@@ -38,6 +75,7 @@
 
   function buildShell(config) {
     const navItems = config.secondaryNav?.items || [];
+    const activeApp = config.activeApp || config.activeModule || 'doctor';
     return `
       <header class="frame2-topbar">
         <div class="frame2-brand">
@@ -47,7 +85,7 @@
             <span class="frame2-brand-sub">${config.versionLabel || 'Frame 2'}</span>
           </span>
         </div>
-        <nav class="frame2-module-tabs" aria-label="主模块">${renderModules(config.activeModule || 'doctor')}</nav>
+        <nav class="frame2-module-tabs" aria-label="应用导航">${renderApps(config.appGroups || DEFAULT_APPS, activeApp)}</nav>
         <div class="frame2-tools">
           <button class="frame2-tool" type="button" aria-label="搜索"><span class="wise-icon" data-wise-icon="search"></span></button>
           <button class="frame2-tool" type="button" aria-label="刷新"><span class="wise-icon" data-wise-icon="refresh"></span></button>
@@ -109,17 +147,41 @@
         activateFeature(node.dataset.tab);
       });
     });
-    stage.querySelectorAll('[data-module]').forEach((node) => {
+    stage.querySelectorAll('.frame2-app-trigger').forEach((node) => {
       node.addEventListener('click', () => {
-        stage.querySelectorAll('[data-module]').forEach((item) => item.classList.remove('is-active'));
-        node.classList.add('is-active');
-        if (typeof config.onModuleChange === 'function') config.onModuleChange(node.dataset.module);
+        const group = node.closest('.frame2-app-group');
+        const expanded = group.classList.toggle('is-open');
+        node.setAttribute('aria-expanded', String(expanded));
       });
+    });
+    stage.querySelectorAll('[data-app]').forEach((node) => {
+      node.addEventListener('click', () => {
+        stage.querySelectorAll('.frame2-module, .frame2-app-option, .frame2-app-group').forEach((item) => item.classList.remove('is-active'));
+        node.classList.add('is-active');
+        const group = node.closest('.frame2-app-group');
+        if (group) {
+          group.classList.add('is-active');
+          group.classList.remove('is-open');
+          group.querySelector('.frame2-app-trigger')?.setAttribute('aria-expanded', 'false');
+        }
+        if (typeof config.onAppChange === 'function') config.onAppChange(node.dataset.app);
+        if (typeof config.onModuleChange === 'function') config.onModuleChange(node.dataset.app);
+      });
+    });
+    document.addEventListener('click', (event) => {
+      if (stage.contains(event.target)) {
+        const openGroup = event.target.closest('.frame2-app-group');
+        stage.querySelectorAll('.frame2-app-group.is-open').forEach((group) => {
+          if (group === openGroup) return;
+          group.classList.remove('is-open');
+          group.querySelector('.frame2-app-trigger')?.setAttribute('aria-expanded', 'false');
+        });
+      }
     });
 
     window.WiseIconRegistry?.renderIcons(stage);
     return { stage, activateFeature };
   }
 
-  window.WiseAppShellV2 = { init, MODULES };
+  window.WiseAppShellV2 = { init, DEFAULT_APPS };
 })();

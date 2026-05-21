@@ -68,7 +68,7 @@
   display: flex;
   flex: 1;
   align-items: center;
-  gap: var(--ds-space-1);
+  gap: var(--ds-space-2);
   min-width: 0;
   overflow: auto hidden;
 }
@@ -92,13 +92,90 @@
   cursor: pointer;
 }
 
+.frame2-app-group {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+}
+
+.frame2-app-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-1);
+  height: 36px;
+  padding: 0 var(--ds-space-3);
+  color: rgba(var(--ds-color-white-rgb), 0.86);
+  background: transparent;
+  border: 0;
+  border-radius: var(--ds-radius-sm);
+  font: inherit;
+  cursor: pointer;
+}
+
 .frame2-module:hover {
   background: rgba(var(--ds-color-white-rgb), 0.12);
 }
 
-.frame2-module.is-active {
+.frame2-app-trigger:hover,
+.frame2-app-group.is-open .frame2-app-trigger {
+  background: rgba(var(--ds-color-white-rgb), 0.12);
+}
+
+.frame2-module.is-active,
+.frame2-app-group.is-active .frame2-app-trigger {
   color: var(--ds-color-primary);
   background: var(--ds-color-white);
+  font-weight: var(--ds-font-weight-semibold);
+}
+
+.frame2-app-arrow {
+  color: currentColor;
+  font-size: var(--ds-font-size-xs);
+  line-height: 1;
+}
+
+.frame2-app-menu {
+  position: absolute;
+  z-index: calc(var(--ds-z-dropdown) + 1);
+  top: calc(100% + 8px);
+  left: 0;
+  display: none;
+  min-width: 148px;
+  padding: var(--ds-space-1);
+  background: var(--ds-color-white);
+  border: 1px solid var(--ds-color-border-secondary);
+  border-radius: var(--ds-radius-md);
+  box-shadow: var(--ds-shadow-md);
+}
+
+.frame2-app-group.is-open .frame2-app-menu {
+  display: grid;
+  gap: var(--ds-space-1);
+}
+
+.frame2-app-option {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+  height: 34px;
+  padding: 0 var(--ds-space-2);
+  color: var(--ds-color-text-secondary);
+  background: transparent;
+  border: 0;
+  border-radius: var(--ds-radius-sm);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.frame2-app-option:hover {
+  color: var(--ds-color-primary);
+  background: var(--ds-color-bg-hover);
+}
+
+.frame2-app-option.is-active {
+  color: var(--ds-color-primary);
+  background: var(--ds-color-primary-selected);
   font-weight: var(--ds-font-weight-semibold);
 }
 
@@ -119,6 +196,15 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+.frame2-side-icon img {
+  filter: brightness(0) saturate(100%) invert(35%) sepia(8%) saturate(1024%) hue-rotate(198deg) brightness(91%) contrast(86%);
+}
+
+.frame2-side-item.is-active .frame2-side-icon img,
+.frame2-side-item:hover .frame2-side-icon img {
+  filter: brightness(0) saturate(100%) invert(27%) sepia(95%) saturate(3763%) hue-rotate(235deg) brightness(99%) contrast(109%);
 }
 
 .frame2-tools {
@@ -331,6 +417,7 @@
 }
 
 .frame2-content {
+  position: relative;
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -340,6 +427,18 @@
   border: 1px solid var(--ds-color-border-secondary);
   border-radius: var(--ds-radius-lg);
   box-shadow: var(--ds-shadow-xs);
+}
+
+.frame2-content::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: min(760px, 58%);
+  height: 260px;
+  pointer-events: none;
+  background: url('../../../../assets/framework2-campus.png') right bottom / contain no-repeat;
+  opacity: 0.08;
 }
 
 .frame2-page-head {
@@ -376,6 +475,8 @@
 }
 
 .frame2-content-body {
+  position: relative;
+  z-index: 1;
   flex: 1;
   min-height: 0;
   padding: var(--ds-space-4);

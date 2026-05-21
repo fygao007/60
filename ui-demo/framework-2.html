@@ -22,7 +22,7 @@
   <header class="frame2-page-head">
     <div class="frame2-page-title">
       <h1 data-frame2-title>功能索引</h1>
-      <p>框架2独立预览。设计来源记录：mastergo://getd2c/193705377860925-21-112711</p>
+      <p>框架2独立预览。顶部应用分组：mastergo://getd2c/193705377860925-21-113045；左侧菜单：mastergo://getd2c/193705377860925-21-112714</p>
     </div>
     <div class="frame2-action-row">
       <a class="ds-link-button" href="./primary-nav.html">查看框架1</a>
@@ -52,11 +52,35 @@
 <script>
   WiseAppShellV2.init({
     activeModule: 'doctor',
+    activeApp: 'doctor',
     systemName: '60系统',
     versionLabel: '框架2',
+    appGroups: [
+      { key: 'portal', icon: 'home', label: '门户' },
+      { key: 'admission', label: '招生应用', apps: [
+        { key: 'prepare', icon: 'prepare', label: '准备工作' },
+        { key: 'master', icon: 'master', label: '硕士招生系统' },
+        { key: 'doctor', icon: 'doctor', label: '博士招生系统' },
+        { key: 'camp', icon: 'camp', label: '夏令营系统' }
+      ] },
+      { key: 'recommend', icon: 'recommend', label: '推免系统' },
+      { key: 'student', label: '学生服务', apps: [
+        { key: 'hkmt', icon: 'hkmt', label: '港澳台招生' },
+        { key: 'exam', icon: 'exam', label: '考务管理' }
+      ] }
+    ],
     secondaryNav: {
       title: '组件库',
-      items: ['功能索引', '当前组件', 'Ant目录', '组件总览', '表单', '表格', '框架1', '框架2']
+      items: [
+        { key: '功能索引', label: '功能索引', icon: 'home' },
+        { key: '当前组件', label: '当前组件', icon: 'prepare' },
+        { key: 'Ant目录', label: 'Ant目录', icon: 'prepare' },
+        { key: '组件总览', label: '组件总览', icon: 'fullscreen' },
+        { key: '表单', label: '表单', icon: 'settings' },
+        { key: '表格', label: '表格', icon: 'flow' },
+        { key: '框架1', label: '框架1', icon: 'master' },
+        { key: '框架2', label: '框架2', icon: 'doctor' }
+      ]
     },
     activeFeature: '框架2',
     tabs: ['功能索引', '当前组件', 'Ant目录', '组件总览', '表单', '表格', '框架2'],
