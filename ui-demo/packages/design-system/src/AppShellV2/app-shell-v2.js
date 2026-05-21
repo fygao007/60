@@ -35,7 +35,6 @@
             <div class="frame2-app-menu" role="menu">
               ${item.apps.map((app) => `
                 <button class="frame2-app-option${app.key === activeApp ? ' is-active' : ''}" type="button" role="menuitem" data-app="${app.key}" title="${app.label}">
-                  <span class="frame2-module-icon"><span class="wise-icon" data-wise-icon="${app.icon || 'home'}"></span></span>
                   <span>${shortLabel(app.label)}</span>
                 </button>
               `).join('')}
@@ -45,7 +44,6 @@
       }
       return `
         <button class="frame2-module${item.key === activeApp ? ' is-active' : ''}" type="button" data-app="${item.key}" title="${item.label}">
-          <span class="frame2-module-icon"><span class="wise-icon" data-wise-icon="${item.icon || 'home'}"></span></span>
           <span>${shortLabel(item.label)}</span>
         </button>
       `;
