@@ -48,11 +48,14 @@ export default function DSDatePicker({
   const currentValue = value !== undefined ? value : internalValue
   const selectedDate = useMemo(() => parseDate(currentValue), [currentValue])
   const [viewDate, setViewDate] = useState(selectedDate || new Date())
+  const [draftValue, setDraftValue] = useState(currentValue || '')
   const todayValue = formatDate(new Date())
 
   useEffect(() => {
-    if (open) setViewDate(selectedDate || new Date())
-  }, [open, selectedDate])
+    if (!open) return
+    setDraftValue(currentValue || '')
+    setViewDate(selectedDate || new Date())
+  }, [open, currentValue, selectedDate])
 
   useEffect(() => {
     if (!open) return undefined
@@ -81,18 +84,24 @@ export default function DSDatePicker({
   const clearValue = (event) => {
     event.stopPropagation()
     commitValue(undefined)
+    setDraftValue('')
     setOpen(false)
   }
 
-  const selectDate = (date) => {
-    commitValue(formatDate(date))
-    setOpen(false)
+  const selectDraftDate = (date) => {
+    setDraftValue(formatDate(date))
+    setViewDate(date)
   }
 
   const useToday = () => {
     const now = new Date()
+    setDraftValue(formatDate(now))
     setViewDate(now)
-    selectDate(now)
+  }
+
+  const confirmValue = () => {
+    if (draftValue) commitValue(draftValue)
+    setOpen(false)
   }
 
   const classes = [
@@ -138,11 +147,11 @@ export default function DSDatePicker({
                     'ds-date-picker__day',
                     date.getMonth() !== currentMonth && 'is-muted',
                     dateValue === todayValue && 'is-today',
-                    dateValue === currentValue && 'is-selected',
+                    dateValue === draftValue && 'is-selected',
                   ].filter(Boolean).join(' ')}
                   type="button"
                   key={dateValue}
-                  onClick={() => selectDate(date)}
+                  onClick={() => selectDraftDate(date)}
                 >
                   {date.getDate()}
                 </button>
@@ -151,7 +160,7 @@ export default function DSDatePicker({
           </div>
           <div className="ds-date-picker__footer">
             <button className="ds-date-picker__link" type="button" onClick={useToday}>今天</button>
-            <button className="ds-date-picker__confirm" type="button" onClick={() => setOpen(false)}>确定</button>
+            <button className="ds-date-picker__confirm" type="button" onClick={confirmValue}>确定</button>
           </div>
         </div>
       )}

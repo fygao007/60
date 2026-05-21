@@ -179,7 +179,7 @@
               'ds-date-picker__day',
               date.getMonth() !== currentMonth ? 'is-muted' : '',
               value === todayValue ? 'is-today' : '',
-              value === state.value ? 'is-selected' : ''
+              value === state.draftValue ? 'is-selected' : ''
             ].filter(Boolean).join(' ');
             return `<button class="${classes}" type="button" data-date="${value}">${date.getDate()}</button>`;
           }).join('')}
@@ -205,6 +205,7 @@
     const selectedDate = parseDateValue(root.dataset.value);
     const state = {
       value: root.dataset.value || '',
+      draftValue: root.dataset.value || '',
       viewDate: selectedDate || new Date()
     };
     renderDatePicker(root, state);
@@ -215,6 +216,7 @@
 
       if (event.target.closest('.ds-date-picker__clear')) {
         state.value = '';
+        state.draftValue = '';
         state.viewDate = new Date();
         root.classList.remove('is-open');
         renderDatePicker(root, state);
@@ -225,6 +227,7 @@
         const nextOpen = !root.classList.contains('is-open');
         closeOtherDatePickers(root);
         root.classList.toggle('is-open', nextOpen);
+        state.draftValue = state.value;
         state.viewDate = parseDateValue(state.value) || state.viewDate || new Date();
         renderDatePicker(root, state);
         return;
@@ -244,14 +247,14 @@
 
       if (event.target.closest('.js-date-today')) {
         const today = new Date();
-        state.value = formatDateValue(today);
+        state.draftValue = formatDateValue(today);
         state.viewDate = today;
-        root.classList.remove('is-open');
         renderDatePicker(root, state);
         return;
       }
 
       if (event.target.closest('.js-date-confirm')) {
+        if (state.draftValue) state.value = state.draftValue;
         root.classList.remove('is-open');
         renderDatePicker(root, state);
         return;
@@ -259,9 +262,8 @@
 
       const day = event.target.closest('.ds-date-picker__day');
       if (day) {
-        state.value = day.dataset.date;
-        state.viewDate = parseDateValue(state.value) || state.viewDate;
-        root.classList.remove('is-open');
+        state.draftValue = day.dataset.date;
+        state.viewDate = parseDateValue(state.draftValue) || state.viewDate;
         renderDatePicker(root, state);
       }
     });
