@@ -181,6 +181,21 @@
       background: #fff5cc;
     }
 
+    .status-tag.is-built {
+      color: #168a66;
+      background: #e9f8ef;
+    }
+
+    .status-tag.is-demo {
+      color: #333fff;
+      background: #ebecff;
+    }
+
+    .status-tag.is-planned {
+      color: #737585;
+      background: #eeeef0;
+    }
+
     .type-tag {
       color: #505266;
       background: #eeeef0;
@@ -222,8 +237,8 @@
       <section class="summary-grid" aria-label="组件统计">
         <article class="summary-card"><span>组件总数</span><strong id="totalCount">0</strong></article>
         <article class="summary-card"><span>组件分类</span><strong id="categoryCount">0</strong></article>
-        <article class="summary-card"><span>当前状态</span><strong>基础交互稿</strong></article>
-        <article class="summary-card"><span>调整方式</span><strong>逐个组件</strong></article>
+        <article class="summary-card"><span>已组件化</span><strong id="builtCount">0</strong></article>
+        <article class="summary-card"><span>已有交互页</span><strong id="demoCount">0</strong></article>
       </section>
 
       <section class="library-table-wrap">
@@ -329,6 +344,34 @@
     href || `./ant-components-page.html#official-${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`
   ]);
 
+  const capabilityMap = {
+    Button: ['已组件化', 'is-built', './button-states.html'],
+    LinkButton: ['已组件化', 'is-built', './link-button-components.html'],
+    LinkButtonGroup: ['已组件化', 'is-built', './link-button-components.html'],
+    Icon: ['已组件化', 'is-built', './ant-components-page.html#official-button'],
+    Anchor: ['已组件化', 'is-built', './anchor-components.html'],
+    Pagination: ['已组件化', 'is-built', './basic-table-page.html'],
+    Steps: ['已组件化', 'is-built', './steps-components.html'],
+    Tabs: ['已组件化', 'is-built', './ant-components-page.html#official-tabs'],
+    Cascader: ['已组件化', 'is-built', './form-cascader-states.html'],
+    DatePicker: ['已组件化', 'is-built', './form-date-picker-states.html'],
+    Input: ['已组件化', 'is-built', './form-input-states.html'],
+    Radio: ['已组件化', 'is-built', './form-radio-group-states.html'],
+    Select: ['已组件化', 'is-built', './form-select-states.html'],
+    Switch: ['已组件化', 'is-built', './form-switch-states.html'],
+    TimePicker: ['已组件化', 'is-built', './form-time-picker-states.html'],
+    Table: ['已组件化', 'is-built', './basic-table-page.html'],
+    Card: ['已组件化', 'is-built', './form-components-page.html'],
+    Empty: ['已组件化', 'is-built', './ant-components-page.html#official-empty'],
+    Tag: ['已组件化', 'is-built', './basic-table-page.html'],
+    Drawer: ['已组件化', 'is-built', './ant-components-page.html#official-drawer'],
+    Modal: ['已组件化', 'is-built', './ant-components-page.html#official-modal'],
+    Checkbox: ['已有交互页', 'is-demo', './form-checkbox-group-states.html'],
+    Form: ['已有组合页', 'is-demo', './form-components-page.html'],
+    Upload: ['已有交互页', 'is-demo', './form-upload-button-states.html'],
+    Calendar: ['总览占位', 'is-planned', './ant-components-page.html#official-calendar']
+  };
+
   const tbody = document.getElementById('componentRows');
   let lastCategory = '';
   components.forEach(([category, name, usage, type, href]) => {
@@ -336,20 +379,24 @@
       tbody.insertAdjacentHTML('beforeend', `<tr class="category-row"><td colspan="6">${category}</td></tr>`);
       lastCategory = category;
     }
+    const capability = capabilityMap[name] || ['总览占位', 'is-planned', href];
+    const targetHref = capability[2] || href;
     tbody.insertAdjacentHTML('beforeend', `
       <tr>
         <td>${category}</td>
-        <td><a class="component-link" href="${href}">${name}</a></td>
+        <td><a class="component-link" href="${targetHref}">${name}</a></td>
         <td>${usage}</td>
         <td><span class="type-tag">${type}</span></td>
-        <td><span class="status-tag">基础交互稿</span></td>
-        <td><a class="component-link" href="${href}">查看</a></td>
+        <td><span class="status-tag ${capability[1]}">${capability[0]}</span></td>
+        <td><a class="component-link" href="${targetHref}">查看</a></td>
       </tr>
     `);
   });
 
   document.getElementById('totalCount').textContent = components.length;
   document.getElementById('categoryCount').textContent = new Set(components.map(item => item[0])).size;
+  document.getElementById('builtCount').textContent = Object.values(capabilityMap).filter(item => item[0] === '已组件化').length;
+  document.getElementById('demoCount').textContent = Object.values(capabilityMap).filter(item => item[0] === '已有交互页' || item[0] === '已有组合页').length;
 
   const componentFeatureRoutes = {
     '功能索引': './component-library-index.html',

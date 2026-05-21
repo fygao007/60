@@ -253,7 +253,7 @@
     <section class="summary-grid" aria-label="组件统计">
       <article class="summary-card"><span>当前组件</span><strong id="componentTotal">0</strong></article>
       <article class="summary-card"><span>组件分组</span><strong id="groupTotal">0</strong></article>
-      <article class="summary-card"><span>预览页面</span><strong>29</strong></article>
+      <article class="summary-card"><span>预览页面</span><strong id="previewTotal">0</strong></article>
       <article class="summary-card"><span>维护方式</span><strong>组件化</strong></article>
     </section>
 
@@ -285,7 +285,9 @@
         ['DSInput', '单行文本输入组件。', '已组件化', './form-input-states.html', './packages/design-system/src/Field/index.jsx'],
         ['DSSelect', '下拉选择组件。', '已组件化', './form-select-states.html', './packages/design-system/src/Field/index.jsx'],
         ['DSCascader', '级联选择器组件，支持多列选择、搜索、清除和路径展示。', '已组件化', './form-cascader-states.html', './packages/design-system/src/Cascader/index.jsx'],
+        ['DSDatePicker', '日期选择器组件，支持日期、日期范围、按月、按年、标题层级跳转和跨度切换。', '已组件化', './form-date-picker-states.html', './packages/design-system/src/DatePicker/index.jsx'],
         ['DSTextarea', '多行文本域组件。', '已组件化', './form-textarea-states.html', './packages/design-system/src/Field/index.jsx'],
+        ['DSRadioGroup / DSRadio', '单选组件，支持横向、纵向、禁用、错误、表单行交互。', '已组件化', './form-radio-group-states.html', './packages/design-system/src/Radio/index.jsx'],
         ['DSRichTextEditor', '富文本编辑器组件，支持工具栏、正文编辑和字数统计。', '已组件化', './form-rich-text-editor-states.html', './packages/design-system/src/RichTextEditor/index.jsx'],
         ['DSTimePicker', '时间选择器组件，支持时分秒面板、此刻、确认和清除。', '已组件化', './form-time-picker-states.html', './packages/design-system/src/TimePicker/index.jsx'],
         ['DSSwitch', '开关组件，用于启用、停用、是否类字段。', '已组件化', './form-switch-states.html', './packages/design-system/src/Switch/index.jsx']
@@ -386,6 +388,7 @@
 
   document.getElementById('componentTotal').textContent = groups.reduce((sum, group) => sum + group.items.length, 0);
   document.getElementById('groupTotal').textContent = groups.length;
+  document.getElementById('previewTotal').textContent = new Set(groups.flatMap(group => group.items.map(item => item[3]))).size;
 
   const componentFeatureRoutes = {
     '功能索引': './component-library-index.html',
