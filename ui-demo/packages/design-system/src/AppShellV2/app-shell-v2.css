@@ -20,7 +20,6 @@
 
 .frame2-topbar {
   position: relative;
-  isolation: isolate;
   display: flex;
   flex: none;
   align-items: center;
@@ -28,30 +27,12 @@
   height: 52px;
   padding: 0 var(--ds-space-3);
   color: var(--ds-color-white);
-  background: #3659cb;
-}
-
-.frame2-topbar::before,
-.frame2-topbar::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.frame2-topbar::before {
-  z-index: 0;
-  background: url('../../../../assets/framework2-topbar-bg.png') right center / auto 52px no-repeat;
-}
-
-.frame2-topbar::after {
-  z-index: 1;
-  background: rgb(54 89 203 / 86%);
+  background: #3659cb url('../../../../assets/framework2-topbar-bg.jpg') right center / auto 52px no-repeat;
 }
 
 .frame2-brand {
   position: relative;
-  z-index: 2;
+  z-index: 1;
   display: flex;
   flex: none;
   align-items: center;
@@ -88,7 +69,7 @@
 
 .frame2-module-tabs {
   position: relative;
-  z-index: 2;
+  z-index: 1;
   display: flex;
   flex: none;
   align-items: center;
@@ -248,7 +229,7 @@
 
 .frame2-tools {
   position: relative;
-  z-index: 2;
+  z-index: 1;
   display: flex;
   flex: none;
   align-items: center;
