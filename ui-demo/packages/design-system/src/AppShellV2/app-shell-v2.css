@@ -24,10 +24,10 @@
   flex: none;
   align-items: center;
   gap: var(--ds-space-4);
-  height: 52px;
+  height: 48px;
   padding: 0 var(--ds-space-3);
   color: var(--ds-color-white);
-  background: #3659cb url('../../../../assets/framework2-topbar-bg.jpg') right center / auto 52px no-repeat;
+  background: #3659cb url('../../../../assets/framework2-topbar-bg.jpg') right center / auto 48px no-repeat;
 }
 
 .frame2-brand {
@@ -88,7 +88,7 @@
   flex: none;
   align-items: center;
   justify-content: center;
-  height: 52px;
+  height: 48px;
   padding: 0 14px;
   color: rgba(var(--ds-color-white-rgb), 0.86);
   background: transparent;
@@ -110,7 +110,7 @@
   align-items: center;
   gap: var(--ds-space-1);
   justify-content: center;
-  height: 52px;
+  height: 48px;
   padding: 0 14px;
   color: rgba(var(--ds-color-white-rgb), 0.86);
   background: transparent;
