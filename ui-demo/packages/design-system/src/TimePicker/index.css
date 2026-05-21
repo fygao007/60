@@ -90,12 +90,17 @@
   z-index: var(--ds-z-dropdown);
   top: calc(100% + 4px);
   left: 0;
-  min-width: 192px;
+  min-width: 128px;
+  width: max-content;
   overflow: hidden;
   background: var(--ds-color-white);
   border: 1px solid var(--ds-color-border-secondary);
   border-radius: var(--ds-radius-sm);
   box-shadow: var(--ds-shadow-md);
+}
+
+.ds-time-picker__panel--seconds {
+  min-width: 192px;
 }
 
 .ds-time-picker__columns {

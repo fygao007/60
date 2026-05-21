@@ -133,7 +133,7 @@ export default function DSTimePicker({
         <span className="ds-time-picker__clock" aria-hidden="true" />
       </button>
       {open && (
-        <div className="ds-time-picker__panel">
+        <div className={['ds-time-picker__panel', showSecond && 'ds-time-picker__panel--seconds'].filter(Boolean).join(' ')}>
           <div className="ds-time-picker__columns">
             {columns.map(([key, values]) => (
               <div className="ds-time-picker__column" role="listbox" key={key}>

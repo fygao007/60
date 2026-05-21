@@ -156,7 +156,8 @@
 
   function renderTimePanel(state) {
     const columns = [['hour', hours], ['minute', minutes], ...(state.showSecond ? [['second', minutes]] : [])];
-    return `<div class="ds-time-picker__panel"><div class="ds-time-picker__columns">${columns.map(([key, values]) => `<div class="ds-time-picker__column" role="listbox">${values.map((value) => `<button class="ds-time-picker__option ${state.draft[key] === value ? 'is-selected' : ''}" type="button" data-part="${key}" data-value="${value}">${value}</button>`).join('')}</div>`).join('')}</div><div class="ds-time-picker__footer"><button class="ds-time-picker__link js-time-now" type="button">此刻</button><button class="ds-time-picker__confirm js-time-confirm" type="button">确定</button></div></div>`;
+    const panelClass = `ds-time-picker__panel${state.showSecond ? ' ds-time-picker__panel--seconds' : ''}`;
+    return `<div class="${panelClass}"><div class="ds-time-picker__columns">${columns.map(([key, values]) => `<div class="ds-time-picker__column" role="listbox">${values.map((value) => `<button class="ds-time-picker__option ${state.draft[key] === value ? 'is-selected' : ''}" type="button" data-part="${key}" data-value="${value}">${value}</button>`).join('')}</div>`).join('')}</div><div class="ds-time-picker__footer"><button class="ds-time-picker__link js-time-now" type="button">此刻</button><button class="ds-time-picker__confirm js-time-confirm" type="button">确定</button></div></div>`;
   }
 
   function closeOtherTimePickers(currentRoot) {
