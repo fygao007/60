@@ -506,6 +506,18 @@
 
   function renderMonthLikePanel(state, isRange) {
     const nextYear = state.viewYear + 1;
+    if (!isRange) {
+      return `
+        <div class="ds-date-picker__panel">
+          <div class="ds-date-picker__header">
+            <button class="ds-date-picker__nav js-month-prev" type="button">«</button>
+            <span class="ds-date-picker__title">${state.viewYear} 年</span>
+            <button class="ds-date-picker__nav js-month-next" type="button">»</button>
+          </div>
+          ${renderMonthGrid(state.viewYear, state, isRange)}
+        </div>
+      `;
+    }
     return `
       <div class="ds-date-picker__panel ds-date-picker__panel--wide">
         <div class="ds-date-picker__panels">
@@ -613,7 +625,7 @@
           <div class="ds-date-picker__subpanel">
             <div class="ds-date-picker__header">
               <button class="ds-date-picker__nav js-year-prev" type="button">«</button>
-              <span class="ds-date-picker__title">${state.viewStart + 5} 年 - ${state.viewStart + 11} 年</span>
+              <span class="ds-date-picker__title">${state.viewStart} 年 - ${state.viewStart + 11} 年</span>
               ${isRange ? '<span class="ds-date-picker__nav" aria-hidden="true"></span>' : '<button class="ds-date-picker__nav js-year-next" type="button">»</button>'}
             </div>
             ${renderYearGrid(state.viewStart, state, isRange)}
