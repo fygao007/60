@@ -42,6 +42,7 @@
         <tr><td>F2-001</td><td>框架2首页布局</td><td>组件库</td><td><span class="ds-tag" style="background: var(--ds-color-success-light); color: var(--ds-color-success-active)">已启用</span></td><td>2026-05-21</td></tr>
         <tr><td>F2-002</td><td>横向主模块切换</td><td>框架</td><td><span class="ds-tag" style="background: var(--ds-color-primary-selected); color: var(--ds-color-primary)">进行中</span></td><td>2026-05-21</td></tr>
         <tr><td>F2-003</td><td>侧栏折叠状态</td><td>框架</td><td><span class="ds-tag" style="background: var(--ds-color-bg-disabled); color: var(--ds-color-text-secondary)">待确认</span></td><td>2026-05-21</td></tr>
+        <tr><td>F2-004</td><td><a class="ds-link-button" href="./framework-2-basic-info-table.html">基本信息表格页面</a></td><td>业务页面</td><td><span class="ds-tag" style="background: var(--ds-color-primary-selected); color: var(--ds-color-primary)">新增</span></td><td>2026-05-21</td></tr>
       </tbody>
     </table>
   </div>
@@ -78,12 +79,13 @@
         { key: '组件总览', label: '组件总览', icon: 'fullscreen' },
         { key: '表单', label: '表单', icon: 'settings' },
         { key: '表格', label: '表格', icon: 'flow' },
+        { key: '基本信息表格', label: '基本信息表格', icon: 'flow' },
         { key: '框架1', label: '框架1', icon: 'master' },
         { key: '框架2', label: '框架2', icon: 'doctor' }
       ]
     },
     activeFeature: '框架2',
-    tabs: ['功能索引', '当前组件', 'Ant目录', '组件总览', '表单', '表格', '框架2'],
+    tabs: ['功能索引', '当前组件', 'Ant目录', '组件总览', '表单', '表格', '基本信息表格', '框架2'],
     onFeatureChange(feature) {
       const routes = {
         '功能索引': './component-library-index.html',
@@ -92,6 +94,7 @@
         '组件总览': './ant-components-page.html',
         '表单': './form-components-page.html',
         '表格': './basic-table-page.html',
+        '基本信息表格': './framework-2-basic-info-table.html',
         '框架1': './primary-nav.html',
         '框架2': './framework-2.html'
       };
