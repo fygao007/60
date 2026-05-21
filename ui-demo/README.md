@@ -59,7 +59,7 @@
 
 ## 60 组件库当前覆盖
 
-- 基础：`DSAnchor`、`DSButton`、`DSButtonGroup`、`DSLinkButton`、`DSLinkButtonGroup`、`DSSteps`、`DSIconButton`、`DSField`、`DSInput`、`DSSelect`、`DSCascader`、`DSTextarea`、`DSRichTextEditor`、`DSTag`。
+- 基础：`DSAnchor`、`DSButton`、`DSButtonGroup`、`DSLinkButton`、`DSLinkButtonGroup`、`DSSteps`、`DSIconButton`、`DSField`、`DSInput`、`DSSelect`、`DSCascader`、`DSTextarea`、`DSRichTextEditor`、`DSTimePicker`、`DSTag`。
 - 布局：`DSAppShell`、`DSPageHeader`、`DSCard`、`DSTabs`。
 - 数据：`DSFilterBar`、`DSDataTable`、`DSParentChildTable`、`DSPagination`、`DSEmptyState`。
 - 浮层：`DSModal`、`DSDrawer`。

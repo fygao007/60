@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="./packages/design-system/src/AppShell/app-shell.css" />
   <link rel="stylesheet" href="./packages/design-system/src/Radio/index.css" />
   <link rel="stylesheet" href="./packages/design-system/src/RichTextEditor/index.css" />
+  <link rel="stylesheet" href="./packages/design-system/src/TimePicker/index.css" />
   <style>
     .form-page {
       display: flex;
@@ -851,20 +852,7 @@
             <div class="form-item">
               <span class="form-label">时间选择</span>
               <div class="form-control">
-                <div class="ant-select js-time-select has-value" data-placeholder="请选择时间">
-                  <div class="ant-select-trigger" role="combobox" aria-expanded="false" tabindex="0">
-                    <span class="ant-select-value">09:30</span>
-                    <button class="ant-clear" type="button" aria-label="清空">×</button>
-                    <span class="ant-suffix" data-wise-icon="clock"></span>
-                  </div>
-                  <div class="ant-dropdown time-list" role="listbox">
-                    <div class="ant-option" data-value="08:00">08:00<span class="ant-checkmark">✓</span></div>
-                    <div class="ant-option is-selected" data-value="09:30">09:30<span class="ant-checkmark">✓</span></div>
-                    <div class="ant-option" data-value="10:00">10:00<span class="ant-checkmark">✓</span></div>
-                    <div class="ant-option" data-value="14:00">14:00<span class="ant-checkmark">✓</span></div>
-                    <div class="ant-option" data-value="16:30">16:30<span class="ant-checkmark">✓</span></div>
-                  </div>
-                </div>
+                <div class="ds-time-picker js-time-picker has-value" data-placeholder="请选择时间" data-value="09:30" data-clearable="true"></div>
               </div>
             </div>
           </div>
@@ -1207,6 +1195,87 @@
     });
     editor.addEventListener('input', () => updateRichTextCounter(root));
     updateRichTextCounter(root);
+  });
+
+  const timePickerHours = Array.from({ length: 24 }, (_, index) => String(index).padStart(2, '0'));
+  const timePickerMinutes = Array.from({ length: 60 }, (_, index) => String(index).padStart(2, '0'));
+
+  function parseTimePickerValue(value) {
+    const parts = String(value || '').split(':');
+    return { hour: parts[0] || '09', minute: parts[1] || '00' };
+  }
+
+  function renderFormTimePicker(root, state) {
+    const placeholder = root.dataset.placeholder || '请选择时间';
+    const clearable = root.dataset.clearable === 'true';
+    root.classList.toggle('has-value', Boolean(state.value));
+    root.innerHTML = `
+      <button class="ds-time-picker__trigger" type="button" aria-haspopup="dialog" aria-expanded="${root.classList.contains('is-open')}">
+        <span class="${state.value ? 'ds-time-picker__text' : 'ds-time-picker__placeholder'}">${state.value || placeholder}</span>
+        ${clearable && state.value ? '<span class="ds-time-picker__clear" role="button" tabindex="-1" aria-label="清除"></span>' : ''}
+        <span class="ds-time-picker__clock" aria-hidden="true"></span>
+      </button>
+      ${root.classList.contains('is-open') ? renderFormTimePanel(state) : ''}
+    `;
+    window.requestAnimationFrame(() => {
+      root.querySelectorAll('.ds-time-picker__column').forEach((column) => {
+        column.querySelector('.ds-time-picker__option.is-selected')?.scrollIntoView({ block: 'center' });
+      });
+    });
+  }
+
+  function renderFormTimePanel(state) {
+    return `<div class="ds-time-picker__panel"><div class="ds-time-picker__columns">${[
+      ['hour', timePickerHours],
+      ['minute', timePickerMinutes]
+    ].map(([key, values]) => `<div class="ds-time-picker__column" role="listbox">${values.map((value) => `<button class="ds-time-picker__option ${state.draft[key] === value ? 'is-selected' : ''}" type="button" data-part="${key}" data-value="${value}">${value}</button>`).join('')}</div>`).join('')}</div><div class="ds-time-picker__footer"><button class="ds-time-picker__link js-time-now" type="button">此刻</button><button class="ds-time-picker__confirm js-time-confirm" type="button">确定</button></div></div>`;
+  }
+
+  document.querySelectorAll('.js-time-picker').forEach((root) => {
+    const state = { value: root.dataset.value || '', draft: parseTimePickerValue(root.dataset.value) };
+    renderFormTimePicker(root, state);
+    root.addEventListener('click', (event) => {
+      event.stopPropagation();
+      if (event.target.closest('.ds-time-picker__clear')) {
+        state.value = '';
+        state.draft = parseTimePickerValue('');
+        root.classList.remove('is-open');
+        renderFormTimePicker(root, state);
+        return;
+      }
+      if (event.target.closest('.ds-time-picker__trigger')) {
+        root.classList.toggle('is-open');
+        state.draft = parseTimePickerValue(state.value);
+        renderFormTimePicker(root, state);
+        return;
+      }
+      const option = event.target.closest('.ds-time-picker__option');
+      if (option) {
+        state.draft[option.dataset.part] = option.dataset.value;
+        renderFormTimePicker(root, state);
+        return;
+      }
+      if (event.target.closest('.js-time-now')) {
+        const now = new Date();
+        state.draft = { hour: String(now.getHours()).padStart(2, '0'), minute: String(now.getMinutes()).padStart(2, '0') };
+        renderFormTimePicker(root, state);
+        return;
+      }
+      if (event.target.closest('.js-time-confirm')) {
+        state.value = `${state.draft.hour}:${state.draft.minute}`;
+        root.classList.remove('is-open');
+        renderFormTimePicker(root, state);
+      }
+    });
+  });
+
+  document.addEventListener('click', (event) => {
+    document.querySelectorAll('.js-time-picker.is-open').forEach((root) => {
+      if (root.contains(event.target)) return;
+      root.classList.remove('is-open');
+      root.querySelector('.ds-time-picker__panel')?.remove();
+      root.querySelector('.ds-time-picker__trigger')?.setAttribute('aria-expanded', 'false');
+    });
   });
 
   document.querySelectorAll('.js-dragger').forEach((dragger) => {

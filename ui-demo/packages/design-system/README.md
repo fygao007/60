@@ -217,6 +217,7 @@ import {
 - `DSRadioGroup`
 - `DSRichTextEditor`
 - `DSTextarea`
+- `DSTimePicker`
 - `DSTag`
 - `DSSwitch`
 
@@ -229,6 +230,7 @@ import {
 - `docs/cascader.md`：MasterGo 级联选择器设计链接与落地规则。
 - `docs/radio.md`：MasterGo 单选设计链接与落地规则。
 - `docs/rich-text-editor.md`：MasterGo 富文本编辑器设计链接与落地规则。
+- `docs/time-picker.md`：MasterGo 时间选择器设计链接与落地规则。
 
 HTML 表单预览：
 
