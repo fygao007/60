@@ -3,45 +3,105 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>日期选择状态</title>
+  <title>日期选择器状态</title>
   <link rel="stylesheet" href="./packages/design-system/src/base.css" />
   <link rel="stylesheet" href="./packages/design-system/src/AppShell/app-shell.css" />
+  <link rel="stylesheet" href="./packages/design-system/src/DatePicker/index.css" />
   <style>
-    .fis-page { display: flex; flex: 1; flex-direction: column; min-height: 0; background: #fff; }
-    .fis-stage { flex: 1; min-height: 0; padding: 24px; overflow: auto; background: #fff; }
-    .fis-content { display: flex; flex-direction: column; gap: 24px; width: 693px; }
-    .fis-title { color: #000; font-size: 14px; font-weight: 600; line-height: 22px; font-family: 'PingFang SC', var(--ds-font-family); }
-    .fis-rows { display: grid; grid-template-columns: 133px 560px; row-gap: 20px; }
-    .fis-state { align-self: start; padding-top: 5px; color: #505266; font-size: 14px; line-height: 22px; font-family: 'PingFang SC', var(--ds-font-family); }
-    .fis-field { display: flex; align-items: flex-start; gap: 16px; }
-    .fis-field-label { flex: none; display: flex; align-items: center; justify-content: flex-end; width: 94px; height: 32px; color: #505266; font-size: 14px; line-height: 20px; text-align: right; font-family: 'PingFang SC', var(--ds-font-family); }
-    .fis-field-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
-
-    .fis-picker { box-sizing: border-box; width: 100%; height: 32px; display: flex; align-items: center; gap: 8px; padding: 5px 12px; background: #FFFFFF; border: 1px solid #DCDCE0; border-radius: 4px; }
-    .fis-picker-text { flex: 1; color: #9697A3; font-size: 14px; line-height: 22px; font-family: 'PingFang SC', var(--ds-font-family); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .fis-picker-text.is-filled { color: #000; }
-    .fis-picker-icon { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 14px; height: 14px; color: #505266; }
-    .fis-picker-icon img, .fis-picker-icon svg { width: 100%; height: 100%; display: block; }
+    body { margin: 0; color: var(--ds-color-text); background: var(--ds-color-bg); font-family: var(--ds-font-family); }
+    .date-page { display: flex; flex: 1; flex-direction: column; min-height: 0; background: var(--ds-color-white); }
+    .date-stage { flex: 1; min-height: 0; padding: 24px; overflow: auto; background: var(--ds-color-white); }
+    .date-content { display: grid; gap: 24px; width: min(1120px, 100%); }
+    .date-title { position: relative; display: inline-flex; margin: 0; padding: 2px; color: var(--ds-color-text); font-size: 16px; font-weight: 600; line-height: 24px; }
+    .date-title::after { content: ""; position: absolute; left: 2px; right: 2px; bottom: 2px; height: 8px; background: var(--ds-color-primary-weak); }
+    .date-title span { position: relative; z-index: 1; }
+    .date-desc { margin: 6px 0 0; color: var(--ds-color-text-secondary); font-size: 13px; line-height: 20px; }
+    .date-section { border: 1px solid var(--ds-color-border-secondary); background: var(--ds-color-white); }
+    .date-section-head { display: flex; align-items: center; justify-content: space-between; min-height: 44px; padding: 10px 16px; background: var(--ds-color-bg-subtle); border-bottom: 1px solid var(--ds-color-border-secondary); }
+    .date-section-title { margin: 0; color: var(--ds-color-text); font-size: 14px; font-weight: 600; line-height: 22px; }
+    .date-section-meta { color: var(--ds-color-text-tertiary); font-size: 12px; line-height: 20px; }
+    .date-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; padding: 16px; }
+    .date-card { min-width: 0; min-height: 340px; padding: 16px; border: 1px solid var(--ds-color-border-secondary); background: var(--ds-color-white); }
+    .date-card:nth-child(3n) .ds-date-picker__panel { left: auto; right: 0; }
+    .date-card h3 { margin: 0 0 12px; color: var(--ds-color-text); font-size: 14px; font-weight: 600; line-height: 22px; }
+    .date-card .ds-date-picker { width: 100%; }
+    .date-card p { margin: 10px 0 0; color: var(--ds-color-text-tertiary); font-size: 12px; line-height: 20px; }
+    .date-row { display: grid; grid-template-columns: 108px minmax(0, 280px); gap: 16px; align-items: start; padding: 16px; border-top: 1px solid var(--ds-color-border-secondary); }
+    .date-label { height: 32px; display: flex; align-items: center; justify-content: flex-end; color: var(--ds-color-text-secondary); font-size: 14px; line-height: 20px; text-align: right; }
+    .date-output { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 8px; margin-top: 12px; padding: 10px 12px; color: var(--ds-color-text-secondary); background: var(--ds-color-bg-subtle); border: 1px solid var(--ds-color-border-secondary); font-size: 12px; line-height: 20px; }
+    .date-output strong { color: var(--ds-color-text); font-weight: 500; }
+    .date-message { margin-top: 4px; color: var(--ds-color-text-tertiary); font-size: 12px; line-height: 20px; }
+    .date-message.is-error { color: var(--ds-color-danger); }
+    @media (max-width: 1100px) {
+      .date-grid { grid-template-columns: 1fr; }
+      .date-row { grid-template-columns: 1fr; }
+      .date-label { justify-content: flex-start; }
+    }
   </style>
 </head>
 <body>
 <div class="stage ds-scope">
-  <main class="fis-page">
-    <section class="fis-stage">
-      <div class="fis-content">
-        <span class="fis-title">状态</span>
-        <div class="fis-rows">
-          <div class="fis-state">未编辑态</div>
-          <div class="fis-field">
-            <span class="fis-field-label">标题名称</span>
-            <div class="fis-field-body">
-              <div class="fis-picker">
-                <span class="fis-picker-text">请选择日期</span>
-                <span class="fis-picker-icon" data-wise-icon="calendar"></span>
-              </div>
+  <main class="date-page">
+    <section class="date-stage">
+      <div class="date-content">
+        <header>
+          <h1 class="date-title"><span>日期选择器</span></h1>
+          <p class="date-desc">基于 MasterGo 基础控件日期选择设计，覆盖输入框、日历面板、月份切换、今天、清除、禁用和错误状态。</p>
+        </header>
+
+        <section class="date-section">
+          <div class="date-section-head">
+            <h2 class="date-section-title">基础状态</h2>
+            <span class="date-section-meta">Default / Filled / Open / Disabled / Error</span>
+          </div>
+          <div class="date-grid">
+            <article class="date-card">
+              <h3>未选择</h3>
+              <div class="ds-date-picker js-date-picker" data-placeholder="请选择日期"></div>
+              <p>默认展示占位文字和日历图标。</p>
+            </article>
+            <article class="date-card">
+              <h3>已选择</h3>
+              <div class="ds-date-picker js-date-picker" data-value="2026-05-21" data-clearable="true"></div>
+              <p>选中后展示日期值，支持清除。</p>
+            </article>
+            <article class="date-card">
+              <h3>展开面板</h3>
+              <div class="ds-date-picker js-date-picker is-open" data-value="2026-05-21" data-clearable="true"></div>
+              <p>面板展示当前月份，可选择日期或切换月份。</p>
+            </article>
+            <article class="date-card">
+              <h3>跨月选择</h3>
+              <div class="ds-date-picker js-date-picker is-open" data-value="2026-06-08" data-clearable="true"></div>
+              <p>非本月日期弱化展示，点击后直接回填。</p>
+            </article>
+            <article class="date-card">
+              <h3>禁用</h3>
+              <div class="ds-date-picker js-date-picker is-disabled" data-placeholder="请选择日期"></div>
+              <p>禁用态不可展开、不可选择。</p>
+            </article>
+            <article class="date-card">
+              <h3>错误</h3>
+              <div class="ds-date-picker js-date-picker is-error" data-placeholder="请选择日期"></div>
+              <p class="date-message is-error">请选择业务日期。</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="date-section">
+          <div class="date-section-head">
+            <h2 class="date-section-title">表单行示例</h2>
+            <span class="date-section-meta">Form Field</span>
+          </div>
+          <div class="date-row">
+            <span class="date-label">办理日期</span>
+            <div>
+              <div class="ds-date-picker js-date-picker js-date-picker-live" data-placeholder="请选择日期" data-clearable="true"></div>
+              <p class="date-message">点击输入框展开日历，可切换月份、选择日期或使用“今天”。</p>
+              <div class="date-output" aria-live="polite"><span>当前值</span><strong class="js-date-output">未选择</strong></div>
             </div>
           </div>
-        </div>
+        </section>
       </div>
     </section>
   </main>
@@ -50,6 +110,173 @@
 <script src="./assets/icon-registry.js"></script>
 <script src="./packages/design-system/src/AppShell/app-shell.js"></script>
 <script>
+  const dateWeekLabels = ['一', '二', '三', '四', '五', '六', '日'];
+
+  function padDatePart(value) {
+    return String(value).padStart(2, '0');
+  }
+
+  function formatDateValue(date) {
+    return `${date.getFullYear()}-${padDatePart(date.getMonth() + 1)}-${padDatePart(date.getDate())}`;
+  }
+
+  function parseDateValue(value) {
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(value || ''));
+    if (!match) return null;
+    const date = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+    return Number.isNaN(date.getTime()) ? null : date;
+  }
+
+  function monthDays(viewDate) {
+    const first = new Date(viewDate.getFullYear(), viewDate.getMonth(), 1);
+    const offset = (first.getDay() + 6) % 7;
+    const start = new Date(viewDate.getFullYear(), viewDate.getMonth(), 1 - offset);
+    return Array.from({ length: 42 }, (_, index) => {
+      const date = new Date(start);
+      date.setDate(start.getDate() + index);
+      return date;
+    });
+  }
+
+  function updateDateOutput(root, state) {
+    if (!root.classList.contains('js-date-picker-live')) return;
+    const output = document.querySelector('.js-date-output');
+    if (output) output.textContent = state.value || '未选择';
+  }
+
+  function renderDatePicker(root, state) {
+    const placeholder = root.dataset.placeholder || '请选择日期';
+    const disabled = root.classList.contains('is-disabled');
+    const clearable = root.dataset.clearable === 'true';
+    root.classList.toggle('has-value', Boolean(state.value));
+    root.innerHTML = `
+      <button class="ds-date-picker__trigger" type="button" ${disabled ? 'disabled' : ''} aria-haspopup="dialog" aria-expanded="${root.classList.contains('is-open')}">
+        <span class="${state.value ? 'ds-date-picker__text' : 'ds-date-picker__placeholder'}">${state.value || placeholder}</span>
+        ${clearable && state.value && !disabled ? '<span class="ds-date-picker__clear" role="button" tabindex="-1" aria-label="清除"></span>' : ''}
+        <span class="ds-date-picker__calendar" aria-hidden="true"></span>
+      </button>
+      ${root.classList.contains('is-open') ? renderDatePanel(state) : ''}
+    `;
+    updateDateOutput(root, state);
+  }
+
+  function renderDatePanel(state) {
+    const todayValue = formatDateValue(new Date());
+    const currentMonth = state.viewDate.getMonth();
+    const days = monthDays(state.viewDate);
+    return `
+      <div class="ds-date-picker__panel">
+        <div class="ds-date-picker__header">
+          <button class="ds-date-picker__nav js-date-prev" type="button" aria-label="上个月">‹</button>
+          <span class="ds-date-picker__title">${state.viewDate.getFullYear()} 年 ${state.viewDate.getMonth() + 1} 月</span>
+          <button class="ds-date-picker__nav js-date-next" type="button" aria-label="下个月">›</button>
+        </div>
+        <div class="ds-date-picker__grid">
+          ${dateWeekLabels.map(label => `<span class="ds-date-picker__week">${label}</span>`).join('')}
+          ${days.map((date) => {
+            const value = formatDateValue(date);
+            const classes = [
+              'ds-date-picker__day',
+              date.getMonth() !== currentMonth ? 'is-muted' : '',
+              value === todayValue ? 'is-today' : '',
+              value === state.value ? 'is-selected' : ''
+            ].filter(Boolean).join(' ');
+            return `<button class="${classes}" type="button" data-date="${value}">${date.getDate()}</button>`;
+          }).join('')}
+        </div>
+        <div class="ds-date-picker__footer">
+          <button class="ds-date-picker__link js-date-today" type="button">今天</button>
+          <button class="ds-date-picker__confirm js-date-confirm" type="button">确定</button>
+        </div>
+      </div>
+    `;
+  }
+
+  function closeOtherDatePickers(currentRoot) {
+    document.querySelectorAll('.js-date-picker.is-open').forEach((root) => {
+      if (root === currentRoot) return;
+      root.classList.remove('is-open');
+      root.querySelector('.ds-date-picker__panel')?.remove();
+      root.querySelector('.ds-date-picker__trigger')?.setAttribute('aria-expanded', 'false');
+    });
+  }
+
+  function initDatePicker(root) {
+    const selectedDate = parseDateValue(root.dataset.value);
+    const state = {
+      value: root.dataset.value || '',
+      viewDate: selectedDate || new Date()
+    };
+    renderDatePicker(root, state);
+
+    root.addEventListener('click', (event) => {
+      event.stopPropagation();
+      if (root.classList.contains('is-disabled')) return;
+
+      if (event.target.closest('.ds-date-picker__clear')) {
+        state.value = '';
+        state.viewDate = new Date();
+        root.classList.remove('is-open');
+        renderDatePicker(root, state);
+        return;
+      }
+
+      if (event.target.closest('.ds-date-picker__trigger')) {
+        const nextOpen = !root.classList.contains('is-open');
+        closeOtherDatePickers(root);
+        root.classList.toggle('is-open', nextOpen);
+        state.viewDate = parseDateValue(state.value) || state.viewDate || new Date();
+        renderDatePicker(root, state);
+        return;
+      }
+
+      if (event.target.closest('.js-date-prev')) {
+        state.viewDate = new Date(state.viewDate.getFullYear(), state.viewDate.getMonth() - 1, 1);
+        renderDatePicker(root, state);
+        return;
+      }
+
+      if (event.target.closest('.js-date-next')) {
+        state.viewDate = new Date(state.viewDate.getFullYear(), state.viewDate.getMonth() + 1, 1);
+        renderDatePicker(root, state);
+        return;
+      }
+
+      if (event.target.closest('.js-date-today')) {
+        const today = new Date();
+        state.value = formatDateValue(today);
+        state.viewDate = today;
+        root.classList.remove('is-open');
+        renderDatePicker(root, state);
+        return;
+      }
+
+      if (event.target.closest('.js-date-confirm')) {
+        root.classList.remove('is-open');
+        renderDatePicker(root, state);
+        return;
+      }
+
+      const day = event.target.closest('.ds-date-picker__day');
+      if (day) {
+        state.value = day.dataset.date;
+        state.viewDate = parseDateValue(state.value) || state.viewDate;
+        root.classList.remove('is-open');
+        renderDatePicker(root, state);
+      }
+    });
+  }
+
+  document.querySelectorAll('.js-date-picker').forEach(initDatePicker);
+  document.addEventListener('click', (event) => {
+    document.querySelectorAll('.js-date-picker.is-open').forEach((root) => {
+      if (root.contains(event.target)) return;
+      root.classList.remove('is-open');
+      root.querySelector('.ds-date-picker__panel')?.remove();
+      root.querySelector('.ds-date-picker__trigger')?.setAttribute('aria-expanded', 'false');
+    });
+  });
+
   WiseAppShell.init({
     activeModule: 'doctor',
     secondaryNav: {
