@@ -99,6 +99,21 @@
   box-shadow: var(--ds-shadow-md);
 }
 
+.ds-date-picker__panel--wide {
+  width: min(560px, calc(100vw - 360px));
+}
+
+.ds-date-picker__panels {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--ds-space-3);
+}
+
+.ds-date-picker__subpanel + .ds-date-picker__subpanel {
+  border-left: 1px solid var(--ds-color-border-secondary);
+  padding-left: var(--ds-space-3);
+}
+
 .ds-date-picker__header {
   display: flex;
   align-items: center;
@@ -179,6 +194,63 @@
   color: var(--ds-color-text-inverse);
   background: var(--ds-color-primary);
   font-weight: var(--ds-font-weight-semibold);
+}
+
+.ds-date-picker__day.is-range {
+  background: var(--ds-color-primary-light);
+}
+
+.ds-date-picker__day.is-range-start,
+.ds-date-picker__day.is-range-end {
+  color: var(--ds-color-text-inverse);
+  background: var(--ds-color-primary);
+  font-weight: var(--ds-font-weight-semibold);
+}
+
+.ds-date-picker__month-grid,
+.ds-date-picker__year-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--ds-space-4) var(--ds-space-2);
+  padding: var(--ds-space-4) 0 var(--ds-space-3);
+}
+
+.ds-date-picker__cell {
+  display: grid;
+  place-items: center;
+  height: 32px;
+  color: var(--ds-color-text);
+  background: transparent;
+  border: 0;
+  border-radius: var(--ds-radius-pill);
+  font: inherit;
+  line-height: var(--ds-line-height-md);
+  cursor: pointer;
+}
+
+.ds-date-picker__cell:hover {
+  color: var(--ds-color-primary);
+  background: var(--ds-color-bg-hover);
+}
+
+.ds-date-picker__cell.is-today {
+  color: var(--ds-color-primary);
+  border: 1px solid var(--ds-color-primary);
+}
+
+.ds-date-picker__cell.is-range {
+  border-radius: 0;
+  background: var(--ds-color-primary-light);
+}
+
+.ds-date-picker__cell.is-selected,
+.ds-date-picker__cell.is-range-start,
+.ds-date-picker__cell.is-range-end,
+.ds-date-picker__cell.is-selected:hover,
+.ds-date-picker__cell.is-range-start:hover,
+.ds-date-picker__cell.is-range-end:hover {
+  color: var(--ds-color-text-inverse);
+  background: var(--ds-color-primary);
 }
 
 .ds-date-picker__footer {

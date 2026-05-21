@@ -21,8 +21,11 @@
     .date-section-title { margin: 0; color: var(--ds-color-text); font-size: 14px; font-weight: 600; line-height: 22px; }
     .date-section-meta { color: var(--ds-color-text-tertiary); font-size: 12px; line-height: 20px; }
     .date-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; padding: 16px; }
+    .date-grid.is-two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .date-card { min-width: 0; min-height: 340px; padding: 16px; border: 1px solid var(--ds-color-border-secondary); background: var(--ds-color-white); }
+    .date-card.is-wide { min-height: 420px; }
     .date-card:nth-child(3n) .ds-date-picker__panel { left: auto; right: 0; }
+    .date-grid.is-two .date-card:nth-child(2n) .ds-date-picker__panel { left: auto; right: 0; }
     .date-card h3 { margin: 0 0 12px; color: var(--ds-color-text); font-size: 14px; font-weight: 600; line-height: 22px; }
     .date-card .ds-date-picker { width: 100%; }
     .date-card p { margin: 10px 0 0; color: var(--ds-color-text-tertiary); font-size: 12px; line-height: 20px; }
@@ -33,7 +36,7 @@
     .date-message { margin-top: 4px; color: var(--ds-color-text-tertiary); font-size: 12px; line-height: 20px; }
     .date-message.is-error { color: var(--ds-color-danger); }
     @media (max-width: 1100px) {
-      .date-grid { grid-template-columns: 1fr; }
+      .date-grid, .date-grid.is-two { grid-template-columns: 1fr; }
       .date-row { grid-template-columns: 1fr; }
       .date-label { justify-content: flex-start; }
     }
@@ -71,9 +74,9 @@
               <p>面板展示当前月份，可选择日期或切换月份。</p>
             </article>
             <article class="date-card">
-              <h3>跨月选择</h3>
+              <h3>本月外日期</h3>
               <div class="ds-date-picker js-date-picker is-open" data-value="2026-06-08" data-clearable="true"></div>
-              <p>非本月日期弱化展示，点击后直接回填。</p>
+              <p>非本月日期弱化展示，点击后更新面板月份。</p>
             </article>
             <article class="date-card">
               <h3>禁用</h3>
@@ -84,6 +87,63 @@
               <h3>错误</h3>
               <div class="ds-date-picker js-date-picker is-error" data-placeholder="请选择日期"></div>
               <p class="date-message is-error">请选择业务日期。</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="date-section">
+          <div class="date-section-head">
+            <h2 class="date-section-title">日期范围</h2>
+            <span class="date-section-meta">Range / Cross Month</span>
+          </div>
+          <div class="date-grid is-two">
+            <article class="date-card is-wide">
+              <h3>跨月范围未选择</h3>
+              <div class="ds-date-picker js-date-range-picker is-open" data-placeholder-start="开始日期" data-placeholder-end="结束日期"></div>
+              <p>左右展示相邻两个月，先选开始日期，再选结束日期。</p>
+            </article>
+            <article class="date-card is-wide">
+              <h3>跨月范围已选择</h3>
+              <div class="ds-date-picker js-date-range-picker is-open" data-start="2026-05-21" data-end="2026-06-08" data-clearable="true"></div>
+              <p>选中区间使用浅色连线，起止日期使用主色高亮。</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="date-section">
+          <div class="date-section-head">
+            <h2 class="date-section-title">按月选择</h2>
+            <span class="date-section-meta">Month / Month Range</span>
+          </div>
+          <div class="date-grid is-two">
+            <article class="date-card">
+              <h3>月份选择</h3>
+              <div class="ds-date-picker js-month-picker is-open" data-placeholder="请选择月份"></div>
+              <p>点击月份后高亮，确认后回填为 YYYY-MM。</p>
+            </article>
+            <article class="date-card">
+              <h3>月份范围</h3>
+              <div class="ds-date-picker js-month-range-picker is-open" data-start="2026-05" data-end="2026-08" data-clearable="true"></div>
+              <p>左右展示相邻年份，支持选择开始月份和结束月份。</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="date-section">
+          <div class="date-section-head">
+            <h2 class="date-section-title">按年选择</h2>
+            <span class="date-section-meta">Year / Year Range</span>
+          </div>
+          <div class="date-grid is-two">
+            <article class="date-card">
+              <h3>年份选择</h3>
+              <div class="ds-date-picker js-year-picker is-open" data-placeholder="请选择年份" data-value="2026" data-clearable="true"></div>
+              <p>按年份面板选择单个年份。</p>
+            </article>
+            <article class="date-card is-wide">
+              <h3>年份范围</h3>
+              <div class="ds-date-picker js-year-range-picker is-open" data-start="2028" data-end="2036" data-clearable="true"></div>
+              <p>左右展示两个年份区间，支持连续范围高亮。</p>
             </article>
           </div>
         </section>
@@ -269,9 +329,349 @@
     });
   }
 
+  function compareValue(a, b) {
+    return String(a || '').localeCompare(String(b || ''));
+  }
+
+  function rangeText(start, end, startPlaceholder, endPlaceholder) {
+    return `${start || startPlaceholder} <span aria-hidden="true">-</span> ${end || endPlaceholder}`;
+  }
+
+  function renderRangeTrigger(root, state, startPlaceholder, endPlaceholder) {
+    const disabled = root.classList.contains('is-disabled');
+    const clearable = root.dataset.clearable === 'true';
+    const hasValue = Boolean(state.start || state.end);
+    root.classList.toggle('has-value', hasValue);
+    return `
+      <button class="ds-date-picker__trigger" type="button" ${disabled ? 'disabled' : ''} aria-haspopup="dialog" aria-expanded="${root.classList.contains('is-open')}">
+        <span class="${hasValue ? 'ds-date-picker__text' : 'ds-date-picker__placeholder'}">${rangeText(state.start, state.end, startPlaceholder, endPlaceholder)}</span>
+        ${clearable && hasValue && !disabled ? '<span class="ds-date-picker__clear" role="button" tabindex="-1" aria-label="清除"></span>' : ''}
+        <span class="ds-date-picker__calendar" aria-hidden="true"></span>
+      </button>
+    `;
+  }
+
+  function renderDateRangePicker(root, state) {
+    const startPlaceholder = root.dataset.placeholderStart || '开始日期';
+    const endPlaceholder = root.dataset.placeholderEnd || '结束日期';
+    root.innerHTML = `
+      ${renderRangeTrigger(root, state, startPlaceholder, endPlaceholder)}
+      ${root.classList.contains('is-open') ? renderDateRangePanel(state) : ''}
+    `;
+  }
+
+  function renderDateRangeMonth(viewDate, state) {
+    const todayValue = formatDateValue(new Date());
+    const currentMonth = viewDate.getMonth();
+    return `
+      <div class="ds-date-picker__grid">
+        ${dateWeekLabels.map(label => `<span class="ds-date-picker__week">${label}</span>`).join('')}
+        ${monthDays(viewDate).map((date) => {
+          const value = formatDateValue(date);
+          const inRange = state.start && state.end && compareValue(value, state.start) > 0 && compareValue(value, state.end) < 0;
+          const classes = [
+            'ds-date-picker__day',
+            date.getMonth() !== currentMonth ? 'is-muted' : '',
+            value === todayValue ? 'is-today' : '',
+            inRange ? 'is-range' : '',
+            value === state.start ? 'is-range-start' : '',
+            value === state.end ? 'is-range-end' : ''
+          ].filter(Boolean).join(' ');
+          return `<button class="${classes}" type="button" data-date="${value}">${date.getDate()}</button>`;
+        }).join('')}
+      </div>
+    `;
+  }
+
+  function renderDateRangePanel(state) {
+    const nextMonth = new Date(state.viewDate.getFullYear(), state.viewDate.getMonth() + 1, 1);
+    return `
+      <div class="ds-date-picker__panel ds-date-picker__panel--wide">
+        <div class="ds-date-picker__panels">
+          <div class="ds-date-picker__subpanel">
+            <div class="ds-date-picker__header">
+              <button class="ds-date-picker__nav js-range-prev-year" type="button" aria-label="上一年">«</button>
+              <button class="ds-date-picker__nav js-range-prev" type="button" aria-label="上个月">‹</button>
+              <span class="ds-date-picker__title">${state.viewDate.getFullYear()} 年 ${state.viewDate.getMonth() + 1} 月</span>
+              <span class="ds-date-picker__nav" aria-hidden="true"></span>
+              <span class="ds-date-picker__nav" aria-hidden="true"></span>
+            </div>
+            ${renderDateRangeMonth(state.viewDate, state)}
+          </div>
+          <div class="ds-date-picker__subpanel">
+            <div class="ds-date-picker__header">
+              <span class="ds-date-picker__nav" aria-hidden="true"></span>
+              <span class="ds-date-picker__nav" aria-hidden="true"></span>
+              <span class="ds-date-picker__title">${nextMonth.getFullYear()} 年 ${nextMonth.getMonth() + 1} 月</span>
+              <button class="ds-date-picker__nav js-range-next" type="button" aria-label="下个月">›</button>
+              <button class="ds-date-picker__nav js-range-next-year" type="button" aria-label="下一年">»</button>
+            </div>
+            ${renderDateRangeMonth(nextMonth, state)}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function closeOtherRangePickers(currentRoot) {
+    document.querySelectorAll('.js-date-range-picker.is-open, .js-month-picker.is-open, .js-month-range-picker.is-open, .js-year-picker.is-open, .js-year-range-picker.is-open').forEach((root) => {
+      if (root === currentRoot) return;
+      root.classList.remove('is-open');
+      root.querySelector('.ds-date-picker__panel')?.remove();
+      root.querySelector('.ds-date-picker__trigger')?.setAttribute('aria-expanded', 'false');
+    });
+  }
+
+  function initDateRangePicker(root) {
+    const selectedStart = parseDateValue(root.dataset.start);
+    const state = {
+      start: root.dataset.start || '',
+      end: root.dataset.end || '',
+      step: root.dataset.start && !root.dataset.end ? 'end' : 'start',
+      viewDate: selectedStart || new Date(2025, 2, 1)
+    };
+    renderDateRangePicker(root, state);
+
+    root.addEventListener('click', (event) => {
+      event.stopPropagation();
+      if (event.target.closest('.ds-date-picker__clear')) {
+        state.start = '';
+        state.end = '';
+        state.step = 'start';
+        root.classList.remove('is-open');
+        renderDateRangePicker(root, state);
+        return;
+      }
+      if (event.target.closest('.ds-date-picker__trigger')) {
+        const nextOpen = !root.classList.contains('is-open');
+        closeOtherDatePickers(root);
+        closeOtherRangePickers(root);
+        root.classList.toggle('is-open', nextOpen);
+        renderDateRangePicker(root, state);
+        return;
+      }
+      if (event.target.closest('.js-range-prev-year')) state.viewDate = new Date(state.viewDate.getFullYear() - 1, state.viewDate.getMonth(), 1);
+      else if (event.target.closest('.js-range-next-year')) state.viewDate = new Date(state.viewDate.getFullYear() + 1, state.viewDate.getMonth(), 1);
+      else if (event.target.closest('.js-range-prev')) state.viewDate = new Date(state.viewDate.getFullYear(), state.viewDate.getMonth() - 1, 1);
+      else if (event.target.closest('.js-range-next')) state.viewDate = new Date(state.viewDate.getFullYear(), state.viewDate.getMonth() + 1, 1);
+      else {
+        const day = event.target.closest('.ds-date-picker__day');
+        if (!day) return;
+        const value = day.dataset.date;
+        if (!state.start || state.end || compareValue(value, state.start) < 0) {
+          state.start = value;
+          state.end = '';
+          state.step = 'end';
+        } else {
+          state.end = value;
+          state.step = 'start';
+          root.classList.remove('is-open');
+        }
+      }
+      renderDateRangePicker(root, state);
+    });
+  }
+
+  const monthLabels = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
+
+  function renderMonthLikePicker(root, state, isRange) {
+    const clearable = root.dataset.clearable === 'true';
+    const value = isRange ? `${state.start || '开始月份'} <span aria-hidden="true">-</span> ${state.end || '结束月份'}` : (state.value || root.dataset.placeholder || '请选择月份');
+    const hasValue = isRange ? Boolean(state.start || state.end) : Boolean(state.value);
+    root.classList.toggle('has-value', hasValue);
+    root.innerHTML = `
+      <button class="ds-date-picker__trigger" type="button" aria-haspopup="dialog" aria-expanded="${root.classList.contains('is-open')}">
+        <span class="${hasValue ? 'ds-date-picker__text' : 'ds-date-picker__placeholder'}">${value}</span>
+        ${clearable && hasValue ? '<span class="ds-date-picker__clear" role="button" tabindex="-1" aria-label="清除"></span>' : ''}
+        <span class="ds-date-picker__calendar" aria-hidden="true"></span>
+      </button>
+      ${root.classList.contains('is-open') ? renderMonthLikePanel(state, isRange) : ''}
+    `;
+  }
+
+  function renderMonthGrid(year, state, isRange) {
+    return `<div class="ds-date-picker__month-grid">${monthLabels.map((label, index) => {
+      const value = `${year}-${padDatePart(index + 1)}`;
+      const inRange = isRange && state.start && state.end && compareValue(value, state.start) > 0 && compareValue(value, state.end) < 0;
+      const classes = [
+        'ds-date-picker__cell',
+        !isRange && value === state.draftValue ? 'is-selected' : '',
+        isRange && inRange ? 'is-range' : '',
+        isRange && value === state.start ? 'is-range-start' : '',
+        isRange && value === state.end ? 'is-range-end' : ''
+      ].filter(Boolean).join(' ');
+      return `<button class="${classes}" type="button" data-month="${value}">${label}</button>`;
+    }).join('')}</div>`;
+  }
+
+  function renderMonthLikePanel(state, isRange) {
+    const nextYear = state.viewYear + 1;
+    return `
+      <div class="ds-date-picker__panel ds-date-picker__panel--wide">
+        <div class="ds-date-picker__panels">
+          <div class="ds-date-picker__subpanel">
+            <div class="ds-date-picker__header">
+              <button class="ds-date-picker__nav js-month-prev" type="button">«</button>
+              <span class="ds-date-picker__title">${state.viewYear} 年</span>
+              <span class="ds-date-picker__nav" aria-hidden="true"></span>
+            </div>
+            ${renderMonthGrid(state.viewYear, state, isRange)}
+          </div>
+          <div class="ds-date-picker__subpanel">
+            <div class="ds-date-picker__header">
+              <span class="ds-date-picker__nav" aria-hidden="true"></span>
+              <span class="ds-date-picker__title">${nextYear} 年</span>
+              <button class="ds-date-picker__nav js-month-next" type="button">»</button>
+            </div>
+            ${renderMonthGrid(nextYear, state, isRange)}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function initMonthPicker(root, isRange) {
+    const baseYear = Number((root.dataset.value || root.dataset.start || '2025').slice(0, 4)) || 2025;
+    const state = isRange ? { start: root.dataset.start || '', end: root.dataset.end || '', viewYear: baseYear } : { value: root.dataset.value || '', draftValue: root.dataset.value || '', viewYear: baseYear };
+    renderMonthLikePicker(root, state, isRange);
+    root.addEventListener('click', (event) => {
+      event.stopPropagation();
+      if (event.target.closest('.ds-date-picker__clear')) {
+        if (isRange) { state.start = ''; state.end = ''; } else { state.value = ''; state.draftValue = ''; }
+        root.classList.remove('is-open');
+        renderMonthLikePicker(root, state, isRange);
+        return;
+      }
+      if (event.target.closest('.ds-date-picker__trigger')) {
+        const nextOpen = !root.classList.contains('is-open');
+        closeOtherDatePickers(root);
+        closeOtherRangePickers(root);
+        root.classList.toggle('is-open', nextOpen);
+        if (!isRange) state.draftValue = state.value;
+        renderMonthLikePicker(root, state, isRange);
+        return;
+      }
+      if (event.target.closest('.js-month-prev')) state.viewYear -= 1;
+      else if (event.target.closest('.js-month-next')) state.viewYear += 1;
+      else {
+        const month = event.target.closest('[data-month]');
+        if (!month) return;
+        const value = month.dataset.month;
+        if (isRange) {
+          if (!state.start || state.end || compareValue(value, state.start) < 0) { state.start = value; state.end = ''; }
+          else { state.end = value; root.classList.remove('is-open'); }
+        } else {
+          state.draftValue = value;
+          state.value = value;
+          root.classList.remove('is-open');
+        }
+      }
+      renderMonthLikePicker(root, state, isRange);
+    });
+  }
+
+  function yearRangeStart(year) {
+    return Math.floor((year - 2020) / 12) * 12 + 2020;
+  }
+
+  function renderYearLikePicker(root, state, isRange) {
+    const clearable = root.dataset.clearable === 'true';
+    const value = isRange ? `${state.start || '开始年份'} <span aria-hidden="true">-</span> ${state.end || '结束年份'}` : (state.value || root.dataset.placeholder || '请选择年份');
+    const hasValue = isRange ? Boolean(state.start || state.end) : Boolean(state.value);
+    root.classList.toggle('has-value', hasValue);
+    root.innerHTML = `
+      <button class="ds-date-picker__trigger" type="button" aria-haspopup="dialog" aria-expanded="${root.classList.contains('is-open')}">
+        <span class="${hasValue ? 'ds-date-picker__text' : 'ds-date-picker__placeholder'}">${value}</span>
+        ${clearable && hasValue ? '<span class="ds-date-picker__clear" role="button" tabindex="-1" aria-label="清除"></span>' : ''}
+        <span class="ds-date-picker__calendar" aria-hidden="true"></span>
+      </button>
+      ${root.classList.contains('is-open') ? renderYearLikePanel(state, isRange) : ''}
+    `;
+  }
+
+  function renderYearGrid(startYear, state, isRange) {
+    return `<div class="ds-date-picker__year-grid">${Array.from({ length: 12 }, (_, index) => startYear + index).map((year) => {
+      const value = String(year);
+      const inRange = isRange && state.start && state.end && compareValue(value, state.start) > 0 && compareValue(value, state.end) < 0;
+      const classes = [
+        'ds-date-picker__cell',
+        !isRange && value === state.draftValue ? 'is-selected' : '',
+        isRange && inRange ? 'is-range' : '',
+        isRange && value === state.start ? 'is-range-start' : '',
+        isRange && value === state.end ? 'is-range-end' : ''
+      ].filter(Boolean).join(' ');
+      return `<button class="${classes}" type="button" data-year="${value}">${value}</button>`;
+    }).join('')}</div>`;
+  }
+
+  function renderYearLikePanel(state, isRange) {
+    const secondStart = state.viewStart + 12;
+    const wide = isRange ? ' ds-date-picker__panel--wide' : '';
+    return `
+      <div class="ds-date-picker__panel${wide}">
+        <div class="${isRange ? 'ds-date-picker__panels' : ''}">
+          <div class="ds-date-picker__subpanel">
+            <div class="ds-date-picker__header">
+              <button class="ds-date-picker__nav js-year-prev" type="button">«</button>
+              <span class="ds-date-picker__title">${state.viewStart + 5} 年 - ${state.viewStart + 11} 年</span>
+              ${isRange ? '<span class="ds-date-picker__nav" aria-hidden="true"></span>' : '<button class="ds-date-picker__nav js-year-next" type="button">»</button>'}
+            </div>
+            ${renderYearGrid(state.viewStart, state, isRange)}
+          </div>
+          ${isRange ? `<div class="ds-date-picker__subpanel"><div class="ds-date-picker__header"><span class="ds-date-picker__nav" aria-hidden="true"></span><span class="ds-date-picker__title">${secondStart} 年 - ${secondStart + 11} 年</span><button class="ds-date-picker__nav js-year-next" type="button">»</button></div>${renderYearGrid(secondStart, state, isRange)}</div>` : ''}
+        </div>
+      </div>
+    `;
+  }
+
+  function initYearPicker(root, isRange) {
+    const base = Number(root.dataset.value || root.dataset.start || '2025') || 2025;
+    const state = isRange ? { start: root.dataset.start || '', end: root.dataset.end || '', viewStart: yearRangeStart(base) } : { value: root.dataset.value || '', draftValue: root.dataset.value || '', viewStart: yearRangeStart(base) };
+    renderYearLikePicker(root, state, isRange);
+    root.addEventListener('click', (event) => {
+      event.stopPropagation();
+      if (event.target.closest('.ds-date-picker__clear')) {
+        if (isRange) { state.start = ''; state.end = ''; } else { state.value = ''; state.draftValue = ''; }
+        root.classList.remove('is-open');
+        renderYearLikePicker(root, state, isRange);
+        return;
+      }
+      if (event.target.closest('.ds-date-picker__trigger')) {
+        const nextOpen = !root.classList.contains('is-open');
+        closeOtherDatePickers(root);
+        closeOtherRangePickers(root);
+        root.classList.toggle('is-open', nextOpen);
+        if (!isRange) state.draftValue = state.value;
+        renderYearLikePicker(root, state, isRange);
+        return;
+      }
+      if (event.target.closest('.js-year-prev')) state.viewStart -= 12;
+      else if (event.target.closest('.js-year-next')) state.viewStart += 12;
+      else {
+        const year = event.target.closest('[data-year]');
+        if (!year) return;
+        const value = year.dataset.year;
+        if (isRange) {
+          if (!state.start || state.end || compareValue(value, state.start) < 0) { state.start = value; state.end = ''; }
+          else { state.end = value; root.classList.remove('is-open'); }
+        } else {
+          state.draftValue = value;
+          state.value = value;
+          root.classList.remove('is-open');
+        }
+      }
+      renderYearLikePicker(root, state, isRange);
+    });
+  }
+
   document.querySelectorAll('.js-date-picker').forEach(initDatePicker);
+  document.querySelectorAll('.js-date-range-picker').forEach(initDateRangePicker);
+  document.querySelectorAll('.js-month-picker').forEach((root) => initMonthPicker(root, false));
+  document.querySelectorAll('.js-month-range-picker').forEach((root) => initMonthPicker(root, true));
+  document.querySelectorAll('.js-year-picker').forEach((root) => initYearPicker(root, false));
+  document.querySelectorAll('.js-year-range-picker').forEach((root) => initYearPicker(root, true));
   document.addEventListener('click', (event) => {
-    document.querySelectorAll('.js-date-picker.is-open').forEach((root) => {
+    document.querySelectorAll('.js-date-picker.is-open, .js-date-range-picker.is-open, .js-month-picker.is-open, .js-month-range-picker.is-open, .js-year-picker.is-open, .js-year-range-picker.is-open').forEach((root) => {
       if (root.contains(event.target)) return;
       root.classList.remove('is-open');
       root.querySelector('.ds-date-picker__panel')?.remove();
