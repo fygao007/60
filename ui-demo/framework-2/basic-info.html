@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>框架2 - 基本信息</title>
+  <link rel="stylesheet" href="../packages/design-system/src/base.css" />
+  <link rel="stylesheet" href="./theme.css" />
+  <link rel="stylesheet" href="../packages/design-system/src/AppShellV2/app-shell-v2.css" />
+  <style>
+    body { margin: 0; }
+
+    .basic-page {
+      display: flex;
+      flex: 1;
+      min-width: 0;
+      min-height: 0;
+      background: var(--ds-color-white);
+    }
+
+    .basic-main {
+      flex: 1;
+      min-width: 0;
+      padding: 0 20px 20px;
+      overflow: auto;
+    }
+
+    .basic-titlebar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      height: 56px;
+      border-bottom: 1px solid var(--ds-color-border-secondary);
+    }
+
+    .basic-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--ds-color-text);
+      background: transparent;
+      border: 0;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .basic-titlebar h1 {
+      margin: 0;
+      color: var(--ds-color-text-heading);
+      font-size: var(--ds-font-size-title);
+      line-height: var(--ds-line-height-title);
+    }
+
+    .basic-section {
+      margin-top: 16px;
+    }
+
+    .basic-section-title {
+      display: flex;
+      align-items: center;
+      height: 52px;
+      padding: 0 24px;
+      color: var(--ds-color-text-heading);
+      background: var(--ds-color-primary-light);
+      border-radius: var(--ds-radius-md);
+      font-size: var(--ds-font-size-lg);
+      font-weight: var(--ds-font-weight-semibold);
+    }
+
+    .basic-grid {
+      display: grid;
+      grid-template-columns: 150px minmax(0, 1fr) 150px minmax(0, 1fr);
+      border-top: 1px solid var(--ds-color-border-secondary);
+      border-left: 1px solid var(--ds-color-border-secondary);
+    }
+
+    .basic-cell-label,
+    .basic-cell-control {
+      min-height: 56px;
+      border-right: 1px solid var(--ds-color-border-secondary);
+      border-bottom: 1px solid var(--ds-color-border-secondary);
+    }
+
+    .basic-cell-label {
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      color: var(--ds-color-text-secondary);
+      background: var(--ds-color-bg-subtle);
+    }
+
+    .basic-cell-label.is-required::before {
+      content: "*";
+      margin-right: 2px;
+      color: var(--ds-color-danger);
+    }
+
+    .basic-cell-control {
+      display: flex;
+      align-items: center;
+      padding: 8px;
+      min-width: 0;
+    }
+
+    .basic-input,
+    .basic-select {
+      width: 100%;
+      height: 36px;
+      padding: 0 12px;
+      color: var(--ds-color-text);
+      background: var(--ds-color-white);
+      border: 1px solid var(--ds-color-border);
+      border-radius: var(--ds-radius-sm);
+      font: inherit;
+      outline: none;
+    }
+
+    .basic-input:focus,
+    .basic-select:focus {
+      border-color: var(--ds-color-primary);
+      box-shadow: 0 0 0 2px var(--ds-color-focus-ring);
+    }
+
+    .basic-edit-table {
+      width: 100%;
+      margin-top: 16px;
+      border: 1px solid var(--ds-color-border-secondary);
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    .basic-edit-table th,
+    .basic-edit-table td {
+      height: 56px;
+      padding: 8px 16px;
+      border-bottom: 1px solid var(--ds-color-border-secondary);
+      text-align: left;
+    }
+
+    .basic-edit-table th {
+      height: 52px;
+      color: var(--ds-color-text-heading);
+      background: var(--ds-color-bg-subtle);
+      font-weight: var(--ds-font-weight-semibold);
+    }
+
+    .basic-link {
+      color: var(--ds-color-primary);
+      text-decoration: none;
+    }
+
+    .basic-add {
+      display: inline-flex;
+      align-items: center;
+      margin-top: 12px;
+      color: var(--ds-color-primary);
+      background: transparent;
+      border: 0;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .basic-actions {
+      position: sticky;
+      bottom: 0;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 24px;
+      padding: 12px 0 0;
+      background: var(--ds-color-white);
+    }
+
+    .basic-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 72px;
+      height: 32px;
+      padding: 0 16px;
+      color: var(--ds-color-text-secondary);
+      background: var(--ds-color-white);
+      border: 1px solid var(--ds-color-border);
+      border-radius: var(--ds-radius-sm);
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .basic-btn.primary {
+      color: var(--ds-color-white);
+      background: var(--ds-color-primary);
+      border-color: var(--ds-color-primary);
+    }
+
+    .basic-anchor {
+      flex: none;
+      width: 184px;
+      padding: 52px 20px 0;
+      border-left: 1px solid var(--ds-color-border-secondary);
+    }
+
+    .basic-anchor a {
+      position: relative;
+      display: block;
+      padding: 8px 0 8px 18px;
+      color: var(--ds-color-text-secondary);
+      text-decoration: none;
+    }
+
+    .basic-anchor a.is-active {
+      color: var(--ds-color-primary);
+      font-weight: var(--ds-font-weight-semibold);
+    }
+
+    .basic-anchor a.is-active::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 16px;
+      width: 8px;
+      height: 8px;
+      background: var(--ds-color-primary);
+      border-radius: var(--ds-radius-pill);
+    }
+  </style>
+</head>
+<body>
+<div class="frame2-stage ds-scope">
+  <main class="basic-page">
+    <section class="basic-main">
+      <header class="basic-titlebar">
+        <button class="basic-back" type="button">← 返回</button>
+        <h1 data-frame2-title>基本信息页面</h1>
+      </header>
+
+      <section class="basic-section" id="section-basic">
+        <div class="basic-section-title">基本信息</div>
+        <div class="basic-grid">
+          <div class="basic-cell-label is-required">内容名称</div>
+          <div class="basic-cell-control"><select class="basic-select"><option>请选择</option><option>博士招生</option></select></div>
+          <div class="basic-cell-label is-required">课程性质</div>
+          <div class="basic-cell-control"><select class="basic-select"><option>请选择</option><option>必修</option><option>选修</option></select></div>
+        </div>
+      </section>
+
+      <section class="basic-section" id="section-course">
+        <div class="basic-section-title">课程信息</div>
+        <div class="basic-grid">
+          <div class="basic-cell-label is-required">内容名称</div>
+          <div class="basic-cell-control"><select class="basic-select"><option>请选择</option><option>研究方法</option></select></div>
+          <div class="basic-cell-label is-required">内容名称</div>
+          <div class="basic-cell-control"><select class="basic-select"><option>请选择</option><option>培养方案</option></select></div>
+        </div>
+        <table class="basic-edit-table" aria-label="课程信息">
+          <thead>
+            <tr><th>标题</th><th>标题</th><th>标题</th><th style="width: 140px">操作</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>内容名称</td>
+              <td>内容名称</td>
+              <td>内容名称</td>
+              <td><a class="basic-link" href="#">操作</a>　<a class="basic-link" href="#">操作</a></td>
+            </tr>
+            <tr>
+              <td><select class="basic-select"><option>选项</option></select></td>
+              <td><select class="basic-select"><option>选项</option></select></td>
+              <td><select class="basic-select"><option>选项</option></select></td>
+              <td><a class="basic-link" href="#">操作</a>　<a class="basic-link" href="#">操作</a></td>
+            </tr>
+          </tbody>
+        </table>
+        <button class="basic-add" type="button">＋ 新增</button>
+      </section>
+
+      <section class="basic-section" id="section-apply">
+        <div class="basic-section-title">申报信息</div>
+        <div class="basic-grid">
+          <div class="basic-cell-label is-required">内容名称</div>
+          <div class="basic-cell-control"><select class="basic-select"><option>请选择</option></select></div>
+          <div class="basic-cell-label is-required">内容名称</div>
+          <div class="basic-cell-control"><select class="basic-select"><option>请选择</option></select></div>
+          <div class="basic-cell-label is-required">内容名称</div>
+          <div class="basic-cell-control"><input class="basic-input" type="text" placeholder="请输入整数" /></div>
+          <div class="basic-cell-label is-required">内容名称</div>
+          <div class="basic-cell-control"><input class="basic-input" type="text" placeholder="请输入整数" /></div>
+        </div>
+      </section>
+
+      <section class="basic-section" id="section-extra">
+        <div class="basic-section-title">补充信息</div>
+        <div class="basic-grid">
+          <div class="basic-cell-label is-required">内容名称</div>
+          <div class="basic-cell-control"><input class="basic-input" type="text" placeholder="请输入" /></div>
+          <div class="basic-cell-label is-required">内容名称</div>
+          <div class="basic-cell-control"><input class="basic-input" type="text" placeholder="请输入" /></div>
+        </div>
+      </section>
+
+      <div class="basic-actions">
+        <button class="basic-btn" type="button">取消</button>
+        <button class="basic-btn primary" type="button">保存</button>
+      </div>
+    </section>
+
+    <aside class="basic-anchor" aria-label="页面锚点">
+      <a class="is-active" href="#section-basic">基本信息</a>
+      <a href="#section-course">课程信息</a>
+      <a href="#section-apply">申报信息</a>
+      <a href="#section-extra">补充信息</a>
+    </aside>
+  </main>
+</div>
+
+<script src="../assets/icon-registry.js"></script>
+<script src="../packages/design-system/src/AppShellV2/app-shell-v2.js"></script>
+<script>
+  WiseAppShellV2.init({
+    activeModule: 'doctor',
+    activeApp: 'doctor',
+    systemName: '60系统',
+    versionLabel: '框架2',
+    assetBase: '../assets',
+    frameworkAssetBase: './assets',
+    topTools: [
+      { key: 'search', label: '搜索', icon: './assets/top-search.svg' },
+      { key: 'skin', label: '换肤', icon: './assets/top-skin.svg' },
+      { key: 'language', label: '语言', icon: './assets/top-language.svg' }
+    ],
+    appGroups: [
+      { key: 'portal', icon: 'home', label: '门户' },
+      { key: 'admission', label: '招生应用', apps: [
+        { key: 'prepare', icon: 'prepare', label: '准备工作' },
+        { key: 'master', icon: 'master', label: '硕士招生系统' },
+        { key: 'doctor', icon: 'doctor', label: '博士招生系统' },
+        { key: 'camp', icon: 'camp', label: '夏令营系统' }
+      ] },
+      { key: 'recommend', icon: 'recommend', label: '推免系统' },
+      { key: 'student', label: '学生服务', apps: [
+        { key: 'hkmt', icon: 'hkmt', label: '港澳台招生' },
+        { key: 'exam', icon: 'exam', label: '考务管理' }
+      ] }
+    ],
+    secondaryNav: {
+      title: '组件库',
+      items: [
+        { key: '工作台', label: '工作台', icon: 'home', children: [
+          { key: '框架2首页', label: '框架2首页' },
+          { key: '基本信息页面', label: '基本信息页面' },
+          { key: '基本信息表格', label: '基本信息表格' },
+          { key: '页面配置', label: '页面配置' }
+        ] },
+        { key: '业务管理', label: '业务管理', icon: 'flow', expanded: false, children: [
+          { key: '业务列表', label: '业务列表' },
+          { key: '数据维护', label: '数据维护' }
+        ] },
+        { key: '系统设置', label: '系统设置', icon: 'settings', expanded: false, children: [
+          { key: '角色权限', label: '角色权限' },
+          { key: '操作日志', label: '操作日志' }
+        ] }
+      ]
+    },
+    activeFeature: '基本信息页面',
+    tabs: ['框架2首页', '基本信息页面', '基本信息表格', '页面配置'],
+    onFeatureChange(feature) {
+      const routes = {
+        '框架2首页': './index.html',
+        '基本信息页面': './basic-info.html',
+        '基本信息表格': './basic-info-table.html',
+        '页面配置': './index.html'
+      };
+      if (routes[feature] && feature !== '基本信息页面') window.location.href = routes[feature];
+    }
+  });
+</script>
+</body>
+</html>

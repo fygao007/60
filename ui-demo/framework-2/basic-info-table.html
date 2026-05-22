@@ -404,6 +404,7 @@
       items: [
         { key: '工作台', label: '工作台', icon: 'home', children: [
           { key: '框架2首页', label: '框架2首页' },
+          { key: '基本信息页面', label: '基本信息页面' },
           { key: '基本信息表格', label: '基本信息表格' },
           { key: '页面配置', label: '页面配置' }
         ] },
@@ -418,10 +419,11 @@
       ]
     },
     activeFeature: '基本信息表格',
-    tabs: ['框架2首页', '基本信息表格', '页面配置'],
+    tabs: ['框架2首页', '基本信息页面', '基本信息表格', '页面配置'],
     onFeatureChange(feature) {
       const routes = {
         '框架2首页': './index.html',
+        '基本信息页面': './basic-info.html',
         '基本信息表格': './basic-info-table.html',
         '页面配置': './index.html'
       };
