@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>框架2 - 基本信息表格</title>
-  <link rel="stylesheet" href="./packages/design-system/src/base.css" />
-  <link rel="stylesheet" href="./packages/design-system/src/AppShellV2/app-shell-v2.css" />
+  <link rel="stylesheet" href="../packages/design-system/src/base.css" />
+  <link rel="stylesheet" href="../packages/design-system/src/AppShellV2/app-shell-v2.css" />
   <style>
     body { margin: 0; }
 
@@ -369,14 +369,15 @@
   </main>
 </div>
 
-<script src="./assets/icon-registry.js"></script>
-<script src="./packages/design-system/src/AppShellV2/app-shell-v2.js"></script>
+<script src="../assets/icon-registry.js"></script>
+<script src="../packages/design-system/src/AppShellV2/app-shell-v2.js"></script>
 <script>
   WiseAppShellV2.init({
     activeModule: 'doctor',
     activeApp: 'doctor',
     systemName: '60系统',
     versionLabel: '框架2',
+    assetBase: '../assets',
     appGroups: [
       { key: 'portal', icon: 'home', label: '门户' },
       { key: 'admission', label: '招生应用', apps: [
@@ -394,30 +395,18 @@
     secondaryNav: {
       title: '组件库',
       items: [
-        { key: '功能索引', label: '功能索引', icon: 'home' },
-        { key: '当前组件', label: '当前组件', icon: 'prepare' },
-        { key: 'Ant目录', label: 'Ant目录', icon: 'prepare' },
-        { key: '组件总览', label: '组件总览', icon: 'fullscreen' },
-        { key: '表单', label: '表单', icon: 'settings' },
-        { key: '表格', label: '表格', icon: 'flow' },
+        { key: '框架2首页', label: '框架2首页', icon: 'home' },
         { key: '基本信息表格', label: '基本信息表格', icon: 'flow' },
-        { key: '框架1', label: '框架1', icon: 'master' },
-        { key: '框架2', label: '框架2', icon: 'doctor' }
+        { key: '页面配置', label: '页面配置', icon: 'settings' }
       ]
     },
     activeFeature: '基本信息表格',
-    tabs: ['功能索引', '当前组件', 'Ant目录', '组件总览', '表单', '表格', '基本信息表格', '框架2'],
+    tabs: ['框架2首页', '基本信息表格', '页面配置'],
     onFeatureChange(feature) {
       const routes = {
-        '功能索引': './component-library-index.html',
-        '当前组件': './current-components-index.html',
-        'Ant目录': './all-components-index.html',
-        '组件总览': './ant-components-page.html',
-        '表单': './form-components-page.html',
-        '表格': './basic-table-page.html',
-        '基本信息表格': './framework-2-basic-info-table.html',
-        '框架1': './primary-nav.html',
-        '框架2': './framework-2.html'
+        '框架2首页': './index.html',
+        '基本信息表格': './basic-info-table.html',
+        '页面配置': './index.html'
       };
       if (routes[feature] && feature !== '基本信息表格') window.location.href = routes[feature];
     }

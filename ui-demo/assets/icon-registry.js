@@ -1,5 +1,6 @@
 (function () {
-  const iconPath = "./assets/icons/";
+  const scriptUrl = document.currentScript?.src || "";
+  const iconPath = scriptUrl ? new URL("./icons/", scriptUrl).href : "./assets/icons/";
   const icons = {
     search: "search-line.svg",
     home: "home-fill.svg",

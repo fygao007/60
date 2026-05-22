@@ -74,10 +74,11 @@
   function buildShell(config) {
     const navItems = config.secondaryNav?.items || [];
     const activeApp = config.activeApp || config.activeModule || 'doctor';
+    const assetBase = config.assetBase || './assets';
     return `
       <header class="frame2-topbar">
         <div class="frame2-brand">
-          <img src="./assets/icons/金智logo.svg" alt="Wisedu" />
+          <img src="${assetBase}/icons/金智logo.svg" alt="Wisedu" />
           <span class="frame2-brand-text">
             <span class="frame2-brand-name">${config.systemName || '系统框架2'}</span>
             <span class="frame2-brand-sub">${config.versionLabel || 'Frame 2'}</span>
