@@ -265,8 +265,8 @@
 
 .frame2-tools .frame2-tool img,
 .frame2-tools .frame2-tool svg {
-  width: 16px;
-  height: 16px;
+  width: 32px;
+  height: 32px;
 }
 
 .frame2-tool:hover {
@@ -449,7 +449,7 @@
   flex-direction: column;
   min-width: 0;
   min-height: 0;
-  padding: 0 12px 12px;
+  padding: 12px;
   background: var(--ds-color-bg-page);
 }
 
