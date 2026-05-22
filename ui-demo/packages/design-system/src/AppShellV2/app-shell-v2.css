@@ -29,7 +29,7 @@
   color: var(--ds-color-white);
   overflow: hidden;
   background: linear-gradient(270deg, rgba(45, 95, 202, 0.8) 0%, rgba(33, 76, 191, 0.9) 50%, #1e51bc 100%);
-  background-image: url('../../../../framework-2/assets/topbar-nav.svg');
+  background-image: url('../../../../framework-2/assets/topbar-nav.jpg');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
