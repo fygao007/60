@@ -23,11 +23,16 @@
   display: flex;
   flex: none;
   align-items: center;
-  gap: var(--ds-space-4);
+  gap: 0;
   height: 48px;
-  padding: 0 var(--ds-space-3);
+  padding: 0 16px;
   color: var(--ds-color-white);
-  background: #3659cb url('../../../../framework-2/assets/topbar-bg.jpg') right center / auto 48px no-repeat;
+  overflow: hidden;
+  background: linear-gradient(270deg, rgba(45, 95, 202, 0.8) 0%, rgba(33, 76, 191, 0.9) 50%, #1e51bc 100%);
+  background-image: url('../../../../framework-2/assets/topbar-nav.svg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .frame2-brand {
@@ -36,13 +41,13 @@
   display: flex;
   flex: none;
   align-items: center;
-  gap: var(--ds-space-2);
-  width: 184px;
+  gap: 16px;
+  width: 211px;
   min-width: 0;
 }
 
 .frame2-brand img {
-  width: 58px;
+  width: 56px;
   height: 26px;
   object-fit: contain;
 }
@@ -54,17 +59,16 @@
 
 .frame2-brand-name {
   overflow: hidden;
-  font-size: var(--ds-font-size-md);
-  font-weight: var(--ds-font-weight-semibold);
+  font-family: 'Alibaba PuHuiTi 2.0', var(--ds-font-family);
+  font-size: var(--ds-font-size-lg);
+  font-weight: 900;
   line-height: var(--ds-line-height-md);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .frame2-brand-sub {
-  color: rgba(var(--ds-color-white-rgb), 0.72);
-  font-size: var(--ds-font-size-xs);
-  line-height: var(--ds-line-height-xs);
+  display: none;
 }
 
 .frame2-module-tabs {
@@ -73,9 +77,10 @@
   display: flex;
   flex: none;
   align-items: center;
-  gap: var(--ds-space-1);
-  max-width: calc(100vw - 520px);
+  gap: 4px;
+  max-width: calc(100vw - 560px);
   min-width: 0;
+  padding-left: 12px;
   overflow: auto hidden;
 }
 
@@ -89,12 +94,13 @@
   align-items: center;
   justify-content: center;
   height: 48px;
-  padding: 0 14px;
-  color: rgba(var(--ds-color-white-rgb), 0.86);
+  padding: 4px 12px;
+  color: var(--ds-color-white);
   background: transparent;
   border: 0;
-  border-radius: 0;
+  border-radius: var(--ds-radius-sm);
   font: inherit;
+  font-size: var(--ds-font-size-md);
   line-height: var(--ds-line-height-md);
   cursor: pointer;
 }
@@ -111,12 +117,13 @@
   gap: var(--ds-space-1);
   justify-content: center;
   height: 48px;
-  padding: 0 14px;
-  color: rgba(var(--ds-color-white-rgb), 0.86);
+  padding: 4px 12px;
+  color: var(--ds-color-white);
   background: transparent;
   border: 0;
   border-radius: 0;
   font: inherit;
+  font-size: var(--ds-font-size-md);
   line-height: var(--ds-line-height-md);
   cursor: pointer;
 }
@@ -140,12 +147,13 @@
 .frame2-app-group.is-active .frame2-app-trigger::after {
   content: "";
   position: absolute;
-  left: 14px;
-  right: 14px;
+  left: 12px;
+  right: 12px;
   bottom: 0;
-  height: 3px;
+  height: 2px;
   background: var(--ds-color-white);
-  border-radius: var(--ds-radius-pill) var(--ds-radius-pill) 0 0;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
 }
 
 .frame2-app-arrow {
@@ -233,8 +241,9 @@
   display: flex;
   flex: none;
   align-items: center;
-  gap: 0;
+  gap: 8px;
   margin-left: auto;
+  padding-left: 16px;
 }
 
 .frame2-tool {
@@ -250,13 +259,14 @@
 }
 
 .frame2-tools .frame2-tool {
-  height: 48px;
+  height: 32px;
+  border-radius: var(--ds-radius-sm);
 }
 
 .frame2-tools .frame2-tool img,
 .frame2-tools .frame2-tool svg {
-  width: 32px;
-  height: 32px;
+  width: 16px;
+  height: 16px;
 }
 
 .frame2-tool:hover {
@@ -264,11 +274,34 @@
 }
 
 .frame2-avatar {
+  flex: none;
   width: 32px;
   height: 32px;
   background: url('../../../../assets/icons/头像.svg') center / cover no-repeat, var(--ds-color-avatar-bg);
-  border: 1px solid rgba(var(--ds-color-white-rgb), 0.82);
+  border: 1px solid var(--ds-color-white);
   border-radius: var(--ds-radius-sm);
+}
+
+.frame2-user {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+  margin-left: 4px;
+}
+
+.frame2-user-name {
+  color: var(--ds-color-white);
+  font-size: var(--ds-font-size-xs);
+  line-height: var(--ds-line-height-xs);
+  white-space: nowrap;
+}
+
+.frame2-user-arrow {
+  margin-left: -6px;
+  color: var(--ds-color-white);
+  font-size: 12px;
+  line-height: 12px;
 }
 
 .frame2-main {
@@ -416,6 +449,8 @@
   flex-direction: column;
   min-width: 0;
   min-height: 0;
+  padding: 0 12px 12px;
+  background: var(--ds-color-bg-page);
 }
 
 .frame2-tabsbar {
@@ -424,7 +459,7 @@
   align-items: center;
   gap: 8px;
   min-height: 32px;
-  padding: 0 16px;
+  padding: 0;
   background: var(--ds-color-bg-page);
   border-bottom: 0;
 }
@@ -501,7 +536,7 @@
   flex-direction: column;
   min-width: 0;
   min-height: 0;
-  padding: 0 12px 12px;
+  padding: 0;
   overflow: hidden;
   background: var(--ds-color-bg-page);
 }
@@ -522,15 +557,7 @@
 }
 
 .frame2-content::after {
-  content: "";
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  width: min(760px, 58%);
-  height: 260px;
-  pointer-events: none;
-  background: url('../../../../framework-2/assets/campus.png') right bottom / contain no-repeat;
-  opacity: 0.08;
+  display: none;
 }
 
 .frame2-page-head {

@@ -130,7 +130,11 @@
         <nav class="frame2-module-tabs" aria-label="应用导航">${renderApps(config.appGroups || DEFAULT_APPS, activeApp)}</nav>
         <div class="frame2-tools">
           ${renderTopTools(config.topTools)}
-          <span class="frame2-avatar" aria-hidden="true"></span>
+          <div class="frame2-user">
+            <span class="frame2-user-name">${config.userName || '人事处管理员'}</span>
+            <span class="frame2-user-arrow">⌄</span>
+            <span class="frame2-avatar" aria-hidden="true"></span>
+          </div>
         </div>
       </header>
       <div class="frame2-main">

@@ -375,8 +375,8 @@
 <script>
   WiseAppShellV2.init({
     activeModule: 'doctor',
-    activeApp: 'doctor',
-    systemName: '60系统',
+    activeApp: 'selected',
+    systemName: '人力资源管理系统',
     versionLabel: '框架2',
     assetBase: '../assets',
     frameworkAssetBase: './assets',
@@ -386,18 +386,18 @@
       { key: 'language', label: '语言', icon: './assets/top-language.svg' }
     ],
     appGroups: [
-      { key: 'portal', icon: 'home', label: '门户' },
-      { key: 'admission', label: '招生应用', apps: [
-        { key: 'prepare', icon: 'prepare', label: '准备工作' },
-        { key: 'master', icon: 'master', label: '硕士招生系统' },
-        { key: 'doctor', icon: 'doctor', label: '博士招生系统' },
-        { key: 'camp', icon: 'camp', label: '夏令营系统' }
+      { key: 'home', label: '首页' },
+      { key: 'task', label: '任务中心' },
+      { key: 'selected', label: '选择的应用', apps: [
+        { key: 'selected-main', label: '人事服务' },
+        { key: 'selected-archive', label: '档案管理' }
       ] },
-      { key: 'recommend', icon: 'recommend', label: '推免系统' },
-      { key: 'student', label: '学生服务', apps: [
-        { key: 'hkmt', icon: 'hkmt', label: '港澳台招生' },
-        { key: 'exam', icon: 'exam', label: '考务管理' }
-      ] }
+      { key: 'daily', label: '日常管理', apps: [
+        { key: 'attendance', label: '考勤管理' },
+        { key: 'approval', label: '流程审批' }
+      ] },
+      { key: 'ai', label: 'AI观察室' },
+      { key: 'stats', label: '数据统计' }
     ],
     secondaryNav: {
       title: '组件库',
