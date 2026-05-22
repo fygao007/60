@@ -1,15 +1,15 @@
 .frame2-stage {
   /* ========== 框架2：主题色阶 ========== */
   --f2-color-1: #f0f6ff;
-  --f2-color-2: #edf4ff;
-  --f2-color-3: #c4daff;
-  --f2-color-4: #9cbdff;
-  --f2-color-5: #739dff;
-  --f2-color-6: #4877f9;
-  --f2-color-7: #3358d4;
-  --f2-color-8: #213dad;
-  --f2-color-9: #132687;
-  --f2-color-10: #0d1861;
+  --f2-color-2: #deebff;
+  --f2-color-3: #b5d0ff;
+  --f2-color-4: #8cb3ff;
+  --f2-color-5: #608ef7;
+  --f2-color-6: #3565ea;
+  --f2-color-7: #2349c4;
+  --f2-color-8: #15309e;
+  --f2-color-9: #0a1c78;
+  --f2-color-10: #061052;
 
   --f2-primary-950: var(--f2-color-10);
   --f2-primary-900: var(--f2-color-9);
@@ -56,7 +56,7 @@
   --ds-color-primary-lighter: var(--f2-bg-soft);
   --ds-color-primary-selected: var(--f2-primary-100);
   --ds-color-primary-weak: var(--f2-primary-200);
-  --ds-color-primary-rgb: 72, 119, 249;
+  --ds-color-primary-rgb: 53, 101, 234;
 
   --ds-color-success: var(--f2-success);
   --ds-color-success-active: var(--f2-success-text);
