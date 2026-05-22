@@ -400,9 +400,19 @@
     secondaryNav: {
       title: '组件库',
       items: [
-        { key: '框架2首页', label: '框架2首页', icon: 'home' },
-        { key: '基本信息表格', label: '基本信息表格', icon: 'flow' },
-        { key: '页面配置', label: '页面配置', icon: 'settings' }
+        { key: '工作台', label: '工作台', icon: 'home', children: [
+          { key: '框架2首页', label: '框架2首页' },
+          { key: '基本信息表格', label: '基本信息表格' },
+          { key: '页面配置', label: '页面配置' }
+        ] },
+        { key: '业务管理', label: '业务管理', icon: 'flow', expanded: false, children: [
+          { key: '业务列表', label: '业务列表' },
+          { key: '数据维护', label: '数据维护' }
+        ] },
+        { key: '系统设置', label: '系统设置', icon: 'settings', expanded: false, children: [
+          { key: '角色权限', label: '角色权限' },
+          { key: '操作日志', label: '操作日志' }
+        ] }
       ]
     },
     activeFeature: '基本信息表格',

@@ -54,13 +54,41 @@
     return typeof item === 'string' ? { key: item, label: item, icon: 'chevronRight' } : item;
   }
 
+  function menuGroupActive(item, activeFeature) {
+    return item.key === activeFeature
+      || item.label === activeFeature
+      || (item.children || []).some((child) => child.key === activeFeature || child.label === activeFeature);
+  }
+
   function renderMenu(items, activeFeature) {
-    return (items || []).map(normalizeMenuItem).map((item) => `
-      <button class="frame2-side-item${item.key === activeFeature || item.label === activeFeature ? ' is-active' : ''}" type="button" data-feature="${item.key || item.label}">
-        <span class="frame2-side-icon"><span class="wise-icon" data-wise-icon="${item.icon || 'chevronRight'}"></span></span>
-        <span class="frame2-side-label">${item.label}</span>
-      </button>
-    `).join('');
+    return (items || []).map(normalizeMenuItem).map((item) => {
+      if (item.children && item.children.length) {
+        const active = menuGroupActive(item, activeFeature);
+        const open = item.expanded !== false || active;
+        return `
+          <div class="frame2-side-group${open ? ' is-open' : ''}${active ? ' is-active' : ''}" data-menu-group="${item.key || item.label}">
+            <button class="frame2-side-item is-group" type="button" data-menu-toggle="${item.key || item.label}">
+              <span class="frame2-side-icon"><span class="wise-icon" data-wise-icon="${item.icon || 'chevronRight'}"></span></span>
+              <span class="frame2-side-label">${item.label}</span>
+              <span class="frame2-side-arrow" aria-hidden="true">${open ? '⌄' : '›'}</span>
+            </button>
+            <div class="frame2-side-children">
+              ${item.children.map(normalizeMenuItem).map((child) => `
+                <button class="frame2-side-item is-child${child.key === activeFeature || child.label === activeFeature ? ' is-active' : ''}" type="button" data-feature="${child.key || child.label}">
+                  <span class="frame2-side-label">${child.label}</span>
+                </button>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+      return `
+        <button class="frame2-side-item${item.key === activeFeature || item.label === activeFeature ? ' is-active' : ''}" type="button" data-feature="${item.key || item.label}">
+          <span class="frame2-side-icon"><span class="wise-icon" data-wise-icon="${item.icon || 'chevronRight'}"></span></span>
+          <span class="frame2-side-label">${item.label}</span>
+        </button>
+      `;
+    }).join('');
   }
 
   function renderTabs(items, activeFeature) {
@@ -106,11 +134,11 @@
       </header>
       <div class="frame2-main">
         <aside class="frame2-sidebar">
-          <div class="frame2-side-head">
-            <span class="frame2-side-title">${config.secondaryNav?.title || '组件库'}</span>
-            <button class="frame2-side-collapse" type="button" aria-label="收起侧栏">‹</button>
-          </div>
           <nav class="frame2-menu" aria-label="二级导航">${renderMenu(navItems, config.activeFeature)}</nav>
+          <button class="frame2-side-collapse" type="button" aria-label="收起导航">
+            <span class="frame2-side-icon" aria-hidden="true">‹</span>
+            <span class="frame2-side-label">收起导航</span>
+          </button>
         </aside>
         <main class="frame2-workspace">
           <div class="frame2-tabsbar">
@@ -138,7 +166,15 @@
     const collapse = stage.querySelector('.frame2-side-collapse');
     collapse?.addEventListener('click', () => {
       stage.classList.toggle('is-side-collapsed');
-      collapse.textContent = stage.classList.contains('is-side-collapsed') ? '›' : '‹';
+    });
+
+    stage.querySelectorAll('[data-menu-toggle]').forEach((node) => {
+      node.addEventListener('click', () => {
+        const group = node.closest('.frame2-side-group');
+        group?.classList.toggle('is-open');
+        const arrow = node.querySelector('.frame2-side-arrow');
+        if (arrow) arrow.textContent = group?.classList.contains('is-open') ? '⌄' : '›';
+      });
     });
 
     function activateFeature(feature) {
