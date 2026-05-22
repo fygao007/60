@@ -71,6 +71,20 @@
     `).join('');
   }
 
+  function renderTopTools(items) {
+    const tools = items && items.length ? items : [
+      { key: 'search', label: '搜索', wiseIcon: 'search' },
+      { key: 'refresh', label: '刷新', wiseIcon: 'refresh' },
+      { key: 'settings', label: '设置', wiseIcon: 'settings' }
+    ];
+    return tools.map((item) => {
+      const icon = item.icon
+        ? `<img src="${item.icon}" alt="" />`
+        : `<span class="wise-icon" data-wise-icon="${item.wiseIcon || item.key}"></span>`;
+      return `<button class="frame2-tool" type="button" aria-label="${item.label || item.key}">${icon}</button>`;
+    }).join('');
+  }
+
   function buildShell(config) {
     const navItems = config.secondaryNav?.items || [];
     const activeApp = config.activeApp || config.activeModule || 'doctor';
@@ -86,9 +100,7 @@
         </div>
         <nav class="frame2-module-tabs" aria-label="应用导航">${renderApps(config.appGroups || DEFAULT_APPS, activeApp)}</nav>
         <div class="frame2-tools">
-          <button class="frame2-tool" type="button" aria-label="搜索"><span class="wise-icon" data-wise-icon="search"></span></button>
-          <button class="frame2-tool" type="button" aria-label="刷新"><span class="wise-icon" data-wise-icon="refresh"></span></button>
-          <button class="frame2-tool" type="button" aria-label="设置"><span class="wise-icon" data-wise-icon="settings"></span></button>
+          ${renderTopTools(config.topTools)}
           <span class="frame2-avatar" aria-hidden="true"></span>
         </div>
       </header>

@@ -233,7 +233,7 @@
   display: flex;
   flex: none;
   align-items: center;
-  gap: var(--ds-space-1);
+  gap: 0;
   margin-left: auto;
 }
 
@@ -245,12 +245,12 @@
   color: rgba(var(--ds-color-white-rgb), 0.9);
   background: transparent;
   border: 0;
-  border-radius: var(--ds-radius-sm);
+  border-radius: 0;
   cursor: pointer;
 }
 
 .frame2-tool:hover {
-  background: rgba(var(--ds-color-white-rgb), 0.14);
+  background: rgba(var(--ds-color-white-rgb), 0.12);
 }
 
 .frame2-avatar {
