@@ -364,8 +364,8 @@
 }
 
 .frame2-side-item.is-active {
-  color: #4667d8;
-  background: #f5f7ff;
+  color: var(--ds-color-primary);
+  background: var(--ds-color-primary-light);
   font-weight: var(--ds-font-weight-semibold);
 }
 
