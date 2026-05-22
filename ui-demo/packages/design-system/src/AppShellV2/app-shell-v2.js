@@ -117,6 +117,7 @@
     const navItems = config.secondaryNav?.items || [];
     const activeApp = config.activeApp || config.activeModule || 'doctor';
     const assetBase = config.assetBase || './assets';
+    const frameworkAssetBase = config.frameworkAssetBase || './framework-2/assets';
     return `
       <header class="frame2-topbar">
         <div class="frame2-brand">
@@ -136,7 +137,7 @@
         <aside class="frame2-sidebar">
           <nav class="frame2-menu" aria-label="二级导航">${renderMenu(navItems, config.activeFeature)}</nav>
           <button class="frame2-side-collapse" type="button" aria-label="收起导航">
-            <span class="frame2-side-icon" aria-hidden="true">‹</span>
+            <span class="frame2-side-icon"><img src="${frameworkAssetBase}/indent-decrease.svg" alt="" /></span>
             <span class="frame2-side-label">收起导航</span>
           </button>
         </aside>
