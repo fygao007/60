@@ -34,6 +34,8 @@
 - `steps-components.html`：步骤条组件，覆盖横向、纵向、小尺寸、点状、错误态和可点击状态。
 - `anchor-components.html`：锚点组件，覆盖纵向、横向、带边线、多级、禁用和滚动定位。
 - `assessment-result-card-page.html`：考核结果卡片业务样例。
+- `framework-2/hr-office-homepage.html`：深职大智慧人事一体化服务系统人事处首页工作台原型，基于框架2生成。
+- `hr-office-homepage.html`：跳转到框架2版本的人事处首页工作台。
 
 表单：
 

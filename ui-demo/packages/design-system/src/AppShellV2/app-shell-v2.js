@@ -77,7 +77,7 @@
           <div class="frame2-app-group${appGroupActive(item, activeApp) ? ' is-active' : ''}" data-app-group="${escapeHtml(item.key)}">
             <button class="frame2-app-trigger" type="button" title="${escapeHtml(item.label)}" aria-haspopup="menu" aria-expanded="false">
               <span>${escapeHtml(shortLabel(item.label))}</span>
-              <span class="frame2-app-arrow">⌄</span>
+              <span class="frame2-app-arrow"><span class="wise-icon" data-wise-icon="chevronDown"></span></span>
             </button>
             <div class="frame2-app-menu" role="menu">
               ${item.apps.map((app) => `

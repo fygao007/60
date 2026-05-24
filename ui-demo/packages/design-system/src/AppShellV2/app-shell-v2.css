@@ -115,7 +115,7 @@
 .frame2-app-trigger {
   display: inline-flex;
   align-items: center;
-  gap: var(--ds-space-1);
+  gap: 4px;
   justify-content: center;
   height: 48px;
   padding: 4px 12px;
@@ -158,9 +158,20 @@
 }
 
 .frame2-app-arrow {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 16px;
+  height: 16px;
   color: currentColor;
-  font-size: var(--ds-font-size-xs);
-  line-height: 1;
+}
+
+.frame2-app-arrow svg,
+.frame2-app-arrow img {
+  display: block;
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
 }
 
 .frame2-app-menu {
