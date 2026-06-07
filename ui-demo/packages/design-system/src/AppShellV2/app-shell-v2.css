@@ -24,12 +24,12 @@
   flex: none;
   align-items: center;
   gap: 0;
-  height: 48px;
+  height: 52px;
   padding: 0 16px;
   color: var(--ds-color-white);
   overflow: hidden;
   background: linear-gradient(270deg, rgba(45, 95, 202, 0.8) 0%, rgba(33, 76, 191, 0.9) 50%, #1e51bc 100%);
-  background-image: url('../../../../framework-2/assets/topbar-nav.jpg');
+  background-image: url('../../../../framework-2/assets/topbar-nav.svg');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -60,7 +60,7 @@
 
 .frame2-brand-name {
   overflow: hidden;
-  font-family: 'Alibaba PuHuiTi 2.0', var(--ds-font-family);
+  font-family: var(--ds-font-family);
   font-size: var(--ds-font-size-lg);
   font-weight: 700;
   line-height: var(--ds-line-height-md);
@@ -94,12 +94,12 @@
   flex: none;
   align-items: center;
   justify-content: center;
-  height: 48px;
-  padding: 4px 12px;
+  height: 36px;
+  padding: 0 16px;
   color: var(--ds-color-white);
   background: transparent;
   border: 0;
-  border-radius: var(--ds-radius-sm);
+  border-radius: 6px;
   font: inherit;
   font-size: var(--ds-font-size-md);
   line-height: var(--ds-line-height-md);
@@ -117,12 +117,12 @@
   align-items: center;
   gap: 4px;
   justify-content: center;
-  height: 48px;
-  padding: 4px 12px;
+  height: 36px;
+  padding: 0 16px;
   color: var(--ds-color-white);
   background: transparent;
   border: 0;
-  border-radius: 0;
+  border-radius: 6px;
   font: inherit;
   font-size: var(--ds-font-size-md);
   line-height: var(--ds-line-height-md);
@@ -133,28 +133,20 @@
 .frame2-app-trigger:hover,
 .frame2-app-group.is-open .frame2-app-trigger {
   color: var(--ds-color-white);
-  background: rgba(var(--ds-color-white-rgb), 0.08);
+  background: rgba(var(--ds-color-white-rgb), 0.1);
 }
 
 .frame2-module.is-active,
 .frame2-app-group.is-active .frame2-app-trigger {
   position: relative;
   color: var(--ds-color-white);
-  background: rgba(var(--ds-color-white-rgb), 0.12);
+  background: rgba(var(--ds-color-white-rgb), 0.16);
   font-weight: var(--ds-font-weight-semibold);
 }
 
 .frame2-module.is-active::after,
 .frame2-app-group.is-active .frame2-app-trigger::after {
-  content: "";
-  position: absolute;
-  left: 12px;
-  right: 12px;
-  bottom: 0;
-  height: 2px;
-  background: var(--ds-color-white);
-  border-top-left-radius: 2px;
-  border-top-right-radius: 2px;
+  content: none;
 }
 
 .frame2-app-arrow {
@@ -489,6 +481,7 @@
   flex: 1;
   min-width: 0;
   min-height: 0;
+  background: var(--ds-color-bg-page) url('../../../../framework-2/assets/personal-workbench-bg.jpg') center top / cover no-repeat;
 }
 
 .frame2-sidebar {
@@ -498,12 +491,17 @@
   width: 180px;
   min-height: 0;
   padding: 12px 8px;
-  background: var(--ds-color-white);
+  background: rgba(var(--ds-color-white-rgb), 0.92);
   border-right: 1px solid var(--ds-color-border-secondary);
+  backdrop-filter: blur(8px);
 }
 
 .frame2-stage.is-side-collapsed .frame2-sidebar {
   width: 56px;
+}
+
+.frame2-stage.is-sidebar-hidden .frame2-sidebar {
+  display: none;
 }
 
 .frame2-side-collapse {
@@ -629,8 +627,8 @@
   flex-direction: column;
   min-width: 0;
   min-height: 0;
-  padding: 12px;
-  background: var(--ds-color-bg-page);
+  padding: 0;
+  background: transparent;
 }
 
 .frame2-tabsbar {
@@ -639,7 +637,7 @@
   align-items: center;
   gap: 8px;
   min-height: 32px;
-  padding: 0;
+  padding: 12px 12px 0;
   background: var(--ds-color-bg-page);
   border-bottom: 0;
 }
@@ -719,8 +717,10 @@
   min-width: 0;
   min-height: 0;
   padding: 0;
+  margin: 0 12px 12px;
   overflow: hidden;
-  background: var(--ds-color-bg-page);
+  background: transparent;
+  border-radius: 4px;
 }
 
 .frame2-content {
@@ -730,11 +730,9 @@
   flex-direction: column;
   min-width: 0;
   min-height: 0;
-  background: var(--ds-color-white);
+  background: transparent;
   border: 0;
-  border-top-right-radius: 12px;
-  border-bottom-right-radius: var(--ds-radius-lg);
-  border-bottom-left-radius: var(--ds-radius-lg);
+  border-radius: inherit;
   box-shadow: none;
 }
 

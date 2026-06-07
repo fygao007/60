@@ -43,6 +43,8 @@
     return {
       key: tab.key || tab.label,
       label: tab.label || tab.key,
+      icon: tab.icon,
+      wiseIcon: tab.wiseIcon,
       closable: tab.closable !== false
     };
   }
@@ -146,6 +148,8 @@
   function renderTabs(items, activeFeature) {
     return (items || []).map(normalizeTab).map((item) => `
       <button class="frame2-tab${item.key === activeFeature ? ' is-active' : ''}" type="button" data-tab="${escapeHtml(item.key)}" data-tab-label="${escapeHtml(item.label)}" title="${escapeHtml(item.label)}">
+        ${item.icon ? `<span class="frame2-tab-icon"><img src="${escapeHtml(item.icon)}" alt="" /></span>` : ''}
+        ${item.wiseIcon ? `<span class="frame2-tab-icon"><span class="wise-icon" data-wise-icon="${escapeHtml(item.wiseIcon)}"></span></span>` : ''}
         <span>${escapeHtml(item.label)}</span>
         ${item.closable ? '<span class="frame2-tab-close" aria-label="关闭页签">×</span>' : ''}
       </button>
@@ -153,7 +157,7 @@
   }
 
   function renderTopTools(items) {
-    const tools = items && items.length ? items : [
+    const tools = Array.isArray(items) ? items : [
       { key: 'search', label: '搜索', wiseIcon: 'search' },
       { key: 'skin', label: '换肤', wiseIcon: 'skin' },
       { key: 'language', label: '语言', wiseIcon: 'settings' }
@@ -250,6 +254,7 @@
       tabs: (config.tabs || []).map(normalizeTab)
     };
     state.menuItems = config.appMenus?.[state.activeApp] || defaultMenu;
+    stage.classList.toggle('is-sidebar-hidden', config.hideSidebar === true || config.sidebar === false);
     const initialFeature = state.activeFeature || firstFeature(state.menuItems)?.key;
     state.activeFeature = initialFeature;
     if (!state.tabs.length && initialFeature) {

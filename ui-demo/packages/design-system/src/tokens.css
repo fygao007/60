@@ -1,6 +1,6 @@
 :root {
   /* Font / 字体 */
-  --ds-font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Alibaba PuHuiTi 2.0', 'Alibaba PuHuiTi', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
+  --ds-font-family: 'PingFang SC', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Microsoft YaHei', Arial, sans-serif;
   --ds-font-family-code: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
 
   /* Brand / 品牌色：来自 60 设计稿组件规范 */

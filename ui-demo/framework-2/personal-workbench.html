@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>框架2 - 智慧人事一体化服务系统</title>
+  <link rel="stylesheet" href="../packages/design-system/src/base.css" />
+  <link rel="stylesheet" href="./theme.css" />
+  <link rel="stylesheet" href="../packages/design-system/src/AppShellV2/app-shell-v2.css" />
+  <style>
+    body { margin: 0; }
+
+    .framework2-home-frame {
+      --home-page: #f4f7fb;
+      --home-card: #fff;
+      width: 100%;
+      min-width: 1180px;
+      font-family: "PingFang SC", -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Microsoft YaHei", Arial, sans-serif;
+    }
+
+    .framework2-home-frame .frame2-topbar {
+      height: 52px;
+      padding: 0 16px;
+      background-image: url("./assets/topbar-nav.svg");
+    }
+
+    .framework2-home-frame .frame2-brand {
+      width: auto;
+      gap: 14px;
+      margin-right: 24px;
+    }
+
+    .framework2-home-frame .frame2-brand-logo {
+      width: 32px;
+      height: 32px;
+    }
+
+    .framework2-home-frame .frame2-brand-name {
+      font-size: 18px;
+      line-height: 24px;
+      letter-spacing: 0;
+    }
+
+    .framework2-home-frame .frame2-module-tabs {
+      max-width: calc(100% - 560px);
+      gap: 4px;
+      padding-left: 0;
+    }
+
+    .framework2-home-frame .frame2-module,
+    .framework2-home-frame .frame2-app-trigger {
+      height: 36px;
+      padding: 0 16px;
+      font-size: 14px;
+      line-height: 20px;
+    }
+
+    .framework2-home-frame .frame2-tools {
+      gap: 10px;
+      padding-left: 10px;
+    }
+
+    .framework2-home-frame .frame2-tool {
+      width: 26px;
+      height: 26px;
+    }
+
+    .framework2-home-frame .frame2-user-name,
+    .framework2-home-frame .frame2-user-arrow {
+      font-size: 16px;
+    }
+
+    .framework2-home-frame .frame2-avatar {
+      width: 32px;
+      height: 32px;
+      background:
+        radial-gradient(circle at 55% 28%, #ffd4bd 0 18%, transparent 19%),
+        radial-gradient(circle at 48% 14%, #182033 0 19%, transparent 20%),
+        linear-gradient(135deg, #ff9db4 0 48%, #ffdfc7 49% 100%);
+      border: 3px solid rgba(255,255,255,.35);
+      border-radius: 8px;
+    }
+
+    .framework2-home-frame .frame2-tabsbar {
+      display: flex;
+      align-items: flex-end;
+      min-height: 40px;
+      padding: 0 28px;
+      background: var(--home-card);
+      border-bottom: 0;
+    }
+
+    .framework2-home-frame .frame2-tabs {
+      align-items: flex-end;
+      height: 40px;
+      overflow: visible;
+    }
+
+    .framework2-home-frame .frame2-tab {
+      height: 32px;
+      padding: 0 18px;
+      gap: 6px;
+      color: #0f172a;
+      border-radius: 8px 8px 0 0;
+      font-size: 13px;
+      line-height: 20px;
+    }
+
+    .framework2-home-frame .frame2-tab.is-active,
+    .framework2-home-frame .frame2-tab.is-active::before,
+    .framework2-home-frame .frame2-tab.is-active::after {
+      background: var(--home-page) url("./assets/personal-workbench-bg.jpg") center top / cover no-repeat fixed;
+    }
+
+    .framework2-home-frame .frame2-tab.is-active {
+      font-weight: 500;
+    }
+
+    .framework2-home-frame .frame2-tab.is-active::before,
+    .framework2-home-frame .frame2-tab.is-active::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      width: 8px;
+      height: 8px;
+    }
+
+    .framework2-home-frame .frame2-tab.is-active::before {
+      left: -8px;
+      -webkit-mask: radial-gradient(circle at 0 0, transparent 0 8px, #000 8.5px);
+      mask: radial-gradient(circle at 0 0, transparent 0 8px, #000 8.5px);
+    }
+
+    .framework2-home-frame .frame2-tab.is-active::after {
+      right: -8px;
+      -webkit-mask: radial-gradient(circle at 100% 0, transparent 0 8px, #000 8.5px);
+      mask: radial-gradient(circle at 100% 0, transparent 0 8px, #000 8.5px);
+    }
+
+    .framework2-home-frame .frame2-tab:not(.is-active)::after {
+      content: none;
+    }
+
+    .framework2-home-frame .frame2-tab-icon,
+    .framework2-home-frame .frame2-tab-icon img,
+    .framework2-home-frame .frame2-tab-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .framework2-home-frame .frame2-tab-icon {
+      display: inline-grid;
+      flex: none;
+      place-items: center;
+      color: currentColor;
+    }
+
+    .framework2-home-frame .frame2-tabsbar .frame2-tool {
+      align-self: center;
+      width: 28px;
+      height: 28px;
+      color: #0f172a;
+    }
+
+    .framework2-home-frame .frame2-content-shell {
+      margin: 0;
+      border-radius: 0;
+    }
+  </style>
+</head>
+<body>
+<div class="frame2-stage framework2-home-frame ds-scope"></div>
+
+<script src="../assets/icon-registry.js"></script>
+<script src="../packages/design-system/src/AppShellV2/app-shell-v2.js"></script>
+<script>
+  WiseAppShellV2.init({
+    systemName: '智慧人事一体化服务系统',
+    versionLabel: '框架2',
+    userName: '教职工',
+    frameworkAssetBase: './assets',
+    logoSrc: './assets/personal-logo.png',
+    activeApp: 'home',
+    activeFeature: 'home',
+    hideSidebar: true,
+    emptyContent: true,
+    topTools: [],
+    appGroups: [
+      { key: 'home', label: '首页' },
+      { key: 'info', label: '信息管理', apps: [
+        { key: 'org', label: '机构信息' },
+        { key: 'info', label: '人员信息' }
+      ] },
+      { key: 'service', label: '业务办理', apps: [
+        { key: 'regular', label: '转正申请' },
+        { key: 'contract', label: '合同管理' },
+        { key: 'attendance', label: '考勤管理' },
+        { key: 'salary', label: '薪酬管理' }
+      ] },
+      { key: 'development', label: '教师发展', apps: [
+        { key: 'annual', label: '年度考核' },
+        { key: 'ethics', label: '师德师风' },
+        { key: 'title', label: '职称评审' }
+      ] },
+      { key: 'data', label: '数据中心' },
+      { key: 'ai', label: '智慧人事' },
+      { key: 'system', label: '系统管理' }
+    ],
+    tabs: [{ key: 'home', label: '首页', wiseIcon: 'homeOutline', closable: false }]
+  });
+</script>
+</body>
+</html>
