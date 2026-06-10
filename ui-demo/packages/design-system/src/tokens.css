@@ -3,16 +3,27 @@
   --ds-font-family: 'PingFang SC', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Microsoft YaHei', Arial, sans-serif;
   --ds-font-family-code: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
 
-  /* Brand / 品牌色：来自 60 设计稿组件规范 */
-  --ds-color-primary: #333fff;
-  --ds-color-primary-hover: #5a66ff;
-  --ds-color-primary-active: #1f2cff;
-  --ds-color-primary-disabled: #b8c3ff;
-  --ds-color-primary-light: #f5f5ff;
-  --ds-color-primary-lighter: #fbfbff;
-  --ds-color-primary-selected: #ebecff;
-  --ds-color-primary-weak: #d6d9ff;
-  --ds-color-primary-rgb: 51, 63, 255;
+  /* Brand / 品牌色：蓝色主题色体系 */
+  --ds-blue-1: #f0f6ff;
+  --ds-blue-2: #d4e5ff;
+  --ds-blue-3: #abcaff;
+  --ds-blue-4: #82acff;
+  --ds-blue-5: #598bff;
+  --ds-blue-6: #3167ff;
+  --ds-blue-7: #1e4ad9;
+  --ds-blue-8: #1031b3;
+  --ds-blue-9: #061c8c;
+  --ds-blue-10: #031066;
+
+  --ds-color-primary: #3167ff;
+  --ds-color-primary-hover: #1e4ad9;
+  --ds-color-primary-active: #1031b3;
+  --ds-color-primary-disabled: #abcaff;
+  --ds-color-primary-light: #f0f6ff;
+  --ds-color-primary-lighter: #fbfdff;
+  --ds-color-primary-selected: #f0f6ff;
+  --ds-color-primary-weak: #d4e5ff;
+  --ds-color-primary-rgb: 49, 103, 255;
 
   /* Functional / 功能色 */
   --ds-color-success: #20b486;
@@ -33,36 +44,36 @@
   --ds-color-danger-active: #d9363e;
   --ds-color-danger-light: #fff1f0;
 
-  --ds-color-info: #1677ff;
-  --ds-color-info-light: #eaf3ff;
-  --ds-color-info-gradient-start: #50bfed;
-  --ds-color-info-gradient-end-rgb: 80, 191, 238;
+  --ds-color-info: #3167ff;
+  --ds-color-info-light: #f0f6ff;
+  --ds-color-info-gradient-start: #82acff;
+  --ds-color-info-gradient-end-rgb: 89, 139, 255;
 
   /* Neutral / 中性色 */
   --ds-color-black: #000000;
   --ds-color-white: #ffffff;
-  --ds-color-text: #000000;
-  --ds-color-text-heading: #000000;
-  --ds-color-text-secondary: #505266;
+  --ds-color-text: #1f2937;
+  --ds-color-text-heading: #1f2937;
+  --ds-color-text-secondary: #4b5563;
   --ds-color-text-tertiary: #737585;
-  --ds-color-text-placeholder: #9697a3;
+  --ds-color-text-placeholder: #9ca3af;
   --ds-color-text-disabled: #c9cdd4;
   --ds-color-text-inverse: #ffffff;
-  --ds-color-text-strong: #0a0d33;
+  --ds-color-text-strong: #1031b3;
   --ds-color-text-disabled-strong: #b9bac2;
   --ds-color-text-rgb: 0, 0, 0;
   --ds-color-white-rgb: 255, 255, 255;
 
   --ds-color-bg: #ffffff;
-  --ds-color-bg-page: #eef5ff;
+  --ds-color-bg-page: #f0f6ff;
   --ds-color-bg-container: #ffffff;
   --ds-color-bg-hover: #f6f6f7;
-  --ds-color-bg-active: #ebecff;
+  --ds-color-bg-active: #f0f6ff;
   --ds-color-bg-disabled: #f2f3f5;
   --ds-color-bg-subtle: #fafafa;
   --ds-color-bg-soft: #f5f7fb;
   --ds-color-bg-soft-hover: #f7f8fa;
-  --ds-color-bg-info: #f7faff;
+  --ds-color-bg-info: #f0f6ff;
   --ds-color-bg-child: #fbfcff;
   --ds-color-bg-mask: rgba(0, 0, 0, 0.45);
   --ds-color-bg-mask-light: rgba(0, 0, 0, 0.28);
@@ -86,11 +97,11 @@
   --ds-color-primary-tint: rgba(var(--ds-color-primary-rgb), 0.08);
   --ds-color-primary-tint-strong: rgba(var(--ds-color-primary-rgb), 0.10);
   --ds-color-success-border: rgba(var(--ds-color-success-rgb), 0.24);
-  --ds-color-ai-gradient: linear-gradient(90deg, #7b61ff 0%, #3d5afe 52%, #00b2ff 100%);
-  --ds-color-nav-bg: linear-gradient(180deg, #7454f1 0%, #6a52f1 25%, #524ae4 53%, #5753e4 75%, #507aee 100%);
-  --ds-color-nav-panel-bg: linear-gradient(270deg, #f3faff 5%, #f0f7ff 31%, #f1f4ff 64%, #eef1ff 100%);
+  --ds-color-ai-gradient: linear-gradient(90deg, #598bff 0%, #3167ff 52%, #1031b3 100%);
+  --ds-color-nav-bg: linear-gradient(180deg, #3167ff 0%, #1e4ad9 55%, #1031b3 100%);
+  --ds-color-nav-panel-bg: linear-gradient(270deg, #f0f6ff 5%, #d4e5ff 100%);
   --ds-color-steps-bg: linear-gradient(0deg, rgba(var(--ds-color-primary-rgb), 0.04) 0%, rgba(var(--ds-color-primary-rgb), 0.04) 100%), var(--ds-color-white);
-  --ds-color-table-group-bg: linear-gradient(90deg, #fbfbff 0%, #f5f5ff 100%);
+  --ds-color-table-group-bg: linear-gradient(90deg, #fbfdff 0%, #f0f6ff 100%);
   --ds-color-info-gradient: linear-gradient(90deg, var(--ds-color-info-gradient-start) 0%, rgba(var(--ds-color-info-gradient-end-rgb), 0.7) 100%);
   --ds-color-avatar-bg: #ffdcc8;
   --ds-color-scrollbar-thumb: #c9cdd4;

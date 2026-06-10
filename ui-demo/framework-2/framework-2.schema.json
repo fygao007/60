@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wisedu.local/schema/framework-2.schema.json",
+  "title": "智慧人事框架2配置",
+  "type": "object",
+  "required": ["activeApp", "activeFeature", "appGroups"],
+  "properties": {
+    "root": { "type": "string", "default": ".frame2-stage" },
+    "systemName": { "type": "string", "default": "智慧人事一体化服务系统" },
+    "userName": { "type": "string", "default": "金晓智" },
+    "roleName": { "type": "string" },
+    "roles": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          { "type": "string" },
+          {
+            "type": "object",
+            "required": ["value", "label"],
+            "properties": {
+              "value": { "type": "string" },
+              "label": { "type": "string" }
+            }
+          }
+        ]
+      }
+    },
+    "activeApp": { "type": "string" },
+    "activeFeature": { "type": "string" },
+    "pinHomeTab": { "type": "boolean", "default": true },
+    "hideSidebar": {
+      "oneOf": [
+        { "type": "boolean" },
+        { "const": "auto" }
+      ],
+      "default": "auto"
+    },
+    "frameworkAssetBase": { "type": "string", "default": "./assets" },
+    "frameworkLogoSrc": { "type": "string" },
+    "appGroups": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/appGroup" }
+    },
+    "roleProfiles": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["appGroups"],
+        "properties": {
+          "appGroups": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "$ref": "#/$defs/appGroup" }
+          }
+        }
+      }
+    },
+    "appMenus": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": { "$ref": "#/$defs/menuItem" }
+      }
+    },
+    "secondaryNav": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/menuItem" }
+        }
+      }
+    },
+    "tabs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/tab" }
+    }
+  },
+  "$defs": {
+    "app": {
+      "type": "object",
+      "required": ["key", "label"],
+      "properties": {
+        "key": { "type": "string" },
+        "label": { "type": "string" },
+        "href": { "type": "string" },
+        "icon": { "type": "string" },
+        "wiseIcon": { "type": "string" },
+        "menuItems": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/menuItem" }
+        }
+      }
+    },
+    "appGroup": {
+      "allOf": [
+        { "$ref": "#/$defs/app" },
+        {
+          "type": "object",
+          "properties": {
+            "apps": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "$ref": "#/$defs/app" }
+            }
+          }
+        }
+      ]
+    },
+    "menuItem": {
+      "type": "object",
+      "required": ["key", "label"],
+      "properties": {
+        "key": { "type": "string" },
+        "label": { "type": "string" },
+        "icon": { "type": "string" },
+        "expanded": { "type": "boolean" },
+        "children": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/menuItem" }
+        }
+      }
+    },
+    "tab": {
+      "type": "object",
+      "required": ["key", "label"],
+      "properties": {
+        "key": { "type": "string" },
+        "label": { "type": "string" },
+        "href": { "type": "string" },
+        "icon": { "type": "string" },
+        "wiseIcon": { "type": "string" },
+        "closable": { "type": "boolean", "default": true }
+      }
+    }
+  }
+}

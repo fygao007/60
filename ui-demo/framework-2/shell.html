@@ -7,88 +7,19 @@
   <link rel="stylesheet" href="../packages/design-system/src/base.css" />
   <link rel="stylesheet" href="./theme.css" />
   <link rel="stylesheet" href="../packages/design-system/src/AppShellV2/app-shell-v2.css" />
-  <style>
-    body { margin: 0; }
-
-    .framework2-shell {
-      font-family: "PingFang SC", -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Microsoft YaHei", Arial, sans-serif;
-    }
-
-    .framework2-shell .frame2-topbar {
-      height: 52px;
-      padding: 0 16px;
-      background-image: url("./assets/topbar-nav.svg");
-    }
-
-    .framework2-shell .frame2-brand {
-      width: auto;
-      gap: 14px;
-      margin-right: 24px;
-    }
-
-    .framework2-shell .frame2-brand-logo {
-      width: 32px;
-      height: 32px;
-    }
-
-    .framework2-shell .frame2-brand-name {
-      font-size: 18px;
-      line-height: 24px;
-      letter-spacing: 0;
-    }
-
-    .framework2-shell .frame2-module-tabs {
-      max-width: calc(100% - 560px);
-      gap: 4px;
-      padding-left: 0;
-    }
-
-    .framework2-shell .frame2-module,
-    .framework2-shell .frame2-app-trigger {
-      height: 36px;
-      padding: 0 16px;
-      font-size: 14px;
-      line-height: 20px;
-    }
-
-    .framework2-shell .frame2-tabsbar {
-      min-height: 40px;
-      padding: 0 28px;
-      background: #fff;
-      border-bottom: 0;
-    }
-
-    .framework2-shell .frame2-tabs {
-      align-items: flex-end;
-      height: 40px;
-    }
-
-    .framework2-shell .frame2-tab {
-      height: 32px;
-      padding: 0 18px;
-      border-radius: 8px 8px 0 0;
-      font-size: 13px;
-      line-height: 20px;
-    }
-
-    .framework2-shell .frame2-content-shell {
-      margin: 0;
-      border-radius: 0;
-    }
-  </style>
 </head>
 <body>
-<div class="frame2-stage framework2-shell ds-scope"></div>
+<div class="frame2-stage ds-scope"></div>
 
 <script src="../assets/icon-registry.js"></script>
 <script src="../packages/design-system/src/AppShellV2/app-shell-v2.js"></script>
+<script src="./framework-2.js"></script>
 <script>
-  WiseAppShellV2.init({
+  WiseFramework2.mount({
     systemName: '智慧人事一体化服务系统',
     versionLabel: '底层框架',
     userName: '教职工',
     frameworkAssetBase: './assets',
-    logoSrc: './assets/personal-logo.png',
     activeApp: 'info',
     activeFeature: 'basic-info',
     emptyContent: true,
