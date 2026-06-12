@@ -33,6 +33,7 @@
 - `link-button-components.html`：链接按钮、链接按钮组和表格操作列样例。
 - `steps-components.html`：步骤条组件，覆盖横向、纵向、小尺寸、点状、错误态和可点击状态。
 - `anchor-components.html`：锚点组件，覆盖纵向、横向、带边线、多级、禁用和滚动定位。
+- `group-title-components.html`：一级标题分组组件，支持前置内容、右侧扩展和长标题省略。
 - `assessment-result-card-page.html`：考核结果卡片业务样例。
 - `framework-2/hr-office-homepage.html`：深职大智慧人事一体化服务系统人事处首页工作台原型，基于框架2生成。
 - `hr-office-homepage.html`：跳转到框架2版本的人事处首页工作台。
@@ -62,7 +63,7 @@
 ## 60 组件库当前覆盖
 
 - 基础：`DSAnchor`、`DSButton`、`DSButtonGroup`、`DSLinkButton`、`DSLinkButtonGroup`、`DSSteps`、`DSIconButton`、`DSField`、`DSInput`、`DSSelect`、`DSCascader`、`DSTextarea`、`DSRichTextEditor`、`DSTimePicker`、`DSTag`。
-- 布局：`DSAppShell`、`DSPageHeader`、`DSCard`、`DSTabs`。
+- 布局：`DSAppShell`、`DSPageHeader`、`DSGroupTitle`、`DSCard`、`DSTabs`。
 - 数据：`DSFilterBar`、`DSDataTable`、`DSParentChildTable`、`DSPagination`、`DSEmptyState`。
 - 浮层：`DSModal`、`DSDrawer`。
 - 审核：`DSAuditStatusTabs`、`DSAuditToolbar`、`DSAuditActions`、`DSAuditOpinionModal`、`DSAuditDetailDrawer`。
