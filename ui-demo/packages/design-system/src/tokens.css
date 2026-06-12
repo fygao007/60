@@ -102,6 +102,7 @@
   --ds-color-nav-panel-bg: linear-gradient(270deg, #f0f6ff 5%, #d4e5ff 100%);
   --ds-color-steps-bg: linear-gradient(0deg, rgba(var(--ds-color-primary-rgb), 0.04) 0%, rgba(var(--ds-color-primary-rgb), 0.04) 100%), var(--ds-color-white);
   --ds-color-table-group-bg: linear-gradient(90deg, #fbfdff 0%, #f0f6ff 100%);
+  --ds-color-group-title-bg: linear-gradient(90deg, #f0f6ff 0%, rgba(245, 245, 255, 0.1) 100%);
   --ds-color-info-gradient: linear-gradient(90deg, var(--ds-color-info-gradient-start) 0%, rgba(var(--ds-color-info-gradient-end-rgb), 0.7) 100%);
   --ds-color-avatar-bg: #ffdcc8;
   --ds-color-scrollbar-thumb: #c9cdd4;

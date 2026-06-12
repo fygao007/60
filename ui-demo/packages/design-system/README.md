@@ -133,6 +133,7 @@ import {
   DSButton,
   DSDataTable,
   DSFilterBar,
+  DSGroupTitle,
   DSPageHeader,
   DSSwitch,
   DSTabs,
@@ -141,6 +142,27 @@ import {
 ```
 
 入口 `src/index.js` 已默认引入 `base.css`，业务页面通常不需要重复引入基础样式。
+
+## 一级标题分组 DSGroupTitle
+
+用于页面内容区内的一级分组标题，不替代页面级 `DSPageHeader`。
+
+```jsx
+<DSGroupTitle
+  title="分组名称"
+  leading={<span className="section-mark" />}
+  extra={<DSButton variant="link">查看说明</DSButton>}
+/>
+```
+
+- 高度固定为 `38px`，横向内边距为 `16px`。
+- 标题使用 `14px / 600 / 22px`。
+- 背景使用从 `#F0F6FF` 到透明浅紫的水平渐变。
+- `leading` 用于前置图标或标识，`extra` 用于右侧按钮、链接或状态。
+- 长标题单行省略，完整字符串自动写入 `title` 属性。
+- 默认输出 `role="heading" aria-level="1"`，可通过 `level` 调整语义层级。
+
+HTML 预览与 CSS 类用法见 `ui-demo/group-title-components.html`。
 
 ## 选项卡 DSTabs
 
@@ -244,6 +266,7 @@ HTML 表单预览：
 
 - `DSAppShell`
 - `DSPageHeader`
+- `DSGroupTitle`
 - `DSCard`
 - `DSTabs`
 
