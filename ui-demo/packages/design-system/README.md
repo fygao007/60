@@ -162,7 +162,22 @@ import {
 - 长标题单行省略，完整字符串自动写入 `title` 属性。
 - 默认输出 `role="heading" aria-level="1"`，可通过 `level` 调整语义层级。
 
-HTML 预览与 CSS 类用法见 `ui-demo/group-title-components.html`。
+独立 HTML 页面引用 Web Component：
+
+```html
+<script defer src="./packages/design-system/web-components/GroupTitle/ds-group-title.js"></script>
+
+<ds-group-title title="分组名称"></ds-group-title>
+
+<ds-group-title title="基本信息">
+  <span slot="leading" class="section-mark"></span>
+  <button slot="extra" type="button">查看说明</button>
+</ds-group-title>
+```
+
+页面只维护标题和插槽内容，组件内部结构与样式由
+`web-components/GroupTitle/ds-group-title.js` 统一管理。完整预览见
+`ui-demo/group-title-components.html`。
 
 ## 选项卡 DSTabs
 

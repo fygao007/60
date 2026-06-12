@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>一级标题分组组件</title>
   <link rel="stylesheet" href="./packages/design-system/src/base.css" />
-  <link rel="stylesheet" href="./packages/design-system/src/GroupTitle/index.css" />
+  <script defer src="./packages/design-system/web-components/GroupTitle/ds-group-title.js"></script>
   <style>
     body {
       margin: 0;
@@ -99,37 +99,23 @@
     <section class="group-title-demo" aria-label="一级标题分组示例">
       <div class="group-title-example">
         <span class="group-title-example__label">标准样式 / 参考宽度 1038px</span>
-        <div class="ds-group-title" role="heading" aria-level="1">
-          <div class="ds-group-title__main">
-            <span class="ds-group-title__text">分组名称</span>
-          </div>
-        </div>
+        <ds-group-title title="分组名称"></ds-group-title>
       </div>
 
       <div class="group-title-example">
         <span class="group-title-example__label">带前置标识和右侧操作</span>
-        <div class="ds-group-title" role="heading" aria-level="1">
-          <div class="ds-group-title__main">
-            <span class="ds-group-title__leading"><span class="demo-leading"></span></span>
-            <span class="ds-group-title__text">基本信息</span>
-          </div>
-          <div class="ds-group-title__extra">
-            <button class="demo-action" type="button" data-demo-action>查看说明</button>
-          </div>
-        </div>
+        <ds-group-title title="基本信息">
+          <span class="demo-leading" slot="leading"></span>
+          <button class="demo-action" slot="extra" type="button" data-demo-action>查看说明</button>
+        </ds-group-title>
         <div class="demo-log" aria-live="polite" data-demo-log>右侧区域可放按钮、链接或状态信息。</div>
       </div>
 
       <div class="group-title-example">
         <span class="group-title-example__label">长标题省略</span>
-        <div class="ds-group-title" role="heading" aria-level="1" style="max-width: 300px">
-          <div class="ds-group-title__main">
-            <span class="ds-group-title__text" title="教职工培养发展与企业实践认定材料信息分组">
-              教职工培养发展与企业实践认定材料信息分组
-            </span>
-          </div>
-          <div class="ds-group-title__extra">共 12 项</div>
-        </div>
+        <ds-group-title title="教职工培养发展与企业实践认定材料信息分组" style="max-width: 300px">
+          <span slot="extra">共 12 项</span>
+        </ds-group-title>
       </div>
     </section>
   </main>
