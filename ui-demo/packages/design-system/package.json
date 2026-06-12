@@ -26,6 +26,7 @@
     "./link-button-group.css": "./src/LinkButtonGroup/index.css",
     "./filter-bar.css": "./src/FilterBar/index.css",
     "./group-title.css": "./src/GroupTitle/index.css",
+    "./group-title-element.js": "./web-components/GroupTitle/ds-group-title.js",
     "./data-table.css": "./src/DataTable/index.css",
     "./import-mapping-table.css": "./src/ImportMappingTable/index.css",
     "./import-result.css": "./src/ImportResult/index.css",
