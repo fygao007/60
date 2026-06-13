@@ -62,4 +62,4 @@ mastergo://getd2c/139272150501659-4096-82458
 </nav>
 ```
 
-预览页：`ui-demo/anchor-components.html`。
+预览页：`ui-demo/components/anchor-components.html`。

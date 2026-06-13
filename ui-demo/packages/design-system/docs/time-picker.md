@@ -34,4 +34,4 @@ https://mastergo.com/goto/T51KMAqO?page_id=39:5073&layer_id=1170:06401&file=1392
 <DSTimePicker showSecond defaultValue="09:30:20" />
 ```
 
-预览页：`ui-demo/form-time-picker-states.html`。
+预览页：`ui-demo/components/form-time-picker-states.html`。

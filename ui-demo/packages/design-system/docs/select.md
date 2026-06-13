@@ -60,4 +60,4 @@ mastergo://getd2c/139272150501659-5259-45739
 </DSSelect>
 ```
 
-预览页：`ui-demo/form-select-states.html`。
+预览页：`ui-demo/components/form-select-states.html`。

@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "validate:framework2": "node ./framework-2/validate-framework-2.mjs"
+    "validate:framework2": "node ./framework/validate-framework-2.mjs",
+    "validate:links": "node ./validate-local-links.mjs"
   },
   "dependencies": {
     "lit": "^3.3.3"

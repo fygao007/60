@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>场景模板索引</title>
+  <link rel="stylesheet" href="../packages/design-system/src/base.css" />
+  <link rel="stylesheet" href="../framework/theme.css" />
+  <style>
+    body {
+      margin: 0;
+      color: var(--ds-color-text);
+      background: #fff;
+      font-family: var(--ds-font-family);
+    }
+
+    .scenario-page {
+      min-height: 100%;
+      min-width: 0;
+      padding: 16px 16px 80px;
+      background: #fff;
+    }
+
+    .scenario-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      width: min(1180px, 100%);
+      margin-bottom: 16px;
+    }
+
+    .scenario-title {
+      position: relative;
+      display: inline-flex;
+      margin: 0;
+      padding: 2px;
+      color: #000;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 24px;
+    }
+
+    .scenario-title::after {
+      content: "";
+      position: absolute;
+      right: 2px;
+      bottom: 2px;
+      left: 2px;
+      height: 8px;
+      background: #d6d9ff;
+    }
+
+    .scenario-title span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .scenario-desc {
+      margin: 6px 0 0;
+      color: #737585;
+      font-size: 13px;
+      line-height: 20px;
+    }
+
+    .scenario-back {
+      display: inline-flex;
+      height: 32px;
+      align-items: center;
+      justify-content: center;
+      padding: 0 16px;
+      color: #000;
+      background: #fff;
+      border: 1px solid #dcdce0;
+      border-radius: 4px;
+      font-size: 14px;
+      line-height: 22px;
+      white-space: nowrap;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      width: min(1180px, 100%);
+      margin-bottom: 16px;
+    }
+
+    .summary-card {
+      padding: 14px 16px;
+      background: #fff;
+      border: 1px solid #eeeef0;
+    }
+
+    .summary-card span {
+      display: block;
+      color: #737585;
+      font-size: 12px;
+      line-height: 20px;
+    }
+
+    .summary-card strong {
+      display: block;
+      margin-top: 4px;
+      color: #000;
+      font-size: 24px;
+      font-weight: 600;
+      line-height: 32px;
+    }
+
+    .scene-section {
+      width: min(1180px, 100%);
+      margin-bottom: 16px;
+      background: #fff;
+      border: 1px solid #eeeef0;
+    }
+
+    .scene-section-head {
+      display: flex;
+      min-height: 44px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      background: #fafafa;
+      border-bottom: 1px solid #eeeef0;
+    }
+
+    .scene-section-title {
+      margin: 0;
+      color: #000;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 22px;
+    }
+
+    .scene-section-count {
+      color: #737585;
+      font-size: 12px;
+      line-height: 20px;
+    }
+
+    .scene-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .scene-card {
+      display: flex;
+      min-height: 174px;
+      flex-direction: column;
+      gap: 10px;
+      padding: 16px;
+      border-right: 1px solid #eeeef0;
+      border-bottom: 1px solid #eeeef0;
+    }
+
+    .scene-card:nth-child(2n) { border-right: 0; }
+
+    .scene-card-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .scene-number {
+      display: inline-grid;
+      width: 28px;
+      height: 28px;
+      flex: none;
+      place-items: center;
+      color: #333fff;
+      background: #f5f5ff;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .scene-name {
+      margin: 0;
+      color: #000;
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 22px;
+    }
+
+    .scene-copy {
+      margin: 2px 0 0;
+      color: #737585;
+      font-size: 12px;
+      line-height: 20px;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      display: inline-flex;
+      height: 22px;
+      align-items: center;
+      padding: 0 8px;
+      color: #505266;
+      background: #eeeef0;
+      border-radius: 4px;
+      font-size: 12px;
+      line-height: 20px;
+    }
+
+    .tag.is-danger {
+      color: #fa5151;
+      background: #fff1f0;
+    }
+
+    .scene-source {
+      color: #737585;
+      font-family: var(--ds-font-family-code);
+      font-size: 11px;
+      line-height: 18px;
+      overflow-wrap: anywhere;
+    }
+
+    .scene-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .scene-link {
+      display: inline-flex;
+      height: 28px;
+      align-items: center;
+      padding: 0 10px;
+      color: #333fff;
+      background: #f5f5ff;
+      border-radius: 4px;
+      font-size: 12px;
+      line-height: 20px;
+    }
+
+    .scene-link.is-primary {
+      color: #fff;
+      background: #333fff;
+    }
+
+    .usage-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      line-height: 20px;
+    }
+
+    .usage-table th,
+    .usage-table td {
+      height: 42px;
+      padding: 10px 12px;
+      text-align: left;
+      border-right: 1px solid #eeeef0;
+      border-bottom: 1px solid #eeeef0;
+    }
+
+    .usage-table th {
+      color: #000;
+      background: #fafafa;
+      font-weight: 600;
+    }
+
+    .usage-table th:last-child,
+    .usage-table td:last-child {
+      border-right: 0;
+    }
+
+    @media (max-width: 900px) {
+      .scenario-page {
+        padding: 16px 12px 48px;
+      }
+
+      .scenario-head { flex-direction: column; }
+      .summary-grid,
+      .scene-grid { grid-template-columns: 1fr; }
+      .scene-card,
+      .scene-card:nth-child(2n) { border-right: 0; }
+      .scene-section.is-table { overflow-x: auto; }
+      .usage-table { min-width: 720px; }
+    }
+  </style>
+</head>
+<body>
+<div class="frame2-stage ds-scope">
+  <main class="scenario-page">
+    <header class="scenario-head">
+      <div>
+        <h1 class="scenario-title"><span>场景模板</span></h1>
+        <p class="scenario-desc">生成业务 HTML 时优先按场景复用组件、状态、尺寸、间距与交互，仅替换业务数据和文案。</p>
+      </div>
+      <a class="scenario-back" href="../components/component-library-index.html">返回功能索引</a>
+    </header>
+
+    <section class="summary-grid" aria-label="场景模板统计">
+      <article class="summary-card"><span>场景模板</span><strong>6</strong></article>
+      <article class="summary-card"><span>已覆盖状态</span><strong>15</strong></article>
+      <article class="summary-card"><span>MasterGo 来源</span><strong>6</strong></article>
+      <article class="summary-card"><span>生成策略</span><strong>优先复用</strong></article>
+    </section>
+
+    <section class="scene-section">
+      <div class="scene-section-head">
+        <h2 class="scene-section-title">页面与浮层场景</h2>
+        <span class="scene-section-count">6 个模板</span>
+      </div>
+      <div class="scene-grid">
+        <article class="scene-card">
+          <div class="scene-card-head">
+            <span class="scene-number">01</span>
+            <div>
+              <h3 class="scene-name">常规列表页</h3>
+              <p class="scene-copy">一级页签、提示条、展开筛选、批量工具栏、数据表格、分页和底部操作。</p>
+            </div>
+          </div>
+          <div class="tag-row"><span class="tag">有数据</span><span class="tag">筛选展开</span><span class="tag">固定列</span><span class="tag">分页</span></div>
+          <div class="scene-source">mastergo://getd2c/195991886967017-11-041340</div>
+          <div class="scene-actions">
+            <a class="scene-link is-primary" href="./regular-list-page.html">交互预览</a>
+            <a class="scene-link" href="../packages/design-system/docs/regular-list-page.md">查看规范</a>
+          </div>
+        </article>
+
+        <article class="scene-card">
+          <div class="scene-card-head">
+            <span class="scene-number">02</span>
+            <div>
+              <h3 class="scene-name">卡片列表页</h3>
+              <p class="scene-copy">筛选、批量工具栏、三列卡片网格、发布状态、配置缺失提示和分页。</p>
+            </div>
+          </div>
+          <div class="tag-row"><span class="tag">卡片网格</span><span class="tag">发布状态</span><span class="tag">配置提示</span><span class="tag">分页</span></div>
+          <div class="scene-source">mastergo://getd2c/195991886967017-11-83832</div>
+          <div class="scene-actions">
+            <a class="scene-link is-primary" href="./card-list-page.html">交互预览</a>
+            <a class="scene-link" href="../packages/design-system/docs/card-list-page.md">查看规范</a>
+          </div>
+        </article>
+
+        <article class="scene-card">
+          <div class="scene-card-head">
+            <span class="scene-number">03</span>
+            <div>
+              <h3 class="scene-name">无数据表格页</h3>
+              <p class="scene-copy">筛选区、工具栏、完整表头、居中空状态和底部分页。</p>
+            </div>
+          </div>
+          <div class="tag-row"><span class="tag">空数据</span><span class="tag">表格</span><span class="tag">分页</span></div>
+          <div class="scene-source">mastergo://getd2c/195991886967017-2-016401</div>
+          <div class="scene-actions">
+            <a class="scene-link is-primary" href="../../.mastergo/195991886967017-2-016401/195991886967017-2-016401.html">预览原稿</a>
+            <a class="scene-link" href="../packages/design-system/docs/no-data-table-page.md">查看规范</a>
+          </div>
+        </article>
+
+        <article class="scene-card">
+          <div class="scene-card-head">
+            <span class="scene-number">04</span>
+            <div>
+              <h3 class="scene-name">右侧表单抽屉</h3>
+              <p class="scene-copy">900px 宽抽屉、双列表单、文本域和固定底栏操作。</p>
+            </div>
+          </div>
+          <div class="tag-row"><span class="tag">打开</span><span class="tag">禁用字段</span><span class="tag">字数统计</span></div>
+          <div class="scene-source">mastergo://getd2c/195991886967017-2-003917</div>
+          <div class="scene-actions">
+            <a class="scene-link is-primary" href="./drawer-page.html">交互预览</a>
+            <a class="scene-link" href="../packages/design-system/docs/drawer.md">查看规范</a>
+          </div>
+        </article>
+
+        <article class="scene-card">
+          <div class="scene-card-head">
+            <span class="scene-number">05</span>
+            <div>
+              <h3 class="scene-name">普通表单弹窗</h3>
+              <p class="scene-copy">480 / 600 / 800px 宽度预设，覆盖集中配置、操作确认和长表单。</p>
+            </div>
+          </div>
+          <div class="tag-row"><span class="tag">内容自适应</span><span class="tag">焦点循环</span><span class="tag">提交加载</span></div>
+          <div class="scene-source">mastergo://getd2c/139272150501659-4316-81924</div>
+          <div class="scene-actions">
+            <a class="scene-link is-primary" href="../components/modal-components.html">交互预览</a>
+            <a class="scene-link" href="../packages/design-system/docs/modal.md">查看规范</a>
+          </div>
+        </article>
+
+        <article class="scene-card">
+          <div class="scene-card-head">
+            <span class="scene-number">06</span>
+            <div>
+              <h3 class="scene-name">删除场景弹窗</h3>
+              <p class="scene-copy">二次确认、删除成功和后端拒绝删除的失败结果态。</p>
+            </div>
+          </div>
+          <div class="tag-row"><span class="tag is-danger">危险操作</span><span class="tag">删除成功</span><span class="tag">删除失败</span></div>
+          <div class="scene-source">mastergo://getd2c/195991886967017-2-003863</div>
+          <div class="scene-actions">
+            <a class="scene-link is-primary" href="./delete-modal-page.html">交互预览</a>
+            <a class="scene-link" href="../packages/design-system/docs/delete-modal.md">查看规范</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="scene-section is-table">
+      <div class="scene-section-head">
+        <h2 class="scene-section-title">生成匹配规则</h2>
+        <span class="scene-section-count">按需求关键词自动选择</span>
+      </div>
+      <table class="usage-table">
+        <thead>
+          <tr>
+            <th style="width: 180px">需求特征</th>
+            <th style="width: 180px">匹配模板</th>
+            <th>生成规则</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>常规查询、批量操作、有数据</td><td>常规列表页</td><td>组合页签、提示、筛选、工具栏、统计、表格和分页；只替换业务字段与数据。</td></tr>
+          <tr><td>方案、应用、配置以卡片展示</td><td>卡片列表页</td><td>组合筛选、工具栏、响应式卡片网格和分页；发布状态与缺失配置提示保持独立。</td></tr>
+          <tr><td>列表为空、暂无数据</td><td>无数据表格页</td><td>保留筛选、操作、表头和分页，数据区替换为空状态。</td></tr>
+          <tr><td>新增、编辑、详情侧滑</td><td>右侧表单抽屉</td><td>优先 900px 表单抽屉；字段较少时可按内容调整宽度。</td></tr>
+          <tr><td>短流程表单、集中配置</td><td>普通表单弹窗</td><td>使用居中弹窗，标题和操作固定，内容超高时内部滚动。</td></tr>
+          <tr><td>删除、不可恢复、引用校验</td><td>删除场景弹窗</td><td>先二次确认；失败必须显示具体原因并保留原数据。</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</div>
+
+<script src="../assets/icon-registry.js"></script>
+<script src="../packages/design-system/src/AppShellV2/app-shell-v2.js?v=2.2.3"></script>
+<script src="../framework/framework-2.staff-preset.js?v=2.2.3"></script>
+<script src="../framework/framework-2.js?v=2.2.3"></script>
+<script>
+  const scenarioFeatureRoutes = {
+    'component-library': '../components/component-library-index.html',
+    'scenario-templates': './scenario-templates-index.html',
+    'current-components': '../components/current-components-index.html',
+    'all-components': '../components/all-components-index.html',
+    'framework': '../framework/framework-index.html'
+  };
+
+  WiseFramework2.mount({
+    activeApp: 'component-library',
+    activeFeature: 'scenario-templates',
+    versionLabel: '组件库',
+    appMenus: {
+      'component-library': [
+        {
+          key: 'design-assets',
+          label: '设计资源',
+          icon: 'home',
+          children: [
+            { key: 'component-library', label: '功能索引' },
+            { key: 'scenario-templates', label: '场景模板' },
+            { key: 'current-components', label: '当前组件' },
+            { key: 'all-components', label: 'Ant目录' },
+            { key: 'framework', label: '框架' }
+          ]
+        }
+      ]
+    },
+    tabs: [
+      { key: 'component-library', label: '功能索引', href: '../components/component-library-index.html', closable: false },
+      { key: 'scenario-templates', label: '场景模板', href: './scenario-templates-index.html', closable: true }
+    ],
+    onFeatureChange(feature) {
+      const target = scenarioFeatureRoutes[feature];
+      if (target) window.location.href = target;
+    }
+  });
+</script>
+</body>
+</html>

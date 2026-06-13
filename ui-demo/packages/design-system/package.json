@@ -17,6 +17,7 @@
     "./button.css": "./src/Button/index.css",
     "./button-group.css": "./src/ButtonGroup/index.css",
     "./card.css": "./src/Card/index.css",
+    "./card-list-template.css": "./src/CardListTemplate/index.css",
     "./crud-template.css": "./src/CrudTemplate/index.css",
     "./app-shell.css": "./src/AppShell/index.css",
     "./drawer.css": "./src/Drawer/index.css",
@@ -41,6 +42,8 @@
     "./switch.css": "./src/Switch/index.css",
     "./tabs.css": "./src/Tabs/index.css",
     "./tag.css": "./src/Tag/index.css",
+    "./transfer.css": "./src/Transfer/index.css",
+    "./upload.css": "./src/Upload/index.css",
     "./empty-state.css": "./src/EmptyState/index.css",
     "./import-wizard.css": "./src/ImportWizard/index.css",
     "./audit-template.css": "./src/AuditTemplate/index.css"

@@ -10,7 +10,7 @@ https://mastergo.com/goto/T2gSeoDg?page_id=1052:03015&file=139272150501659&devMo
 - React 组件：`src/ButtonGroup/index.jsx`
 - 样式文件：`src/ButtonGroup/index.css`
 - 依赖组件：`src/Button`
-- HTML 预览：`ui-demo/button-group-states.html`
+- HTML 预览：`ui-demo/components/button-group-states.html`
 
 ## 形态
 

@@ -9,6 +9,9 @@
     shellStyleUrl.search = shellScriptUrl.search;
   }
   const SHELL_STYLE_URL = shellStyleUrl?.href || '';
+  const DEFAULT_FRAMEWORK_ASSET_BASE = shellScriptUrl
+    ? new URL('../../../../framework/assets/', shellScriptUrl).href.replace(/\/$/, '')
+    : './framework/assets';
   const HOST_FRAMEWORK_CLASSES = new Set(['frame2-stage', 'ds-scope']);
 
   const DEFAULT_APPS = [
@@ -277,7 +280,7 @@
   }
 
   function buildShell(config, state, useContentSlot) {
-    const frameworkAssetBase = config.frameworkAssetBase || './framework-2/assets';
+    const frameworkAssetBase = config.frameworkAssetBase || DEFAULT_FRAMEWORK_ASSET_BASE;
     const brandLogo = config.frameworkLogoSrc || `${frameworkAssetBase}/szpu-emblem.png`;
     const brandLogoAlt = config.logoAlt || '深圳职业技术大学';
     const roleName = state.roleName || config.roleName || config.userRole || '师资科';
@@ -418,6 +421,7 @@
     const initialRole = config.roleName || config.userRole || roleLabels(config)[0] || '师资科';
     const appGroups = roleAppGroups(config, initialRole);
     const forceHideSidebar = config.hideSidebar === true || config.sidebar === false;
+    const workspaceVariant = config.workspaceVariant === 'card' ? 'card' : 'canvas';
     function getAppMenu(key) {
       const app = findApp(state.appGroups, key);
       if (config.appMenus && Object.prototype.hasOwnProperty.call(config.appMenus, key)) return config.appMenus[key] || [];
@@ -433,6 +437,8 @@
     };
     state.menuItems = getAppMenu(state.activeApp);
     stage.classList.toggle('is-sidebar-hidden', forceHideSidebar || !hasMenuItems(state.menuItems));
+    stage.classList.toggle('is-workspace-card', workspaceVariant === 'card');
+    stage.dataset.workspaceVariant = workspaceVariant;
     const initialFeature = state.activeFeature || firstFeature(state.menuItems)?.key;
     state.activeFeature = initialFeature;
     if (!state.tabs.length && initialFeature) {

@@ -12,22 +12,22 @@ HTML 预览默认使用框架2，框架1仅保留兼容实现：
 | `AppShellV2/app-shell-v2.css` + `app-shell-v2.js` | 默认 HTML 预览框架，使用 Shadow DOM 隔离 |
 | `AppShell/app-shell.css` + `app-shell.js` | 框架1兼容实现，不用于新页面 |
 
-根目录中的历史组件预览通过兼容适配器接入框架2：
+`ui-demo/components/` 中的组件预览通过兼容适配器接入框架2：
 
 ```html
-<link rel="stylesheet" href="./packages/design-system/src/base.css" />
-<link rel="stylesheet" href="./packages/design-system/src/AppShell/app-shell.css" />
+<link rel="stylesheet" href="../packages/design-system/src/base.css" />
+<link rel="stylesheet" href="../packages/design-system/src/AppShell/app-shell.css" />
 
 <body>
   <div class="frame2-stage ds-scope">
     <main>...</main>
   </div>
 
-  <script src="./assets/icon-registry.js"></script>
-  <script src="./packages/design-system/src/AppShellV2/app-shell-v2.js?v=2.2.2"></script>
-  <script src="./framework-2/framework-2.staff-preset.js?v=2.2.2"></script>
-  <script src="./framework-2/framework-2.js?v=2.2.2"></script>
-  <script src="./framework-2/legacy-app-shell-adapter.js?v=2.2.2"></script>
+  <script src="../assets/icon-registry.js"></script>
+  <script src="../packages/design-system/src/AppShellV2/app-shell-v2.js?v=2.2.3"></script>
+  <script src="../framework/framework-2.staff-preset.js?v=2.2.3"></script>
+  <script src="../framework/framework-2.js?v=2.2.3"></script>
+  <script src="../framework/legacy-app-shell-adapter.js?v=2.2.3"></script>
   <script>
     WiseAppShell.init({
       secondaryNav: {
@@ -43,7 +43,7 @@ HTML 预览默认使用框架2，框架1仅保留兼容实现：
 </body>
 ```
 
-新索引页和新业务页直接参考 `ui-demo/framework-2/page-template.html`。框架选择入口为 `ui-demo/framework-2/framework-index.html`。
+新索引页和新业务页直接参考 `ui-demo/framework/page-template.html`。框架选择入口为 `ui-demo/framework/framework-index.html`。
 
 `app-shell.css` 同时包含 **CRUD 列表通用模式**（`.operation-query-row` / `.operation-table` / `.ds-switch` / `.pages` / `.operation-footer`），业务页只需在 `<style>` 里写自己表格的列宽。
 
@@ -51,13 +51,24 @@ HTML 预览默认使用框架2，框架1仅保留兼容实现：
 `docs/no-data-table-page.md`，来源为
 `mastergo://getd2c/195991886967017-2-016401`。
 
+常规列表页的组合结构、响应式与交互规则见
+`docs/regular-list-page.md`，来源为
+`mastergo://getd2c/195991886967017-11-041340`。React 页面优先使用
+`DSRegularListTemplate`，交互预览见 `ui-demo/scenarios/regular-list-page.html`。
+
+卡片列表页的组合结构、状态与交互规则见
+`docs/card-list-page.md`，来源为
+`mastergo://getd2c/195991886967017-11-83832`。React 页面优先使用
+`DSCardListTemplate`，交互预览见 `ui-demo/scenarios/card-list-page.html`。
+
 右侧表单抽屉的组件、状态、尺寸与间距基准见
 `docs/drawer.md`，来源为
 `mastergo://getd2c/195991886967017-2-003917`。
 
-普通表单弹窗的组件、状态、尺寸与间距基准见
-`docs/modal.md`，来源为
-`mastergo://getd2c/195991886967017-2-003301`。
+弹窗的尺寸预设、内容自适应、关闭约束、焦点与提交状态见
+`docs/modal.md`，主要来源为
+`mastergo://getd2c/139272150501659-4316-81924`；交互预览见
+`ui-demo/components/modal-components.html`。
 
 删除确认与删除失败场景见 `docs/delete-modal.md`，删除确认来源为
 `mastergo://getd2c/195991886967017-2-003863`。
@@ -192,7 +203,7 @@ import {
 
 页面只维护标题和插槽内容，组件内部结构与样式由
 `web-components/GroupTitle/ds-group-title.js` 统一管理。完整预览见
-`ui-demo/group-title-components.html`。
+`ui-demo/components/group-title-components.html`。
 
 ## 选项卡 DSTabs
 
@@ -266,6 +277,8 @@ import {
 - `DSInput`
 - `DSSelect`
 - `DSCascader`
+- `DSTransfer`
+- `DSUpload`
 - `DSRadioGroup`
 - `DSRichTextEditor`
 - `DSTextarea`
@@ -278,19 +291,24 @@ import {
 - `docs/button.md`：MasterGo《📌【PC】基础控件 / Button》设计链接与落地规则。
 - `docs/button-group.md`：MasterGo《📌【PC】基础控件 / ButtonGroup》设计链接与落地规则。
 - `docs/anchor.md`：MasterGo 锚点设计链接与落地规则。
+- `docs/card.md`：MasterGo 卡片设计链接、布局、状态与交互规则。
+- `docs/card-list-page.md`：卡片列表页的筛选、工具栏、卡片网格、状态与分页规则。
+- `docs/tag.md`：流程状态标签的阶段映射、三种形态与交互边界。
 - `docs/select.md`：MasterGo 选择器设计链接与落地规则。
 - `docs/cascader.md`：MasterGo 级联选择器设计链接与落地规则。
+- `docs/transfer.md`：MasterGo 穿梭框设计链接、四类形态与交互规则。
+- `docs/upload.md`：MasterGo 上传组件设计链接、状态、文件生命周期与 API。
 - `docs/radio.md`：MasterGo 单选设计链接与落地规则。
 - `docs/rich-text-editor.md`：MasterGo 富文本编辑器设计链接与落地规则。
 - `docs/time-picker.md`：MasterGo 时间选择器设计链接与落地规则。
 
 HTML 表单预览：
 
-- 完整表单页：`ui-demo/form-components-page.html`
-- 状态页：`ui-demo/form-input-states.html`、`ui-demo/form-select-states.html`、`ui-demo/form-cascader-states.html`、`ui-demo/form-textarea-states.html`、`ui-demo/form-rich-text-editor-states.html`
-- 选项页：`ui-demo/form-radio-group-states.html`、`ui-demo/form-checkbox-group-states.html`、`ui-demo/form-switch-states.html`
-- 日期时间页：`ui-demo/form-date-picker-states.html`、`ui-demo/form-date-range-states.html`、`ui-demo/form-time-picker-states.html`、`ui-demo/form-time-range-states.html`、`ui-demo/form-datetime-picker-states.html`、`ui-demo/form-datetime-range-states.html`
-- 上传页：`ui-demo/form-upload-button-states.html`、`ui-demo/form-upload-dragger-states.html`
+- 完整表单页：`ui-demo/components/form-components-page.html`
+- 状态页：`ui-demo/components/form-input-states.html`、`ui-demo/components/form-select-states.html`、`ui-demo/components/form-cascader-states.html`、`ui-demo/components/transfer-components.html`、`ui-demo/components/upload-components.html`、`ui-demo/components/form-textarea-states.html`、`ui-demo/components/form-rich-text-editor-states.html`
+- 选项页：`ui-demo/components/form-radio-group-states.html`、`ui-demo/components/form-checkbox-group-states.html`、`ui-demo/components/form-switch-states.html`
+- 日期时间页：`ui-demo/components/form-date-picker-states.html`、`ui-demo/components/form-date-range-states.html`、`ui-demo/components/form-time-picker-states.html`、`ui-demo/components/form-time-range-states.html`、`ui-demo/components/form-datetime-picker-states.html`、`ui-demo/components/form-datetime-range-states.html`
+- 上传页：`ui-demo/components/form-upload-button-states.html`、`ui-demo/components/form-upload-dragger-states.html`
 
 布局与导航：
 
@@ -300,6 +318,80 @@ HTML 表单预览：
 - `DSCard`
 - `DSTabs`
 
+## 卡片 DSCard
+
+卡片设计与交互规则来自
+`mastergo://getd2c/139272150501659-2393-033371`，完整规范见
+`docs/card.md`，交互预览见 `ui-demo/components/card-components.html`。
+卡片管理列表场景来自 `mastergo://getd2c/195991886967017-11-83832`，
+页面模板见 `docs/card-list-page.md`。
+
+```jsx
+<DSCard
+  title="主标题"
+  tag="标签"
+  actions={[
+    { key: 'edit', label: '编辑', onClick: handleEdit },
+    { key: 'detail', label: '详情', onClick: handleDetail },
+    { key: 'copy', label: '复制', onClick: handleCopy },
+    { key: 'delete', label: '删除', danger: true, onClick: handleDelete },
+  ]}
+>
+  卡片内容
+</DSCard>
+```
+
+- `layout="short"`：宽度 `350px - 500px`，适合网格自适应排列。
+- `layout="long"`：独占一行；可配合 `actionsPlacement="header"` 和 `actionDisplay="hover"`。
+- `switchable`：提供启用/停用状态，使用 `enabled` 和 `onEnabledChange` 受控。
+- `selectable`：支持鼠标及 `Enter / Space` 选择，`selection` 可选 `light` 或 `prominent`。
+- 操作超过 `actionLimit` 时自动折叠到“更多”菜单，默认上限为 `3`。
+- `layout="image"` 支持 `image / media / mediaBadge / footer` 图片卡插槽。
+- `status / fields / notice` 用于管理列表中的状态、信息行和缺失配置提示。
+- `variant="list-item"` 配合 `actionAppearance="button"` 生成管理列表卡片。
+
+## 穿梭框 DSTransfer
+
+穿梭框设计与交互规则来自
+`mastergo://getd2c/195991886967017-11-076878`，完整规范见
+`docs/transfer.md`，交互预览见 `ui-demo/components/transfer-components.html`。
+
+```jsx
+<DSTransfer
+  variant="grouped"
+  dataSource={fields}
+  value={selectedKeys}
+  onChange={(keys) => setSelectedKeys(keys)}
+/>
+```
+
+- `variant` 支持 `list`、`grouped`、`table` 和 `tree`。
+- 左侧搜索只过滤待选项；勾选后立即加入右侧。
+- 右侧支持单项移除、清空和卡片/表格两种展示。
+- 使用 `sourceExtra` 与 `sourceFooter` 扩展筛选区和分页。
+
+## 上传组件 DSUpload
+
+上传组件设计与交互规则来自
+`mastergo://getd2c/139272150501659-1259-36938`，完整规范见
+`docs/upload.md`，交互预览见 `ui-demo/components/upload-components.html`。
+
+```jsx
+<DSUpload
+  mode="dragger"
+  listType="picture-card"
+  accept="image/*,.pdf"
+  multiple
+  maxCount={4}
+  request={uploadRequest}
+/>
+```
+
+- 支持点击、拖拽和粘贴文件。
+- 支持文字列表与图片/文件卡片结果。
+- 覆盖上传中、成功、失败、取消和重试。
+- `DSImportUpload` 继续作为导入向导专用组合组件。
+
 数据展示：
 
 - `DSFilterBar`
@@ -307,6 +399,9 @@ HTML 表单预览：
 - `DSParentChildTable`
 - `DSPagination`
 - `DSEmptyState`
+- `DSEmptyGuide`
+
+缺省页应先匹配无数据、无待办、无权限、网络异常、无消息、无搜索结果、维护中或加载失败，再决定是否提供恢复操作。高级空状态使用 `DSEmptyGuide` 组合指定操作、多个步骤、推荐方案和跳过入口。完整规则见 `docs/empty-state.md`，交互预览见 `ui-demo/components/empty-state-components.html`。
 
 审核场景：
 
@@ -331,6 +426,8 @@ HTML 表单预览：
 
 页面模板：
 
+- `DSRegularListTemplate`
+- `DSCardListTemplate`
 - `DSCrudTemplate`
 - `DSAuditTemplate`
 - `DSImportWizard`
@@ -449,7 +546,7 @@ HTML 表单预览：
 
 多级表头通过 `children` 描述分组，子列仍按普通列渲染：
 
-HTML 预览页：`ui-demo/multi-level-table-page.html`。
+HTML 预览页：`ui-demo/components/multi-level-table-page.html`。
 
 ```jsx
 <DSDataTable
@@ -520,11 +617,16 @@ HTML 预览页：`ui-demo/multi-level-table-page.html`。
 状态统一使用 `DSTag`，避免页面级重复写胶囊样式：
 
 ```jsx
-<DSTag color="primary">待审核</DSTag>
-<DSTag color="success">已通过</DSTag>
-<DSTag color="warning">需补充</DSTag>
-<DSTag color="danger">不通过</DSTag>
+<DSTag status="待审核" />
+<DSTag status="已通过" variant="icon" />
+<DSTag status="不通过" variant="stamp" />
 ```
+
+- `filled`：待办面板和待办卡片中的 `24px` 填充标签。
+- `icon`：已结事项表格中的 `16px` 状态图标与黑色文字。
+- `stamp`：IM 聊天卡片中的 `48px` 斜章。
+- 标签只读，状态由业务数据驱动；操作使用独立按钮或链接。
+- 完整规则见 `docs/tag.md`，预览见 `ui-demo/components/tag-components.html`。
 
 ## 审核页组合
 

@@ -28,4 +28,4 @@ mastergo://getd2c/139272150501659-1221-23902
 />
 ```
 
-预览页：`ui-demo/form-rich-text-editor-states.html`。
+预览页：`ui-demo/components/form-rich-text-editor-states.html`。

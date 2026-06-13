@@ -14,21 +14,17 @@
 
 | 路径 | 说明 |
 |---|---|
-| `ui-demo/component-library-index.html` | 跳转到框架2组件库功能索引。 |
-| `ui-demo/scenario-templates-index.html` | 跳转到框架2业务场景模板索引。 |
-| `ui-demo/framework-2/component-library-index.html` | 框架2组件库功能索引。 |
-| `ui-demo/framework-2/scenario-templates-index.html` | 框架2业务场景模板索引和生成规则入口。 |
-| `ui-demo/framework-2/current-components-index.html` | 框架2当前组件索引。 |
-| `ui-demo/framework-2/all-components-index.html` | 框架2 Ant 全量组件目录。 |
-| `ui-demo/framework-2/framework-index.html` | 框架1和框架2选择入口。 |
-| `ui-demo/current-components-index.html` | 当前已沉淀组件索引。 |
-| `ui-demo/all-components-index.html` | Ant Design 组件体系排查目录。 |
-| `ui-demo/ant-components-page.html` | 全量组件交互预览页。 |
-| `ui-demo/*-states.html` | 单组件状态预览页。 |
-| `ui-demo/*-page.html` | 业务页面或组合组件预览页。 |
+| `ui-demo/components/` | 组件索引、组件状态和组件组合预览 HTML。 |
+| `ui-demo/components/component-library-index.html` | 框架2组件库功能索引。 |
+| `ui-demo/components/current-components-index.html` | 当前已沉淀组件索引。 |
+| `ui-demo/components/all-components-index.html` | Ant Design 组件体系排查目录。 |
+| `ui-demo/scenarios/` | 场景模板索引、弹窗、抽屉等场景 HTML。 |
+| `ui-demo/scenarios/scenario-templates-index.html` | 业务场景模板索引和生成规则入口。 |
+| `ui-demo/demos/` | 具体业务和完整功能演示 HTML。 |
+| `ui-demo/framework/` | 框架核心、框架选择、页面模板、资产和隔离回归。 |
+| `ui-demo/framework/framework-index.html` | 框架1和框架2选择入口。 |
 | `ui-demo/assets/` | 图标、导航背景等静态资源。 |
 | `ui-demo/packages/design-system/` | 本地 React 设计组件库。 |
-| `ui-demo/framework-2/` | 框架2预览、公共预设、页面模板和隔离回归。 |
 
 ## Design System
 
@@ -46,7 +42,7 @@
 ## Maintenance Rules
 
 1. 新增组件先在 `ui-demo/packages/design-system/src/<Component>/` 中沉淀源码，再在 `src/index.js` 导出。
-2. 新增组件预览页放在 `ui-demo/` 根下，并同步更新 `README.md` 和 `ui-demo/README.md` 的索引。
+2. 新增 HTML 按职责放入 `components/`、`scenarios/`、`demos/` 或 `framework/`，不放在 `ui-demo/` 根目录。
 3. 新增图标放入 `ui-demo/assets/icons/`，需要在页面脚本中复用时同步登记 `ui-demo/assets/icon-registry.js`。
 4. 组件颜色必须优先使用 `src/tokens.css` 中的变量，不在组件 CSS 里直接写设计色值。
 5. 本地工具配置、系统文件和临时截图不提交到仓库。

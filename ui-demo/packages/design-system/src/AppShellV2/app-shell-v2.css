@@ -25,7 +25,7 @@
   --frame2-card-gap: 12px;
   --frame2-page-background:
     var(--ds-color-bg-page)
-    url('../../../../framework-2/assets/personal-workbench-bg.jpg')
+    url('../../../../framework/assets/personal-workbench-bg.jpg')
     center top / cover no-repeat;
   display: flex;
   flex-direction: column;
@@ -60,7 +60,7 @@
   color: var(--ds-color-white);
   overflow: visible;
   background: #3167ff;
-  background-image: url('../../../../framework-2/assets/topbar-nav-2x.jpg');
+  background-image: url('../../../../framework/assets/topbar-nav-2x.jpg');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -744,6 +744,10 @@
   display: none;
 }
 
+.frame2-stage.is-sidebar-hidden.is-workspace-card {
+  --frame2-topbar-height: 48px;
+}
+
 .frame2-side-collapse {
   display: flex;
   flex: none;
@@ -1030,6 +1034,12 @@
   border-radius: 4px;
 }
 
+.frame2-stage.is-sidebar-hidden.is-workspace-card .frame2-content-shell {
+  margin-bottom: 4px;
+  background: var(--ds-color-bg-container);
+  border-radius: var(--ds-radius-lg) var(--ds-radius-lg) 0 0;
+}
+
 .frame2-content {
   position: relative;
   display: flex;
@@ -1047,6 +1057,10 @@
   box-shadow: none;
 }
 
+.frame2-stage.is-sidebar-hidden.is-workspace-card .frame2-content {
+  background: var(--ds-color-bg-container);
+}
+
 .frame2-content > slot {
   display: contents;
 }
@@ -1058,11 +1072,19 @@
   min-height: 100%;
 }
 
+.frame2-stage.is-sidebar-hidden.is-workspace-card .frame2-content > slot::slotted(*) {
+  padding: var(--ds-space-5);
+}
+
 .frame2-content > :not(slot) {
   flex: none;
   width: 100%;
   min-width: 0;
   min-height: 100%;
+}
+
+.frame2-stage.is-sidebar-hidden.is-workspace-card .frame2-content > :not(slot) {
+  padding: var(--ds-space-5);
 }
 
 .frame2-stage.is-workspace-fullscreen .frame2-sidebar,
@@ -1170,5 +1192,14 @@
 
   .frame2-content-shell {
     margin: 8px;
+  }
+
+  .frame2-stage.is-sidebar-hidden.is-workspace-card .frame2-content-shell {
+    margin-bottom: 4px;
+  }
+
+  .frame2-stage.is-sidebar-hidden.is-workspace-card .frame2-content > slot::slotted(*),
+  .frame2-stage.is-sidebar-hidden.is-workspace-card .frame2-content > :not(slot) {
+    padding: var(--ds-space-4);
   }
 }

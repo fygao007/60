@@ -41,4 +41,4 @@ https://mastergo.com/goto/T3OjETME?page_id=39:5072&file=139272150501659
 />
 ```
 
-预览页：`ui-demo/form-cascader-states.html`。
+预览页：`ui-demo/components/form-cascader-states.html`。

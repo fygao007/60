@@ -45,4 +45,4 @@ mastergo://getd2c/139272150501659-4096-70064
 />
 ```
 
-预览页：`ui-demo/form-radio-group-states.html`。
+预览页：`ui-demo/components/form-radio-group-states.html`。

@@ -11,7 +11,7 @@ https://mastergo.com/goto/T29Z6cTr?page_id=32:2475&file=139272150501659&devMode=
 - 样式文件：`src/Button/index.css`
 - 按钮组：`src/ButtonGroup`
 - 图标按钮：`src/IconButton`
-- HTML 预览：`ui-demo/ant-components-page.html#official-button`
+- HTML 预览：`ui-demo/components/ant-components-page.html#official-button`
 
 ## 形态
 

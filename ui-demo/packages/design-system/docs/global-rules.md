@@ -25,6 +25,7 @@
 - `docs/modal.md`：普通表单弹窗模板，记录遮罩、表单控件、状态、尺寸与底栏操作。
 - `docs/delete-modal.md`：删除确认与删除失败场景，记录危险操作、反馈状态和交互流程。
 - `src/Field`：表单字段、输入框、选择器、文本域。
+- `src/Transfer` / `src/Upload`：穿梭选择和通用文件上传。
 - `src/Tag` / `src/Tabs`：状态标签与页签。
 - `src/Card` / `src/PageHeader`：内容容器与页面标题区。
 - `src/DataTable` / `src/ParentChildTable` / `src/Pagination` / `src/FilterBar`：列表页核心组件。
@@ -60,6 +61,8 @@ import {
   DSSelect,
   DSTabs,
   DSTag,
+  DSTransfer,
+  DSUpload,
 } from '@wisedu/design-system'
 ```
 
