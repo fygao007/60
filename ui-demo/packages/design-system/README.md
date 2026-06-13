@@ -2,50 +2,65 @@
 
 60 系统 PC 页面生成使用的本地 React 组件库。组件以 `DS*` 前缀导出，样式基于 `src/tokens.css` 和 `src/base.css`。
 
-## HTML 预览底子（DSAppShell HTML preview）
+## HTML 预览底子
 
-`src/AppShell/` 下并列两套实现：
+HTML 预览默认使用框架2，框架1仅保留兼容实现：
 
 | 文件 | 用途 |
 |---|---|
 | `index.jsx` + `index.css` | React 组件 `DSAppShell`，业务页用 |
-| **`app-shell.css` + `app-shell.js`** | **HTML 单文件预览底子**，给设计 / 评审看 |
+| `AppShellV2/app-shell-v2.css` + `app-shell-v2.js` | 默认 HTML 预览框架，使用 Shadow DOM 隔离 |
+| `AppShell/app-shell.css` + `app-shell.js` | 框架1兼容实现，不用于新页面 |
 
-HTML 预览页只需要：
+根目录中的历史组件预览通过兼容适配器接入框架2：
 
 ```html
 <link rel="stylesheet" href="./packages/design-system/src/base.css" />
 <link rel="stylesheet" href="./packages/design-system/src/AppShell/app-shell.css" />
 
 <body>
-  <div class="stage ds-scope">
-    <!-- 业务内容（init 后会被自动挪进 .operation-content） -->
-    <header class="operation-header">...</header>
-    <div class="operation-query-row">...</div>
-    <div class="operation-table-wrap">...</div>
-    <footer class="operation-footer">...</footer>
+  <div class="frame2-stage ds-scope">
+    <main>...</main>
   </div>
 
   <script src="./assets/icon-registry.js"></script>
-  <script src="./packages/design-system/src/AppShell/app-shell.js"></script>
+  <script src="./packages/design-system/src/AppShellV2/app-shell-v2.js?v=2.2.2"></script>
+  <script src="./framework-2/framework-2.staff-preset.js?v=2.2.2"></script>
+  <script src="./framework-2/framework-2.js?v=2.2.2"></script>
+  <script src="./framework-2/legacy-app-shell-adapter.js?v=2.2.2"></script>
   <script>
     WiseAppShell.init({
-      activeModule: 'doctor',          // 一级导航 active
-      secondaryNav: {                  // 二级导航分组
-        title: '协议管理',
-        status: ['进行', 6],
-        items: ['协议模板','条款库','机构管理','年级管理','引用配置','条款审核'],
-        foot: '流程参数设置'
+      secondaryNav: {
+        title: '组件库',
+        items: ['功能索引', '当前组件', 'Ant目录', '组件总览', '表单', '表格', '框架']
       },
-      activeFeature: '条款库'           // 二级导航 + 顶 Tab active 项
+      activeFeature: '表单',
+      onFeatureChange(feature) {
+        // 按当前页面路由表跳转。
+      }
     });
   </script>
 </body>
 ```
 
-参考样例：`ui-demo/component-library-index.html`、`ui-demo/form-components-page.html`、`ui-demo/basic-table-page.html`、`ui-demo/multi-level-table-page.html`。
+新索引页和新业务页直接参考 `ui-demo/framework-2/page-template.html`。框架选择入口为 `ui-demo/framework-2/framework-index.html`。
 
 `app-shell.css` 同时包含 **CRUD 列表通用模式**（`.operation-query-row` / `.operation-table` / `.ds-switch` / `.pages` / `.operation-footer`），业务页只需在 `<style>` 里写自己表格的列宽。
+
+操作区无数据表格页的组件、状态、尺寸与间距基准见
+`docs/no-data-table-page.md`，来源为
+`mastergo://getd2c/195991886967017-2-016401`。
+
+右侧表单抽屉的组件、状态、尺寸与间距基准见
+`docs/drawer.md`，来源为
+`mastergo://getd2c/195991886967017-2-003917`。
+
+普通表单弹窗的组件、状态、尺寸与间距基准见
+`docs/modal.md`，来源为
+`mastergo://getd2c/195991886967017-2-003301`。
+
+删除确认与删除失败场景见 `docs/delete-modal.md`，删除确认来源为
+`mastergo://getd2c/195991886967017-2-003863`。
 
 ### 一级页签 / 业务标题样式
 

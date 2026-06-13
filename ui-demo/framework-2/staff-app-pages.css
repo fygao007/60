@@ -12,7 +12,7 @@
   --ap-red: #ff4d4f;
   --ap-green: #18b981;
   width: 100%;
-  min-width: 1360px;
+  min-width: 0;
   max-width: none;
   font-family: "PingFang SC", -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Microsoft YaHei", Arial, sans-serif;
 }
@@ -28,7 +28,7 @@
 
 .ap-wrap {
   width: 100%;
-  min-width: 1100px;
+  min-width: 0;
   margin: 0 auto;
   padding: 0 0 36px;
   display: grid;

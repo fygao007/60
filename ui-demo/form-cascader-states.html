@@ -41,7 +41,7 @@
   </style>
 </head>
 <body>
-<div class="stage ds-scope">
+<div class="frame2-stage ds-scope">
   <main class="cascader-page">
     <section class="cascader-stage">
       <div class="cascader-content">
@@ -114,7 +114,10 @@
 </div>
 
 <script src="./assets/icon-registry.js"></script>
-<script src="./packages/design-system/src/AppShell/app-shell.js"></script>
+<script src="./packages/design-system/src/AppShellV2/app-shell-v2.js?v=2.2.2"></script>
+<script src="./framework-2/framework-2.staff-preset.js?v=2.2.2"></script>
+<script src="./framework-2/framework-2.js?v=2.2.2"></script>
+<script src="./framework-2/legacy-app-shell-adapter.js?v=2.2.2"></script>
 <script>
   const cascaderOptions = [
     { label: '浙江省', value: '浙江省', children: [
@@ -334,7 +337,7 @@
         '组件总览': './ant-components-page.html',
         '表单': './form-components-page.html',
         '表格': './basic-table-page.html',
-        '框架': './primary-nav.html'
+        '框架': './framework-index.html'
       };
       window.location.href = routes[feature] || './component-library-index.html';
     }

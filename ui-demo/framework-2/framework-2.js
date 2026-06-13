@@ -1,5 +1,5 @@
 (function () {
-  const VERSION = '2.0.0';
+  const VERSION = '2.2.2';
 
   const RULES = Object.freeze({
     topbarHeight: 52,
@@ -15,7 +15,7 @@
     root: '.frame2-stage',
     systemName: '智慧人事一体化服务系统',
     userName: '金晓智',
-    roleName: '教职工',
+    roleName: '师资培养发展办',
     frameworkAssetBase: './assets',
     activeApp: 'home',
     activeFeature: 'home',
@@ -26,9 +26,7 @@
       { key: 'skin', label: '换肤', icon: './assets/top-skin.svg' },
       { key: 'language', label: '中英文', icon: './assets/top-language.svg' }
     ],
-    appGroups: [
-      { key: 'home', label: '首页', href: './staff-portal-homepage.html' }
-    ],
+    appGroups: [],
     secondaryNav: { items: [] },
     tabs: [
       { key: 'home', label: '首页', wiseIcon: 'homeOutline', closable: false }
@@ -39,19 +37,65 @@
     return Array.isArray(value) ? value.slice() : fallback.slice();
   }
 
+  function findFeatureInProfile(roleName, profile, key) {
+    if (!profile) return null;
+    for (const group of profile.appGroups || []) {
+      for (const app of group.apps || [group]) {
+        if (app.key === key) return { roleName, app };
+      }
+    }
+    return null;
+  }
+
+  function findFeatureContext(preset, key, preferredRoleName) {
+    if (!key || !preset.roleProfiles) return null;
+
+    const preferredMatch = findFeatureInProfile(
+      preferredRoleName,
+      preset.roleProfiles[preferredRoleName],
+      key
+    );
+    if (preferredMatch) return preferredMatch;
+
+    for (const [roleName, profile] of Object.entries(preset.roleProfiles)) {
+      const match = findFeatureInProfile(roleName, profile, key);
+      if (match) return match;
+    }
+    return null;
+  }
+
   function normalizeConfig(overrides) {
     const input = overrides || {};
+    const preset = window.WiseFramework2StaffPreset || {};
+    const preferredRoleName = preset.roleProfiles?.[input.roleName]
+      ? input.roleName
+      : preset.roleName;
+    const featureContext = findFeatureContext(preset, input.activeFeature, preferredRoleName);
     const config = {
       ...DEFAULT_CONFIG,
+      ...preset,
       ...input,
-      topTools: copyList(input.topTools, DEFAULT_CONFIG.topTools),
-      appGroups: copyList(input.appGroups, DEFAULT_CONFIG.appGroups),
+      topTools: copyList(input.topTools || preset.topTools, DEFAULT_CONFIG.topTools),
+      appGroups: copyList(preset.appGroups, DEFAULT_CONFIG.appGroups),
       tabs: copyList(input.tabs, DEFAULT_CONFIG.tabs),
       secondaryNav: input.secondaryNav || DEFAULT_CONFIG.secondaryNav
     };
 
-    if (input.roleProfiles && !input.roles) {
-      config.roles = Object.keys(input.roleProfiles);
+    config.systemName = preset.systemName || DEFAULT_CONFIG.systemName;
+    config.frameworkAssetBase = input.frameworkAssetBase
+      || preset.frameworkAssetBase
+      || DEFAULT_CONFIG.frameworkAssetBase;
+    config.frameworkLogoSrc = input.frameworkLogoSrc
+      || preset.frameworkLogoSrc
+      || DEFAULT_CONFIG.frameworkLogoSrc;
+
+    if (preset.roleProfiles) {
+      config.roleProfiles = preset.roleProfiles;
+      config.roles = preset.roles || Object.keys(preset.roleProfiles);
+      config.roleName = featureContext?.roleName
+        || (preset.roleProfiles[input.roleName] ? input.roleName : preset.roleName);
+      config.activeApp = featureContext?.app.key || input.activeApp || DEFAULT_CONFIG.activeApp;
+      config.appGroups = preset.roleProfiles[config.roleName]?.appGroups || [];
     }
 
     if (config.hideSidebar === 'auto') {
@@ -95,6 +139,9 @@
   function mount(overrides) {
     if (!window.WiseAppShellV2?.init) {
       throw new Error('框架2加载失败：请先引入 AppShellV2/app-shell-v2.js');
+    }
+    if (!window.WiseFramework2StaffPreset) {
+      throw new Error('框架2加载失败：请先引入 framework-2.staff-preset.js');
     }
 
     const config = normalizeConfig(overrides);

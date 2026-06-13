@@ -4,19 +4,27 @@
 
 ## 目录说明
 
-- `packages/design-system/`：本地 React 设计组件库，包名 `@wisedu/design-system`。
+- `packages/design-system/`：本地设计组件库，React 组件包名 `@wisedu/design-system`；独立 HTML 预览页优先引用 `web-components/` 下的 Lit Web Components。
 - `assets/`：图标、导航背景和组件静态资源。
 - `*.html`：独立 HTML 组件预览页。
 - [`../docs/repository-structure.md`](../docs/repository-structure.md)：仓库级目录和维护规则。
 
 ## 当前框架预览
 
-- `component-library-index.html`：功能索引页，是组件库总入口。
-- `current-components-index.html`：当前组件页，按本地组件库实际已沉淀组件整理预览和源码入口。
-- `all-components-index.html`：Ant 全量目录，按 Ant Design 组件体系排查待补齐组件。
+- `component-library-index.html`：跳转到框架2功能索引。
+- `scenario-templates-index.html`：跳转到框架2场景模板索引。
+- `framework-2/component-library-index.html`：框架2组件库总入口。
+- `framework-2/scenario-templates-index.html`：框架2场景模板入口。
+- `framework-2/current-components-index.html`：框架2当前组件索引。
+- `framework-2/all-components-index.html`：框架2 Ant 全量目录。
+- `framework-2/framework-index.html`：框架1、框架2选择入口。
+- `current-components-index.html` / `all-components-index.html`：兼容跳转入口。
 - `ant-components-page.html`：按 Ant Design 官方分类生成的 70 个基础组件交互稿，后续逐个组件调整样式。
 - `link-button-components.html`：从 MasterGo 链接样式提取出的 LinkButton / LinkButtonGroup 独立组件。
-- `primary-nav.html`：一级导航 + 二级导航区 + 右侧操作区的完整框架原型。
+- `framework-2/framework-index.html`：框架选择入口。
+- `framework-2/personal-workbench.html`：框架2预览入口。
+- `primary-nav.html`：框架1兼容预览。
+- 根目录组件预览页：通过 `framework-2/legacy-app-shell-adapter.js` 统一运行在框架2中。
 - `assets/icon-registry.js`：统一图标注册表。
 - `assets/icons/`：框架图标和组件图标资产。
 
@@ -24,7 +32,8 @@
 
 总览：
 
-- `component-library-index.html`：功能索引，总入口。
+- `component-library-index.html`：兼容入口，自动进入框架2功能索引。
+- `scenario-templates-index.html`：兼容入口，自动进入框架2场景模板索引。
 - `current-components-index.html`：当前组件，按源码组件逐项进入。
 - `all-components-index.html`：Ant 全量目录，按 Ant 组件体系逐项排查。
 - `ant-components-page.html`：组件总览，按钮、布局、导航、数据录入、数据展示、反馈和其他组件的全量交互预览。
@@ -57,6 +66,9 @@
 表格：
 
 - `basic-table-page.html`：基础表格页面。
+- `drawer-page.html`：900px 右侧表单抽屉交互页面。
+- `modal-page.html`：600px 普通表单弹窗交互页面。
+- `delete-modal-page.html`：删除确认、删除成功与删除失败交互场景。
 - `multi-level-table-page.html`：多级表头表格页面。
 - `lowcode-table-page.html`：低代码表格页面。
 
@@ -70,7 +82,7 @@
 - 导入：`DSImportSteps`、`DSImportUpload`、`DSImportMappingTable`、`DSImportValidationPanel`、`DSImportResult`。
 - 模板：`DSCrudTemplate`、`DSAuditTemplate`、`DSImportWizard`。
 
-React 页面统一从 `@wisedu/design-system` 引用组件；独立 HTML 预览优先复用 `packages/design-system/src/base.css` 与 `tokens.css`。
+React 页面统一从 `@wisedu/design-system` 引用组件；独立 HTML 预览优先引用 Lit Web Components，例如 `packages/design-system/web-components/DataTable/ds-data-table.js`，只在页面内维护 `columns`、`data` 等配置，避免重复手写原始 table DOM。
 
 ## 更新索引时机
 

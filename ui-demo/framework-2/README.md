@@ -1,25 +1,23 @@
 # 框架2使用规范
 
-框架2是智慧人事一体化服务系统的统一后台框架。业务页面只能配置框架，
-不能复制、重写或覆盖框架内部结构。
+框架2是智慧人事一体化服务系统的统一后台框架。业务页面只提供内容、当前功能、
+左侧菜单和页签，不能定义顶部导航、角色、Logo 或框架尺寸。
 
-## 1. 唯一实现
-
-以下文件是框架唯一真值：
+## 唯一实现
 
 | 文件 | 职责 |
 | --- | --- |
-| `../packages/design-system/src/AppShellV2/app-shell-v2.css` | 全部框架布局与视觉 |
-| `../packages/design-system/src/AppShellV2/app-shell-v2.js` | 全部框架结构与交互 |
-| `framework-2.js` | 默认配置、配置校验、统一挂载入口 |
-| `framework-2.schema.json` | 供模型和 IDE 使用的配置结构 |
-| `page-template.html` | 新业务页面唯一复制模板 |
+| `framework-2.staff-preset.js` | 全部角色、顶部应用分组和应用 |
+| `framework-2.js` | 默认配置、自动角色匹配、配置校验和统一挂载 |
+| `../packages/design-system/src/AppShellV2/app-shell-v2.js` | 框架结构与交互 |
+| `../packages/design-system/src/AppShellV2/app-shell-v2.css` | 框架布局与视觉 |
+| `framework-2.schema.json` | 业务页面允许使用的配置字段 |
+| `page-template.html` | 新页面唯一模板 |
+| `validate-framework-2.mjs` | 自动检查框架是否被页面覆盖 |
 
-禁止从 `staff-portal-homepage.html`、`basic-info.html` 等业务示例复制框架代码。
+禁止从首页或业务示例复制框架配置。
 
-## 2. 固定尺寸
-
-固定值已经封装在底层 CSS，不允许业务页面再次声明。
+## 固定规则
 
 | 规则 | 固定值 |
 | --- | --- |
@@ -27,250 +25,170 @@
 | 页签栏高度 | `40px` |
 | 左侧菜单宽度 | `256px` |
 | 左侧菜单收起宽度 | `56px` |
-| 操作区距四周 | `12px` |
+| 操作区四周边距 | `12px` |
 | 卡片间距 | `12px` |
-| 应用下拉每行上限 | `5` 个 |
-| 系统名称字体 | 苹方，加粗，`18px/24px` |
+| 应用下拉每行上限 | 5个，仅点击展开 |
+| 系统名称 | 苹方加粗，`18px/24px` |
 
-对应只读变量：
+选中页签保持顶部圆角和左右凹角，使用与工作区同源、同坐标的背景，形成从白色页签栏中镂空的效果。
 
-```css
---frame2-topbar-height: 52px;
---frame2-tabsbar-height: 40px;
---frame2-sidebar-width: 256px;
---frame2-sidebar-collapsed-width: 56px;
---frame2-workspace-inset: 12px;
---frame2-card-gap: 12px;
---frame2-page-background: 通用工作区背景;
-```
+## 标准引用
 
-所有页面必须使用框架提供的 `--frame2-page-background`。业务内容容器保持
-`background: transparent`，不得用纯色覆盖整个工作区背景。
+框架壳使用 Shadow DOM 隔离。业务页面的全局 `button`、`span`、`nav`、
+`.is-active` 等选择器不能覆盖顶部导航、侧栏、页签或弹层；框架样式由
+`app-shell-v2.js` 自动加载，不再暴露到业务页面的全局样式作用域。
 
-## 3. 标准引用顺序
-
-所有业务页面必须保持以下顺序：
+引用顺序不可改变，三个框架脚本必须使用同一个版本号：
 
 ```html
 <link rel="stylesheet" href="../packages/design-system/src/base.css" />
 <link rel="stylesheet" href="./theme.css" />
-<link rel="stylesheet" href="../packages/design-system/src/AppShellV2/app-shell-v2.css" />
 
 <div class="frame2-stage ds-scope">
-  <!-- 这里只放业务内容 -->
+  <main class="business-page">业务内容</main>
 </div>
 
 <script src="../assets/icon-registry.js"></script>
-<script src="../packages/design-system/src/AppShellV2/app-shell-v2.js"></script>
-<script src="./framework-2.js"></script>
+<script src="../packages/design-system/src/AppShellV2/app-shell-v2.js?v=2.2.2"></script>
+<script src="./framework-2.staff-preset.js?v=2.2.2"></script>
+<script src="./framework-2.js?v=2.2.2"></script>
 ```
 
-然后只调用：
+`.frame2-stage` 根节点只能包含 `frame2-stage ds-scope` 两个类。业务页面类必须
+放到内部内容节点，禁止再把 `app-page-frame`、`portal-home-frame` 等业务类
+挂到框架根节点。
+
+最小配置：
 
 ```js
 WiseFramework2.mount({
-  activeApp: 'example',
-  activeFeature: 'example-list',
-  appGroups: [
-    { key: 'home', label: '首页', href: './staff-portal-homepage.html' },
-    { key: 'example', label: '示例分组', apps: [
-      { key: 'example-list', label: '示例应用' }
-    ] }
+  activeFeature: 'dual-qualified',
+  tabs: [
+    { key: 'dual-qualified', label: '双师认定', closable: true }
   ]
 });
 ```
 
-不要直接调用 `WiseAppShellV2.init()`。该方法属于底层实现接口。
+框架会根据 `activeFeature` 自动识别：
 
-## 4. 页面结构规则
-
-### 无左侧菜单
-
-应用没有菜单时，不配置 `appMenus`，框架会自动隐藏左侧菜单。页签和内容区横向拉通。
-
-```js
-appGroups: [
-  { key: 'report', label: '统计报表', href: './report.html' }
-]
-```
-
-### 有左侧菜单
-
-应用存在菜单时，通过 `appMenus[应用 key]` 配置。框架自动切换为“顶部 + 左侧”结构。
-
-```js
-appMenus: {
-  'staff-manage': [
-    { key: 'staff', label: '教职工管理', icon: 'home', children: [
-      { key: 'staff-list', label: '教职工列表' },
-      { key: 'staff-change', label: '信息变更' }
-    ] }
-  ]
-}
-```
-
-禁止通过 CSS 手动显示、隐藏或调整 `.frame2-sidebar`。
-
-## 5. 顶部应用规则
-
-顶部导航支持两种数据：
-
-### 直接应用
-
-没有 `apps` 字段，点击后直接跳转，不展示下拉。
-
-```js
-{ key: 'home', label: '首页', href: './staff-portal-homepage.html' }
-```
-
-### 应用分组
-
-包含 `apps` 字段，点击或悬浮后展示应用宫格。
-
-```js
-{
-  key: 'assessment',
-  label: '考核评价',
-  apps: [
-    { key: 'annual', label: '年度考核', href: './annual-assessment.html' },
-    { key: 'period', label: '聘期考核', href: './period-assessment.html' }
-  ]
-}
-```
-
-应用宫格自动判断列数，一行最多 5 个。业务页面不设置下拉宽度和列数。
-
-## 6. 角色切换规则
-
-个人中心和角色切换是两个独立功能：
-
-- 点击头像或姓名：搜索、换肤、中英文、个人中心、修改密码、退出登录。
-- 点击角色名称：只展示角色列表。
-
-不同角色拥有不同应用时，使用 `roleProfiles`：
-
-```js
-roleName: '综合办公室',
-roleProfiles: {
-  '综合办公室': {
-    appGroups: [
-      { key: 'office', label: '综合事务', apps: [
-        { key: 'expert', label: '专家库建设' }
-      ] }
-    ]
-  },
-  '校领导（只读驾驶舱）': {
-    appGroups: [
-      { key: 'decision', label: '决策中心', apps: [
-        { key: 'statistics', label: '核心数据统计' }
-      ] }
-    ]
-  }
-}
-```
-
-切换角色后，框架自动更新：
-
-- 右上角当前角色。
-- 顶部应用分组和应用。
-- 全局搜索的应用范围。
-- 当前应用激活态。
+- 当前角色。
+- 当前顶部应用。
+- 顶部应用分组。
+- 角色下拉列表。
+- 应用搜索范围。
 - 左侧菜单显示状态。
 
-## 7. 页签规则
+当同一个应用同时授权给多个角色时，可以额外传入一个已经存在于公共预设中的
+`roleName` 进行消歧。页面仍然不能定义角色列表或该角色的应用分组。
 
-- 首页页签固定在第一位。
-- 首页页签带房子图标。
-- 首页页签不可关闭。
-- 详情页不展示面包屑。
-- 普通页签可以关闭。
-- 点击带 `href` 的页签直接跳转。
-- 刷新和全屏由框架统一提供。
+例如：
+
+| `activeFeature` | 自动角色 | 自动分组 |
+| --- | --- | --- |
+| `dual-qualified` | 师资培养发展办 | 资格认定 |
+| `annual-assessment` | 岗位职称办 | 考核评价 |
+| `certificate-print` | 综合办公室 | 证明预算 |
+
+## 左侧菜单
+
+没有左侧菜单时不配置 `appMenus`，内容区自动横向拉通。
+
+有菜单时只配置当前应用菜单：
 
 ```js
-tabs: [
-  { key: 'home', label: '首页', wiseIcon: 'homeOutline', closable: false },
-  { key: 'staff-list', label: '教职工列表', closable: true }
-]
+WiseFramework2.mount({
+  activeFeature: 'staff-list',
+  appMenus: {
+    'staff-list': [
+      {
+        key: 'staff',
+        label: '教职工管理',
+        icon: 'home',
+        children: [
+          { key: 'staff-list', label: '教职工列表' },
+          { key: 'staff-change', label: '信息变更' }
+        ]
+      }
+    ]
+  },
+  tabs: [
+    { key: 'staff-list', label: '教职工列表', closable: true }
+  ]
+});
 ```
 
-## 8. 业务内容规则
+## 页签
 
-`.frame2-stage` 的直接子元素会被框架自动移动到内容区。业务页面只定义自己的命名空间：
+- 首页页签由框架自动补齐并固定在第一位。
+- 首页页签带房子图标且不可关闭。
+- 普通页签可以关闭。
+- 详情页不展示面包屑。
+- 刷新、全屏和选中状态由框架统一处理。
+- 页面不得设置页签背景、圆角或尺寸。
 
-```html
-<div class="frame2-stage ds-scope">
-  <main class="staff-list-page">...</main>
-</div>
+## 禁止配置
+
+业务页面禁止在 `WiseFramework2.mount()` 中出现：
+
+```text
+systemName
+frameworkAssetBase
+frameworkLogoSrc
+logoSrc
+topTools
+appGroups
+roles
+roleProfiles
 ```
+
+即使外部页面传入这些字段，框架运行时也会忽略；仓库校验会直接报错。
+
+角色和顶部应用只能修改 `framework-2.staff-preset.js`。
+
+## 禁止覆盖
+
+业务 CSS 只能使用自己的命名空间：
 
 ```css
-.staff-list-page { ... }
-.staff-list-page__toolbar { ... }
+.business-page {}
+.business-page__toolbar {}
 ```
 
-禁止使用以下选择器：
+禁止覆盖任何 `.frame2-*` 类，尤其是：
 
-```css
+```text
 .frame2-topbar
 .frame2-brand
 .frame2-module-tabs
 .frame2-sidebar
 .frame2-tabsbar
+.frame2-tab
 .frame2-content-shell
 .frame2-content
 ```
 
-也禁止使用 `body > div:nth-child(...)`、固定像素定位或复制框架 DOM。
+## 自动校验
 
-## 9. 主题规则
-
-主题色只通过 `theme.css` 和设计 Token 修改。边框线、中性色、文字层级不随主题色变化。
-
-业务页面不得直接修改：
-
-- 顶部导航背景图。
-- 系统 Logo 和头像尺寸。
-- 框架边框色。
-- 页签形状。
-- 左侧菜单宽度。
-- 框架 z-index。
-
-## 10. 配置校验
-
-`WiseFramework2.mount()` 会在渲染前检查：
-
-- 系统名称是否存在。
-- 是否至少有一个应用或应用分组。
-- 应用和分组是否包含 `key`、`label`。
-- 应用 key 是否重复。
-- 每个角色是否配置 `appGroups`。
-
-完整字段参见 `framework-2.schema.json`。
-
-## 11. 给其他模型的固定指令
-
-将框架文件交给其他模型时，使用以下指令：
-
-```text
-使用 framework-2/page-template.html 创建页面。
-先读取 framework-2/README.md 和 framework-2/framework-2.schema.json。
-只修改业务内容和 WiseFramework2.mount({...}) 配置。
-禁止复制框架 DOM，禁止覆盖任何 .frame2-* CSS，禁止修改框架固定尺寸。
-有左侧菜单时配置 appMenus；没有菜单时不配置，框架自动横向拉通。
+```bash
+node ui-demo/framework-2/validate-framework-2.mjs
 ```
 
-## 12. 自检清单
+校验内容：
 
-交付前必须确认：
+- 是否加载公共角色预设。
+- 是否使用统一挂载入口。
+- 是否覆盖 `.frame2-*` 样式。
+- 是否在页面中重复配置框架字段。
+- 内联脚本是否存在语法错误。
 
-1. 页面只调用 `WiseFramework2.mount()`。
-2. 页面没有 `.frame2-*` CSS 覆盖。
-3. 操作区四周均为 12px。
-4. 卡片间距为 12px。
-5. 首页页签固定且不可删除。
-6. 无菜单应用不预留左侧空间。
-7. 有菜单应用自动显示 256px 左栏。
-8. 应用下拉一行不超过 5 个。
-9. 头像菜单和角色菜单互相独立。
-10. 页面在 1366、1440、1920 宽度下无重叠和错位。
+## 给其他模型的固定指令
+
+```text
+使用 framework-2/page-template.html 创建业务页面。
+先读取 framework-2/README.md 和 framework-2/framework-2.schema.json。
+只编写业务内容、activeFeature、appMenus 和 tabs。
+禁止定义 systemName、Logo、topTools、appGroups、roles、roleProfiles。
+禁止复制框架 DOM，禁止覆盖任何 .frame2-* CSS。
+框架会根据 activeFeature 自动匹配角色和顶部应用。
+完成后运行 node ui-demo/framework-2/validate-framework-2.mjs。
+```

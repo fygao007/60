@@ -14,7 +14,13 @@
 
 | 路径 | 说明 |
 |---|---|
-| `ui-demo/component-library-index.html` | 组件库功能索引，总入口。 |
+| `ui-demo/component-library-index.html` | 跳转到框架2组件库功能索引。 |
+| `ui-demo/scenario-templates-index.html` | 跳转到框架2业务场景模板索引。 |
+| `ui-demo/framework-2/component-library-index.html` | 框架2组件库功能索引。 |
+| `ui-demo/framework-2/scenario-templates-index.html` | 框架2业务场景模板索引和生成规则入口。 |
+| `ui-demo/framework-2/current-components-index.html` | 框架2当前组件索引。 |
+| `ui-demo/framework-2/all-components-index.html` | 框架2 Ant 全量组件目录。 |
+| `ui-demo/framework-2/framework-index.html` | 框架1和框架2选择入口。 |
 | `ui-demo/current-components-index.html` | 当前已沉淀组件索引。 |
 | `ui-demo/all-components-index.html` | Ant Design 组件体系排查目录。 |
 | `ui-demo/ant-components-page.html` | 全量组件交互预览页。 |
@@ -22,6 +28,7 @@
 | `ui-demo/*-page.html` | 业务页面或组合组件预览页。 |
 | `ui-demo/assets/` | 图标、导航背景等静态资源。 |
 | `ui-demo/packages/design-system/` | 本地 React 设计组件库。 |
+| `ui-demo/framework-2/` | 框架2预览、公共预设、页面模板和隔离回归。 |
 
 ## Design System
 
@@ -32,7 +39,8 @@
 | `src/index.js` | React 组件统一导出入口。 |
 | `src/<Component>/index.jsx` | 组件实现。 |
 | `src/<Component>/index.css` | 组件样式。 |
-| `src/AppShell/app-shell.css` / `app-shell.js` | HTML 预览页使用的框架底座。 |
+| `src/AppShell/app-shell.css` / `app-shell.js` | 框架1兼容底座，不用于新页面。 |
+| `src/AppShellV2/app-shell-v2.css` / `app-shell-v2.js` | HTML 预览默认使用的框架2底座，采用 Shadow DOM 隔离。 |
 | `docs/` | 组件专项规范和落地规则。 |
 
 ## Maintenance Rules

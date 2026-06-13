@@ -11,6 +11,23 @@
     p { margin: 0; }
 
     .stage { position: relative; width: 100vw; height: 100vh; overflow: hidden; background: #eef5ff; }
+    .framework-back {
+      position: fixed;
+      z-index: 100;
+      right: 56px;
+      bottom: 24px;
+      display: inline-flex;
+      height: 34px;
+      align-items: center;
+      padding: 0 16px;
+      color: #333fff;
+      background: #fff;
+      border: 1px solid #cfd3ff;
+      border-radius: 6px;
+      box-shadow: 0 6px 20px rgba(31, 44, 119, .12);
+      font-size: 14px;
+      text-decoration: none;
+    }
 
     .primary-nav {
       position: relative;
@@ -432,6 +449,7 @@
   </style>
 </head>
 <body>
+  <a class="framework-back" href="./framework-2/framework-index.html">返回框架选择</a>
   <div class="stage">
     <nav class="primary-nav" aria-label="一级导航">
       <div class="primary-nav-main">

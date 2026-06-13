@@ -1,4 +1,16 @@
 (function () {
+  const shellScriptUrl = document.currentScript?.src
+    ? new URL(document.currentScript.src)
+    : null;
+  const shellStyleUrl = shellScriptUrl
+    ? new URL('./app-shell-v2.css', shellScriptUrl)
+    : null;
+  if (shellStyleUrl && shellScriptUrl) {
+    shellStyleUrl.search = shellScriptUrl.search;
+  }
+  const SHELL_STYLE_URL = shellStyleUrl?.href || '';
+  const HOST_FRAMEWORK_CLASSES = new Set(['frame2-stage', 'ds-scope']);
+
   const DEFAULT_APPS = [
     { key: 'home', label: '首页' },
     { key: 'task', label: '任务中心' },
@@ -264,7 +276,7 @@
     `).join('');
   }
 
-  function buildShell(config, state) {
+  function buildShell(config, state, useContentSlot) {
     const frameworkAssetBase = config.frameworkAssetBase || './framework-2/assets';
     const brandLogo = config.frameworkLogoSrc || `${frameworkAssetBase}/szpu-emblem.png`;
     const brandLogoAlt = config.logoAlt || '深圳职业技术大学';
@@ -327,7 +339,7 @@
             <button class="frame2-tool" type="button" data-fullscreen aria-label="全屏" title="全屏"><img src="${escapeHtml(frameworkAssetBase)}/tab-fullscreen.svg" alt="" /></button>
           </div>
           <section class="frame2-content-shell">
-            <div class="frame2-content"></div>
+            <div class="frame2-content">${useContentSlot ? '<slot name="frame2-content"></slot>' : ''}</div>
           </section>
         </main>
       </div>
@@ -335,11 +347,72 @@
     `;
   }
 
+  function prepareBusinessContent(host) {
+    let nodes = Array.from(host.children);
+    const businessClasses = Array.from(host.classList).filter((name) => (
+      !HOST_FRAMEWORK_CLASSES.has(name)
+      && !name.startsWith('is-')
+    ));
+
+    if (businessClasses.length) {
+      let contentRoot = nodes[0] || document.createElement('div');
+      if (!nodes.length) {
+        host.appendChild(contentRoot);
+        nodes = [contentRoot];
+      } else if (nodes.length > 1) {
+        contentRoot = document.createElement('div');
+        nodes.forEach((node) => contentRoot.appendChild(node));
+        host.appendChild(contentRoot);
+        nodes = [contentRoot];
+      }
+      contentRoot.classList.add(...businessClasses);
+      host.classList.remove(...businessClasses);
+    }
+
+    return nodes;
+  }
+
+  function createMountSurface(host, businessContent) {
+    host.classList.add('frame2-stage', 'ds-scope');
+    host.style.display = 'block';
+    host.style.width = '100vw';
+    host.style.height = '100vh';
+    host.style.minWidth = '0';
+    host.style.minHeight = '0';
+    host.style.overflow = 'hidden';
+
+    if (!host.attachShadow) {
+      if (SHELL_STYLE_URL && !document.querySelector('link[data-frame2-fallback-style]')) {
+        const fallbackStyle = document.createElement('link');
+        fallbackStyle.rel = 'stylesheet';
+        fallbackStyle.href = SHELL_STYLE_URL;
+        fallbackStyle.dataset.frame2FallbackStyle = '';
+        document.head.appendChild(fallbackStyle);
+      }
+      return { stage: host, useContentSlot: false };
+    }
+
+    const shadowRoot = host.shadowRoot || host.attachShadow({ mode: 'open' });
+    shadowRoot.innerHTML = `
+      ${SHELL_STYLE_URL ? `<link rel="stylesheet" href="${escapeHtml(SHELL_STYLE_URL)}" />` : ''}
+      <div class="frame2-stage ds-scope" data-frame2-shell-root></div>
+    `;
+    businessContent.forEach((node) => {
+      node.setAttribute('slot', 'frame2-content');
+    });
+    return {
+      stage: shadowRoot.querySelector('[data-frame2-shell-root]'),
+      useContentSlot: true
+    };
+  }
+
   function init(config) {
     config = config || {};
-    const stage = document.querySelector(config.root || '.frame2-stage');
-    if (!stage) return null;
-    const businessContent = Array.from(stage.children);
+    const host = document.querySelector(config.root || '.frame2-stage');
+    if (!host) return null;
+    const businessContent = prepareBusinessContent(host);
+    const mountSurface = createMountSurface(host, businessContent);
+    const stage = mountSurface.stage;
 
     const defaultMenu = config.secondaryNav?.items || [];
     const initialRole = config.roleName || config.userRole || roleLabels(config)[0] || '师资科';
@@ -372,14 +445,18 @@
     }
     state.tabs = ensureHomeTab(state.tabs, config);
 
-    stage.innerHTML = buildShell(config, state);
+    stage.innerHTML = buildShell(
+      config,
+      state,
+      mountSurface.useContentSlot && config.emptyContent !== true
+    );
     const moduleTabs = stage.querySelector('.frame2-module-tabs');
     const menu = stage.querySelector('.frame2-menu');
     const tabs = stage.querySelector('.frame2-tabs');
     const searchInput = stage.querySelector('[data-search-input]');
     const searchResults = stage.querySelector('[data-search-results]');
     const content = stage.querySelector('.frame2-content');
-    if (content && config.emptyContent !== true) {
+    if (content && config.emptyContent !== true && !mountSurface.useContentSlot) {
       businessContent.forEach((node) => content.appendChild(node));
     }
 
@@ -699,7 +776,7 @@
     });
 
     document.addEventListener('click', (event) => {
-      if (!stage.contains(event.target)) {
+      if (!host.contains(event.target)) {
         stage.classList.remove('is-search-open');
         setProfileMenuOpen(false);
         setRoleMenuOpen(false);
@@ -724,7 +801,14 @@
 
     renderDynamic();
     updateSearch();
-    return { stage, activateFeature, activateApp, closeTab, refreshActiveTab };
+    return {
+      stage: host,
+      shell: stage,
+      activateFeature,
+      activateApp,
+      closeTab,
+      refreshActiveTab
+    };
   }
 
   window.WiseAppShellV2 = { init, DEFAULT_APPS };

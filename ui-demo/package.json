@@ -1,0 +1,11 @@
+{
+  "name": "wisedu-ui-demo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "validate:framework2": "node ./framework-2/validate-framework-2.mjs"
+  },
+  "dependencies": {
+    "lit": "^3.3.3"
+  }
+}

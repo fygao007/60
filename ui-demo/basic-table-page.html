@@ -507,7 +507,7 @@
   </style>
 </head>
 <body>
-<div class="stage ds-scope">
+<div class="frame2-stage ds-scope">
   <main class="basic-table-page">
     <header class="basic-table-header">
       <div class="basic-table-title"><span>基础表格</span></div>
@@ -566,67 +566,31 @@
     </section>
 
     <section class="table-stage">
-      <div class="basic-table-wrap">
-        <table class="basic-table" aria-label="基础表格">
-          <colgroup>
-            <col class="col-drag" />
-            <col class="col-check" />
-            <col class="col-index" />
-            <col class="col-title" />
-            <col class="col-person" />
-            <col class="col-number" />
-            <col class="col-tag" />
-            <col class="col-switch" />
-            <col class="col-progress" />
-            <col class="col-date" />
-            <col class="col-actions" />
-          </colgroup>
-          <thead>
-            <tr>
-              <th class="col-drag is-fixed-left fixed-drag"></th>
-              <th class="col-check is-fixed-left fixed-check"><input id="checkAll" type="checkbox" aria-label="全选" /></th>
-              <th class="col-index is-fixed-left fixed-index">序号</th>
-              <th class="col-title is-fixed-left fixed-title">标题</th>
-              <th class="col-person">标题</th>
-              <th class="col-number">标题</th>
-              <th class="col-tag">标题</th>
-              <th class="col-switch">标题</th>
-              <th class="col-progress">标题</th>
-              <th class="col-date">标题</th>
-              <th class="col-actions is-fixed-right fixed-actions">操作</th>
-            </tr>
-          </thead>
-          <tbody id="tableBody"></tbody>
-        </table>
-      </div>
+      <ds-data-table id="basicTable" title="基础表格" row-key="id" draggable selectable show-index min-width="1540"></ds-data-table>
     </section>
-
-    <footer class="basic-pagination">
-      <span>共 100 条</span>
-      <select class="page-size" aria-label="每页条数">
-        <option>10条/页</option>
-        <option>20条/页</option>
-        <option>50条/页</option>
-      </select>
-      <span class="page-spacer"></span>
-      <div class="page-list" aria-label="分页">
-        <button class="page-item" type="button" disabled>‹</button>
-        <button class="page-item is-active" type="button">1</button>
-        <button class="page-item" type="button">2</button>
-        <button class="page-item" type="button">…</button>
-        <button class="page-item" type="button">10</button>
-        <button class="page-item" type="button">›</button>
-      </div>
-      <span>跳至</span>
-      <input class="page-jump" value="1" aria-label="跳转页码" />
-      <span>页</span>
-    </footer>
   </main>
 </div>
 
 <script src="./assets/icon-registry.js"></script>
-<script src="./packages/design-system/src/AppShell/app-shell.js"></script>
-<script>
+<script src="./packages/design-system/src/AppShellV2/app-shell-v2.js?v=2.2.2"></script>
+<script src="./framework-2/framework-2.staff-preset.js?v=2.2.2"></script>
+<script src="./framework-2/framework-2.js?v=2.2.2"></script>
+<script src="./framework-2/legacy-app-shell-adapter.js?v=2.2.2"></script>
+<script type="importmap">
+{
+  "imports": {
+    "lit": "./node_modules/lit/index.js",
+    "lit/": "./node_modules/lit/",
+    "lit-html": "./node_modules/lit-html/lit-html.js",
+    "lit-html/": "./node_modules/lit-html/",
+    "lit-element/": "./node_modules/lit-element/",
+    "@lit/reactive-element": "./node_modules/@lit/reactive-element/reactive-element.js",
+    "@lit/reactive-element/": "./node_modules/@lit/reactive-element/"
+  }
+}
+</script>
+<script type="module" src="./packages/design-system/web-components/DataTable/ds-data-table.js"></script>
+<script type="module">
   WiseAppShell.init({
     activeModule: 'doctor',
     secondaryNav: {
@@ -644,188 +608,42 @@
         '组件总览': './ant-components-page.html',
         '表单': './form-components-page.html',
         '表格': './basic-table-page.html',
-        '框架': './primary-nav.html'
+        '框架': './framework-index.html'
       };
       window.location.href = routes[feature] || './component-library-index.html';
     }
   });
 
-  const rows = [
-    { title: '培养方案模板维护', person: '张明', count: 24, tag: '标签', enabled: true, progress: 0, date: '2026-05-17' },
-    { title: '年度招生计划配置', person: '李华', count: 14563, tag: '标签', enabled: true, progress: 100, date: '2026-05-15' },
-    { title: '导师资格审核规则', person: '王宁', count: 768, tag: '标签', enabled: true, progress: 20, date: '2026-05-12' },
-    { title: '协议条款库管理', person: '赵阳', count: 62765, tag: '标签', enabled: true, progress: 20, date: '2026-05-09' },
-    { title: '项目成果归档范围', person: '陈晨', count: 668, tag: '标签', enabled: true, progress: 20, date: '2026-05-06' },
-    { title: '导入字段映射配置', person: '周琳', count: 43, tag: '标签', enabled: false, progress: 20, date: '2026-05-02' },
-    { title: '流程节点权限设置', person: '郑可', count: 76, tag: '标签', enabled: true, progress: 20, date: '2026-04-28' },
-    { title: '通知模板维护', person: '刘洋', count: 7292, tag: '标签', enabled: true, progress: 20, date: '2026-04-25' },
-    { title: '数据字典同步', person: '何青', count: 582, tag: '标签', enabled: true, progress: 20, date: '2026-04-21' },
-    { title: '页面字段显隐配置', person: '孙一', count: 692, tag: '标签', enabled: false, progress: 20, date: '2026-04-18' }
-  ];
-
   const progressColors = ['#333fff', '#2fb8a6', '#ff994a', '#ff5555', '#333fff'];
-  const tbody = document.getElementById('tableBody');
-  tbody.innerHTML = rows.map((row, index) => {
-    const color = progressColors[index] || '#333fff';
-    return `
-      <tr>
-        <td class="col-drag is-fixed-left fixed-drag"><span class="drag-handle" role="img" aria-label="按住后可以拖拽更换顺序" title="按住后可以拖拽更换顺序"><img src="./assets/icons/drag-sort-line.svg" alt="" /></span></td>
-        <td class="col-check is-fixed-left fixed-check"><input class="row-check" type="checkbox" aria-label="选择第 ${index + 1} 行" /></td>
-        <td class="col-index is-fixed-left fixed-index">${index + 1}</td>
-        <td class="col-title is-fixed-left fixed-title" title="${row.title}">${row.title}</td>
-        <td class="col-person">
-          <span class="avatar-cell"><span class="avatar">${row.person.slice(0, 1)}</span><span>${row.person}</span></span>
-        </td>
-        <td class="col-number">${row.count}</td>
-        <td class="col-tag"><span class="soft-tag">${row.tag}</span></td>
-        <td class="col-switch"><span class="switch-pill ${row.enabled ? '' : 'is-off'}">${row.enabled ? '是' : '否'}</span></td>
-        <td class="col-progress">
-          <span class="progress-cell">
-            <span class="progress-track"><span class="progress-bar" style="width:${row.progress}%;background:${color}"></span></span>
-            <span class="progress-text">${row.progress}%</span>
-          </span>
-        </td>
-        <td class="col-date">${row.date}</td>
-        <td class="col-actions is-fixed-right fixed-actions">
-          <span class="row-actions">
-            <button class="text-action" type="button">按钮</button>
-            <button class="text-action" type="button">按钮</button>
-            <button class="more-action" type="button" aria-label="更多操作">...</button>
-          </span>
-        </td>
-      </tr>
-    `;
-  }).join('');
 
-  const checkAll = document.getElementById('checkAll');
-  checkAll.addEventListener('change', (event) => {
-    document.querySelectorAll('.row-check').forEach((checkbox) => {
-      checkbox.checked = event.target.checked;
-      checkbox.closest('tr').classList.toggle('is-selected', event.target.checked);
-    });
-  });
-
-  tbody.addEventListener('change', (event) => {
-    if (!event.target.classList.contains('row-check')) return;
-    event.target.closest('tr').classList.toggle('is-selected', event.target.checked);
-    const checks = [...document.querySelectorAll('.row-check')];
-    checkAll.checked = checks.every((checkbox) => checkbox.checked);
-  });
-
-  tbody.addEventListener('click', (event) => {
-    const switchNode = event.target.closest('.switch-pill');
-    if (!switchNode) return;
-    switchNode.classList.toggle('is-off');
-    switchNode.textContent = switchNode.classList.contains('is-off') ? '否' : '是';
-  });
-
-  let dragState = null;
-
-  function refreshRowIndex() {
-    [...tbody.querySelectorAll('tr')].forEach((row, index) => {
-      row.querySelector('.col-index').textContent = index + 1;
-      const checkbox = row.querySelector('.row-check');
-      checkbox?.setAttribute('aria-label', `选择第 ${index + 1} 行`);
-    });
-  }
-
-  function getDragAfterRow(container, y) {
-    const rows = [...container.querySelectorAll('tr:not(.is-dragging)')];
-    return rows.reduce((closest, row) => {
-      const rect = row.getBoundingClientRect();
-      const offset = y - rect.top - rect.height / 2;
-      if (offset < 0 && offset > closest.offset) {
-        return { offset, row };
-      }
-      return closest;
-    }, { offset: Number.NEGATIVE_INFINITY, row: null }).row;
-  }
-
-  function createDragGhost(row, pointerEvent) {
-    const rowRect = row.getBoundingClientRect();
-    const ghost = document.createElement('div');
-    ghost.className = 'row-drag-ghost';
-    ghost.style.left = `${rowRect.left}px`;
-    ghost.style.top = `${rowRect.top}px`;
-    ghost.style.width = `${rowRect.width}px`;
-    ghost.style.height = `${rowRect.height}px`;
-
-    const table = document.createElement('table');
-    const colgroup = document.createElement('colgroup');
-    const ghostBody = document.createElement('tbody');
-    [...row.children].forEach((cell) => {
-      const col = document.createElement('col');
-      col.style.width = `${cell.getBoundingClientRect().width}px`;
-      colgroup.appendChild(col);
-    });
-    table.appendChild(colgroup);
-    ghostBody.appendChild(row.cloneNode(true));
-    table.appendChild(ghostBody);
-    ghost.appendChild(table);
-    document.body.appendChild(ghost);
-
-    return {
-      ghost,
-      offsetX: pointerEvent.clientX - rowRect.left,
-      offsetY: pointerEvent.clientY - rowRect.top,
-    };
-  }
-
-  function moveDragGhost(pointerEvent) {
-    if (!dragState?.ghost) return;
-    dragState.ghost.style.left = `${pointerEvent.clientX - dragState.offsetX}px`;
-    dragState.ghost.style.top = `${pointerEvent.clientY - dragState.offsetY}px`;
-  }
-
-  function finishDrag() {
-    if (!dragState) return;
-    dragState.row.classList.remove('is-dragging');
-    dragState.ghost?.remove();
-    tbody.querySelectorAll('.is-drag-over').forEach((row) => row.classList.remove('is-drag-over'));
-    dragState = null;
-    refreshRowIndex();
-  }
-
-  tbody.addEventListener('pointerdown', (event) => {
-    const handle = event.target.closest('.drag-handle');
-    if (!handle) return;
-    const row = handle.closest('tr');
-    event.preventDefault();
-    handle.setPointerCapture?.(event.pointerId);
-    const ghostState = createDragGhost(row, event);
-    dragState = {
-      row,
-      pointerId: event.pointerId,
-      ...ghostState,
-    };
-    row.classList.add('is-dragging');
-  });
-
-  tbody.addEventListener('pointermove', (event) => {
-    if (!dragState || event.pointerId !== dragState.pointerId) return;
-    event.preventDefault();
-    moveDragGhost(event);
-    const afterRow = getDragAfterRow(tbody, event.clientY);
-    tbody.querySelectorAll('.is-drag-over').forEach((row) => row.classList.remove('is-drag-over'));
-    if (afterRow) {
-      afterRow.classList.add('is-drag-over');
-      tbody.insertBefore(dragState.row, afterRow);
-    } else {
-      tbody.appendChild(dragState.row);
-    }
-  });
-
-  tbody.addEventListener('pointerup', (event) => {
-    if (!dragState || event.pointerId !== dragState.pointerId) return;
-    finishDrag();
-  });
-
-  tbody.addEventListener('pointercancel', finishDrag);
-  window.addEventListener('blur', finishDrag);
-
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') finishDrag();
-  });
+  const table = document.getElementById('basicTable');
+  table.columns = [
+    { key: 'title', title: '标题', width: 240, fixed: 'left' },
+    { key: 'person', title: '标题', width: 240, type: 'avatar' },
+    { key: 'count', title: '标题', width: 128, align: 'right' },
+    { key: 'tag', title: '标题', width: 160, type: 'tag' },
+    { key: 'enabled', title: '标题', width: 160, type: 'switch' },
+    { key: 'progress', title: '标题', width: 200, type: 'progress', color: (_value, _row, index) => progressColors[index] || '#333fff' },
+    { key: 'date', title: '标题', width: 180 }
+  ];
+  table.actions = [
+    { key: 'view', label: '按钮' },
+    { key: 'edit', label: '按钮' },
+    { key: 'more', label: '更多操作', more: true }
+  ];
+  table.pagination = { total: 100, page: 1, pageSize: 10, pageSizes: [10, 20, 50] };
+  table.data = [
+    { id: 1, title: '培养方案模板维护', person: '张明', count: 24, tag: '标签', enabled: true, progress: 0, date: '2026-05-17' },
+    { id: 2, title: '年度招生计划配置', person: '李华', count: 14563, tag: '标签', enabled: true, progress: 100, date: '2026-05-15' },
+    { id: 3, title: '导师资格审核规则', person: '王宁', count: 768, tag: '标签', enabled: true, progress: 20, date: '2026-05-12' },
+    { id: 4, title: '协议条款库管理', person: '赵阳', count: 62765, tag: '标签', enabled: true, progress: 20, date: '2026-05-09' },
+    { id: 5, title: '项目成果归档范围', person: '陈晨', count: 668, tag: '标签', enabled: true, progress: 20, date: '2026-05-06' },
+    { id: 6, title: '导入字段映射配置', person: '周琳', count: 43, tag: '标签', enabled: false, progress: 20, date: '2026-05-02' },
+    { id: 7, title: '流程节点权限设置', person: '郑可', count: 76, tag: '标签', enabled: true, progress: 20, date: '2026-04-28' },
+    { id: 8, title: '通知模板维护', person: '刘洋', count: 7292, tag: '标签', enabled: true, progress: 20, date: '2026-04-25' },
+    { id: 9, title: '数据字典同步', person: '何青', count: 582, tag: '标签', enabled: true, progress: 20, date: '2026-04-21' },
+    { id: 10, title: '页面字段显隐配置', person: '孙一', count: 692, tag: '标签', enabled: false, progress: 20, date: '2026-04-18' }
+  ];
 </script>
 </body>
 </html>

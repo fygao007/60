@@ -6,7 +6,6 @@
   <title>框架2 - 基本信息</title>
   <link rel="stylesheet" href="../packages/design-system/src/base.css" />
   <link rel="stylesheet" href="./theme.css" />
-  <link rel="stylesheet" href="../packages/design-system/src/AppShellV2/app-shell-v2.css" />
   <style>
     body { margin: 0; }
 
@@ -473,8 +472,8 @@
   </style>
 </head>
 <body>
-<div class="frame2-stage basic-info-frame ds-scope">
-  <main class="basic-info-page">
+<div class="frame2-stage ds-scope">
+  <main class="basic-info-page basic-info-frame">
     <section class="basic-scroll">
       <div class="basic-inner">
         <header class="basic-header">
@@ -697,43 +696,16 @@
 </div>
 
 <script src="../assets/icon-registry.js"></script>
-<script src="../packages/design-system/src/AppShellV2/app-shell-v2.js"></script>
-<script src="./framework-2.js"></script>
+<script src="../packages/design-system/src/AppShellV2/app-shell-v2.js?v=2.2.2"></script>
+<script src="./framework-2.staff-preset.js?v=2.2.2"></script>
+<script src="./framework-2.js?v=2.2.2"></script>
 <script>
   WiseFramework2.mount({
     activeApp: 'info',
-    systemName: '智慧人事一体化服务系统',
     versionLabel: '基本信息',
     userName: '教职工',
     assetBase: '../assets',
-    frameworkAssetBase: './assets',
-    topTools: [
-      { key: 'search', label: '通讯录', icon: './assets/top-search.svg' },
-      { key: 'skin', label: '换肤', icon: './assets/top-skin.svg' },
-      { key: 'language', label: '消息', icon: './assets/top-language.svg' }
-    ],
-    appGroups: [
-      { key: 'home', label: '首页' },
-      { key: 'info', label: '信息管理', apps: [
-        { key: 'org', label: '机构信息' },
-        { key: 'info', label: '人员信息' }
-      ] },
-      { key: 'service', label: '业务办理', apps: [
-        { key: 'regular', label: '转正申请' },
-        { key: 'contract', label: '合同管理' },
-        { key: 'attendance', label: '考勤管理' },
-        { key: 'salary', label: '薪酬管理' }
-      ] },
-      { key: 'development', label: '教师发展', apps: [
-        { key: 'annual', label: '年度考核' },
-        { key: 'ethics', label: '师德师风' },
-        { key: 'title', label: '职称评审' }
-      ] },
-      { key: 'data', label: '数据中心' },
-      { key: 'ai', label: '智慧人事' },
-      { key: 'system', label: '系统管理' }
-    ],
-    secondaryNav: {
+  secondaryNav: {
       items: [
         { key: 'person', label: '人员信息', icon: 'home', children: [
           { key: 'basic-info', label: '基本信息' },

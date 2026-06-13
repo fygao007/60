@@ -6,7 +6,6 @@
   <title>框架2业务页面模板</title>
   <link rel="stylesheet" href="../packages/design-system/src/base.css" />
   <link rel="stylesheet" href="./theme.css" />
-  <link rel="stylesheet" href="../packages/design-system/src/AppShellV2/app-shell-v2.css" />
   <style>
     /* 只允许编写业务内容样式，禁止覆盖任何 .frame2-* 选择器。 */
     .demo-page {
@@ -25,21 +24,12 @@
 </div>
 
 <script src="../assets/icon-registry.js"></script>
-<script src="../packages/design-system/src/AppShellV2/app-shell-v2.js"></script>
-<script src="./framework-2.js"></script>
+<script src="../packages/design-system/src/AppShellV2/app-shell-v2.js?v=2.2.2"></script>
+<script src="./framework-2.staff-preset.js?v=2.2.2"></script>
+<script src="./framework-2.js?v=2.2.2"></script>
 <script>
   WiseFramework2.mount({
-    activeApp: 'example',
     activeFeature: 'example-list',
-    roleName: '业务管理员',
-    roles: ['业务管理员', '只读用户'],
-    appGroups: [
-      { key: 'home', label: '首页', href: './staff-portal-homepage.html' },
-      { key: 'example', label: '示例分组', apps: [
-        { key: 'example-list', label: '示例应用' },
-        { key: 'example-report', label: '统计报表' }
-      ] }
-    ],
     appMenus: {
       'example-list': [
         { key: 'example-manage', label: '示例管理', icon: 'home', children: [
@@ -50,7 +40,6 @@
       'example-report': []
     },
     tabs: [
-      { key: 'home', label: '首页', wiseIcon: 'homeOutline', closable: false },
       { key: 'example-list', label: '示例列表', closable: true }
     ]
   });

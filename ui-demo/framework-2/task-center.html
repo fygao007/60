@@ -6,7 +6,6 @@
 <title>任务中心 - 框架2</title>
 <link rel="stylesheet" href="../packages/design-system/src/base.css" />
 <link rel="stylesheet" href="./theme.css" />
-<link rel="stylesheet" href="../packages/design-system/src/AppShellV2/app-shell-v2.css" />
 <link rel="stylesheet" href="./staff-app-pages.css" />
 <style>
 body{margin:0}
@@ -67,8 +66,8 @@ body{margin:0}
 </style>
 </head>
 <body>
-<div class="frame2-stage app-page-frame ds-scope">
-  <main class="app-page">
+<div class="frame2-stage ds-scope">
+  <main class="app-page app-page-frame">
     <div class="ap-wrap">
       <div class="ap-crumb"><a href="./staff-portal-homepage.html">首页</a> / <span class="cur">任务中心</span></div>
       <div class="ap-title-row">
@@ -91,14 +90,12 @@ body{margin:0}
 </div>
 
 <script src="../assets/icon-registry.js"></script>
-<script src="../packages/design-system/src/AppShellV2/app-shell-v2.js"></script>
-<script src="./framework-2.js"></script>
+<script src="../packages/design-system/src/AppShellV2/app-shell-v2.js?v=2.2.2"></script>
+<script src="./framework-2.staff-preset.js?v=2.2.2"></script>
+<script src="./framework-2.js?v=2.2.2"></script>
 <script>
 WiseFramework2.mount({
-  activeApp:'home', activeFeature:'task-center', systemName:'智慧人事一体化服务系统', versionLabel:'任务中心', userName:'金晓智',
-  frameworkAssetBase:'./assets', logoSrc:'./assets/szpu-logo-red.png',
-  topTools:[{key:'search',label:'搜索',icon:'./assets/top-search.svg'},{key:'skin',label:'换肤',icon:'./assets/top-skin.svg'},{key:'language',label:'消息',icon:'./assets/top-language.svg'}],
-  appGroups:[{key:'home',label:'首页'},{key:'archive',label:'我的档案'},{key:'apply',label:'申请办理'},{key:'assess',label:'考核填报'}],
+  activeApp:'home', activeFeature:'task-center', versionLabel:'任务中心', userName:'金晓智',
   secondaryNav:{items:[]},
   tabs:[{key:'task-center',label:'任务中心',closable:true}]
 });
