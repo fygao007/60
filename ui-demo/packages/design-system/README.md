@@ -63,12 +63,19 @@ HTML 预览默认使用框架2，框架1仅保留兼容实现：
 
 右侧表单抽屉的组件、状态、尺寸与间距基准见
 `docs/drawer.md`，来源为
-`mastergo://getd2c/195991886967017-2-003917`。
+`mastergo://getd2c/195991886967017-2-003917` 和
+`mastergo://getd2c/195991886967017-11-92271`。
 
 弹窗的尺寸预设、内容自适应、关闭约束、焦点与提交状态见
 `docs/modal.md`，主要来源为
 `mastergo://getd2c/139272150501659-4316-81924`；交互预览见
 `ui-demo/components/modal-components.html`。
+
+单列编辑弹窗、双列编辑弹窗和带分组抽屉的组合规则见
+`docs/edit-overlay-templates.md`；React 使用 `DSSingleEditModal`、
+`DSDoubleEditModal`、`DSGroupedEditDrawer`、`DSEditField` 和
+`DSFormGroup`，交互预览见
+`ui-demo/components/edit-overlay-templates.html`。
 
 删除确认与删除失败场景见 `docs/delete-modal.md`，删除确认来源为
 `mastergo://getd2c/195991886967017-2-003863`。
@@ -158,14 +165,33 @@ import {
   DSAppShell,
   DSButton,
   DSDataTable,
+  DSDoubleEditModal,
+  DSEditField,
+  DSEditForm,
   DSFilterBar,
+  DSFormGroup,
+  DSGroupedEditDrawer,
   DSGroupTitle,
   DSPageHeader,
+  DSSingleEditModal,
   DSSwitch,
   DSTabs,
   DSTag,
 } from '@wisedu/design-system'
 ```
+
+编辑弹层布局：
+
+```jsx
+<DSDoubleEditModal open={open} title="编辑信息" onCancel={close} onOk={submit}>
+  <DSEditField label="名称" required><DSInput /></DSEditField>
+  <DSEditField label="类型"><DSSelect options={options} /></DSEditField>
+</DSDoubleEditModal>
+```
+
+编辑弹层的机器规范位于
+`specs/edit-overlay-templates.json`。不要在业务页面复制弹窗、抽屉或字段
+内部 DOM；生成规则入口见 `ui-demo/AI_COMPONENT_USAGE.md`。
 
 入口 `src/index.js` 已默认引入 `base.css`，业务页面通常不需要重复引入基础样式。
 

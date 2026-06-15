@@ -7,5 +7,7 @@
 - `modal-page.html`：普通弹窗。
 - `delete-modal-page.html`：删除确认与失败弹窗。
 - `drawer-page.html`：右侧抽屉。
+- 编辑弹层统一入口：`../components/edit-overlay-templates.html`。
 
 场景规范维护在 `../packages/design-system/docs/`。
+模型生成约束见 `../AI_COMPONENT_USAGE.md`。

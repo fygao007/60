@@ -110,7 +110,7 @@
 
 .ds-input,
 .ds-select {
-  height: var(--ds-control-height-lg);
+  height: var(--ds-control-height-md);
   padding: 0 var(--ds-space-3);
 }
 

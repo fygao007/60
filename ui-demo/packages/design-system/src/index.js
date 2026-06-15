@@ -14,6 +14,12 @@ export { default as DSCrudTemplate } from './CrudTemplate'
 export { default as DSAppShell } from './AppShell'
 export { default as DSDatePicker } from './DatePicker'
 export { default as DSDrawer } from './Drawer'
+export { default as DSEditForm, DSEditField, DSFormGroup } from './EditForm'
+export {
+  DSDoubleEditModal,
+  DSGroupedEditDrawer,
+  DSSingleEditModal,
+} from './EditOverlayTemplates'
 export { default as DSIconButton } from './IconButton'
 export { default as DSLinkButton } from './LinkButton'
 export { default as DSLinkButtonGroup } from './LinkButtonGroup'

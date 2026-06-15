@@ -11,8 +11,8 @@
   align-items: center;
   gap: var(--ds-space-2);
   width: 100%;
-  min-height: var(--ds-control-height-md);
-  padding: 5px var(--ds-space-2) 5px var(--ds-space-3);
+  height: var(--ds-control-height-md);
+  padding: 4px var(--ds-space-2) 4px var(--ds-space-3);
   color: var(--ds-color-text);
   background: var(--ds-color-white);
   border: 1px solid var(--ds-color-border);

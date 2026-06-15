@@ -1,11 +1,13 @@
 import { useEffect, useId, useRef } from 'react'
 import DSButton from '../Button'
+import { EDIT_OVERLAY_SPEC } from '../edit-overlay-spec.generated'
 import './index.css'
 
 const sizeMap = {
   small: 480,
-  medium: 600,
+  medium: EDIT_OVERLAY_SPEC.templates.singleModal.width,
   large: 800,
+  wide: EDIT_OVERLAY_SPEC.templates.doubleModal.width,
 }
 
 function getFocusableElements(container) {
@@ -48,6 +50,7 @@ export default function DSModal({
   cancelButtonProps = {},
   overlayClassName = '',
   className = '',
+  ...dialogProps
 }) {
   const titleId = useId()
   const descriptionId = useId()
@@ -137,8 +140,9 @@ export default function DSModal({
   }
 
   return (
-    <div className={overlayClasses} role="presentation" onMouseDown={handleMaskClick}>
+    <div className={overlayClasses} role="presentation" onClick={handleMaskClick}>
       <section
+        {...dialogProps}
         ref={dialogRef}
         className={classes}
         role={role}

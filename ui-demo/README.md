@@ -49,6 +49,7 @@
 - `components/transfer-components.html`：穿梭框组件，覆盖平铺、分组、表格和树形选择。
 - `components/upload-components.html`：通用上传组件，覆盖点击、拖拽、粘贴、进度、成功与失败状态。
 - `components/modal-components.html`：弹窗尺寸、批量配置、危险确认、长内容滚动和焦点交互。
+- `components/edit-overlay-templates.html`：单列编辑弹窗、双列编辑弹窗和带分组抽屉模板。
 - `components/form-textarea-states.html`：文本域状态。
 - `components/form-rich-text-editor-states.html`：富文本编辑器状态。
 - `components/form-radio-group-states.html`：单选组状态。
@@ -73,14 +74,18 @@
 ## 60 组件库当前覆盖
 
 - 基础：`DSAnchor`、`DSButton`、`DSButtonGroup`、`DSLinkButton`、`DSLinkButtonGroup`、`DSSteps`、`DSIconButton`、`DSField`、`DSInput`、`DSSelect`、`DSCascader`、`DSTransfer`、`DSUpload`、`DSTextarea`、`DSRichTextEditor`、`DSTimePicker`、`DSTag`。
-- 布局：`DSAppShell`、`DSPageHeader`、`DSGroupTitle`、`DSCard`、`DSTabs`。
+- 布局：`DSAppShell`、`DSPageHeader`、`DSGroupTitle`、`DSEditForm`、`DSEditField`、`DSFormGroup`、`DSCard`、`DSTabs`。
 - 数据：`DSFilterBar`、`DSDataTable`、`DSParentChildTable`、`DSPagination`、`DSEmptyState`、`DSEmptyGuide`。
-- 浮层：`DSModal`、`DSDrawer`。
+- 浮层：`DSModal`、`DSDrawer`、`DSSingleEditModal`、`DSDoubleEditModal`、`DSGroupedEditDrawer`。
 - 审核：`DSAuditStatusTabs`、`DSAuditToolbar`、`DSAuditActions`、`DSAuditOpinionModal`、`DSAuditDetailDrawer`。
 - 导入：`DSImportSteps`、`DSImportUpload`、`DSImportMappingTable`、`DSImportValidationPanel`、`DSImportResult`。
 - 模板：`DSRegularListTemplate`、`DSCardListTemplate`、`DSCrudTemplate`、`DSAuditTemplate`、`DSImportWizard`。
 
 React 页面统一从 `@wisedu/design-system` 引用组件；独立 HTML 预览优先引用 Lit Web Components，例如 `packages/design-system/web-components/DataTable/ds-data-table.js`，只在页面内维护 `columns`、`data` 等配置，避免重复手写原始 table DOM。
+
+模型生成页面前先读取 `AI_COMPONENT_USAGE.md`。编辑弹层的唯一规范源是
+`packages/design-system/specs/edit-overlay-templates.json`，预览页由真实
+React 组件打包生成，不再维护手写弹层 DOM。
 
 ## 更新索引时机
 
